@@ -190,5 +190,13 @@ class UnsplashAPIImage {
         // Return data URI
         return 'data:image/png;base64,' . base64_encode($imageData);
     }
+
+    public function GetImageDisplayUrl(): string {
+        return $this->urls['regular'] ?? '';
+    }
+
+    public function GetDownloadUrl(): string {
+        return $this->links['download'] ?? '';
+    }
 }
 ?>
