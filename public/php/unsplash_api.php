@@ -50,49 +50,36 @@ class UnsplashAPI {
 
 // Represents the EXIF data from Unsplash API
 class UnsplashAPIExif {
-    private string $make;
-    private string $model;
-    private string $name;
-    private string $exposure_time;
-    private string $aperture;
-    private string $focal_length;
-    private int $iso;
-
-    private ?float $latitude = null;
-    private ?float $longitude = null;
-    private ?float $altitude = null;
-
-    public function __construct(array $exifData) {
-        // All are optional values
-        $this->make = $exifData['make'] ?? '';
-        $this->model = $exifData['model'] ?? '';
-        $this->name = $exifData['name'] ?? '';
-        $this->exposure_time = $exifData['exposure_time'] ?? '';
-        $this->aperture = $exifData['aperture'] ?? '';
-        $this->focal_length = $exifData['focal_length'] ?? '';
-        $this->iso = $exifData['iso'] ?? 0;
-        // These are not assumed to be included in Unsplash API response but incase is representable
-        $this->latitude = $exifData['location']['latitude'] ?? null;
-        $this->longitude = $exifData['location']['longitude'] ?? null;
-        $this->altitude = $exifData['location']['altitude'] ?? null;
+    // Static factory creating known KeyedArray
+    static public function Create(array $exifData): array {
+        return [
+            'make' => $exifData['make'] ?? '',
+            'model' => $exifData['model'] ?? '',
+            'name' => $exifData['name'] ?? '',
+            'exposure_time' => $exifData['exposure_time'] ?? '',
+            'aperture' => $exifData['aperture'] ?? '',
+            'focal_length' => $exifData['focal_length'] ?? '',
+            'iso' => $exifData['iso'] ?? 0,
+            'location' => [
+                'latitude' => $exifData['location']['latitude'] ?? null,
+                'longitude' => $exifData['location']['longitude'] ?? null,
+                'altitude' => $exifData['location']['altitude'] ?? null
+            ]
+        ];
     }
 }
 
-// Represnets a location from Unsplash API
+// Represents a location from Unsplash API
 class UnsplashAPILocation {
-    private string $name;
-    private string $city;
-    private string $country;
-    private float $latitude;
-    private float $longitude;
-
-    public function __construct(array $locationData) {
-        // All are optional values
-        $this->name = $locationData['name'] ?? '';
-        $this->city = $locationData['city'] ?? '';
-        $this->country = $locationData['country'] ?? '';
-        $this->latitude = $locationData['position']['latitude'] ?? 0.0;
-        $this->longitude = $locationData['position']['longitude'] ?? 0.0;
+    // Static factory creating known KeyedArray
+    static public function Create(array $locationData): array {
+        return [
+            'name' => $locationData['name'] ?? '',
+            'city' => $locationData['city'] ?? '',
+            'country' => $locationData['country'] ?? '',
+            'latitude' => $locationData['position']['latitude'] ?? 0.0,
+            'longitude' => $locationData['position']['longitude'] ?? 0.0
+        ];
     }
 }
 
@@ -153,8 +140,8 @@ class UnsplashAPIImage {
         $this->asset_type = $imageData['asset_type'] ?? '';
         $this->user_username = $imageData['user']['username'] ?? '';
         $this->user_unsplash_profile = $imageData['user']['links']['self'] ?? '';
-        $this->exif = new UnsplashAPIExif($imageData['exif'] ?? []);
-        $this->location = new UnsplashAPILocation($imageData['location'] ?? []);
+        $this->exif = UnsplashAPIExif::Create($imageData['exif'] ?? []);
+        $this->location = UnsplashAPILocation::Create($imageData['location'] ?? []);
         $this->meta = $imageData['meta'] ?? [];
         $this->tags = $imageData['tags'] ?? [];
         // $this->views = $imageData['views'] ?? 0;
