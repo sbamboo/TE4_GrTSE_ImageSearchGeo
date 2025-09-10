@@ -13,7 +13,7 @@
 
 
 ## Code Formatting
-- `PHP BuiltIn Functions` are `snake_case`
+- `PHP BuiltIn Functions` are `snake_case` (all lowercase)
 - `Classes` are `PascalCase`
     - Public methods are `PascalCase`
     - Private methods are `camelCase` or `_camelCase` 
