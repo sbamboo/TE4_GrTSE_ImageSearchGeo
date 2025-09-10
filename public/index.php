@@ -40,7 +40,6 @@ require_once('./php/unsplash_api.php');
                 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
                 $images = $unsplash->SearchPhotos($query, 10, 1);
                 foreach ($images as $image) {
-
                     ?>
                     <div id="image-container">
                         <?php
