@@ -1,10 +1,15 @@
 <?php
+// Setup enviroment
+//ini_set('log_errors', 1);
+//ini_set('error_log', './../php-errors.log');
+//ini_set('display_errors', 0); // prevent sending to stderr
+
 // Get all the secrets from php.ini file
 $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
+require_once('./php/blurhash.php');
 require_once('./php/unsplash_api.php');
-
 
 if(!empty($_POST["keyWord"])){
     $searchKeyWord = $_POST["keyWord"];

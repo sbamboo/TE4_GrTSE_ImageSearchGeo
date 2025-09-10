@@ -8,7 +8,8 @@ Install XAMPP
 4. Rename `C:\installs\php\php.ini-development` to `C:\installs\php\php.ini`
     1. Uncomment `extension_dir` for windows
     2. Uncomment `extension=openssl` and `extension=curl`
-    3. If you get errors needing TLS: Install `openssl` with `winget install ShiningLight.OpenSSL.Light`
+    3. Uncomment `extension=gd`
+    4. If you get errors needing TLS: Install `openssl` with `winget install ShiningLight.OpenSSL.Light`
 
 # FiveServer
 For five server follow Manuall or XAMPP and then:
