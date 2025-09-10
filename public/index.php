@@ -4,6 +4,13 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 
 // Imports
 require_once('./php/unsplash_api.php');
+
+
+if(!empty($_POST["keyWord"])){
+    $searchKeyWord = $_POST["keyWord"];
+    echo $searchKeyWord;
+}
+
 ?>
 
 
@@ -15,9 +22,9 @@ require_once('./php/unsplash_api.php');
     <title>Document</title>
 </head>
 <body>
-    <form action="post">
-        <input type="text">
-
+    <form action="" method="post" autocomplete="on">
+        <h3>Search:</h3>
+        <input type="text" name="keyWord" value="<?php echo $_POST['keyWord'] ?? ''; ?>">
     </form>
 </body>
 </html>
