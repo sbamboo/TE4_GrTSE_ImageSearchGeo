@@ -24,13 +24,15 @@ if(!empty($_POST["query"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/main.css">
+    <script src="main.js"></script>
     <title>Document</title>
 </head>
 <body>
     <div id="search-container">
-        <form id="search-form" action="" method="post" autocomplete="on">
-            <h3 id="search-header">Search:</h3>
-            <input id="search-bar" type="text" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
+        <form id="search-form" action="unsplash_api.php" method="post" autocomplete="on">
+            <label id="search-label" for="search-bar">Search image</label>
+            <input id="search-bar" type="search" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
+            <input type="submit" value="Search">
         </form>
     </div>
 </body>
