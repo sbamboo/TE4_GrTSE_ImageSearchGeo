@@ -11,9 +11,8 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 require_once('./php/blurhash.php');
 require_once('./php/unsplash_api.php');
 
-if(!empty($_POST["keyWord"])){
-    $searchKeyWord = $_POST["keyWord"];
-    echo $searchKeyWord;
+if(!empty($_POST["query"])){
+    $query = $_POST["query"];
 }
 
 ?>
