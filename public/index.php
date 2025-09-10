@@ -11,9 +11,6 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
 
-if(!empty($_POST["query"])){
-    $query = $_POST["query"];
-}
 
 ?>
 
@@ -29,11 +26,25 @@ if(!empty($_POST["query"])){
 </head>
 <body>
     <div id="search-container">
-        <form id="search-form" action="php/unsplash_api.php" method="post" autocomplete="on">
+        <form id="search-form" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
             <input type="submit" value="Search">
         </form>
+    </div>
+    <div>
+        <?php
+            if(!empty($_POST["query"])){
+                $query = $_POST["query"];
+
+                $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
+                $images = $unsplash->SearchPhotos($query, 10, 1);
+                foreach ($images as $image) {
+                    $displayUrl = $image->GetImageDisplayUrl();
+                    echo "<img src='$displayUrl'/>";
+                }
+            }
+        ?>
     </div>
 </body>
 </html>
