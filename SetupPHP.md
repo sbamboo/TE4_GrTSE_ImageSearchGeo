@@ -11,6 +11,5 @@ Install XAMPP
     3. Install `openssl` with `winget install ShiningLight.OpenSSL.Light`
 
 # FiveServer
-For five server follow Manuall and then:
+For five server follow Manuall or XAMPP and then:
 1. Install `Live Server (Five Server)` extension
-Or install XAMPP
