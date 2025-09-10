@@ -8,11 +8,12 @@
 $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
-require_once('./php/blurhash.php');
-require_once('./php/unsplash_api.php');
+// require_once('./php/blurhash.php');
+// require_once('./php/unsplash_api.php');
 
 if(!empty($_POST["query"])){
     $query = $_POST["query"];
+    echo $query;
 }
 
 ?>
@@ -23,12 +24,15 @@ if(!empty($_POST["query"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/main.css">
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post" autocomplete="on">
-        <h3>Search:</h3>
-        <input type="text" name="keyWord" value="<?php echo $_POST['keyWord'] ?? ''; ?>">
-    </form>
+    <div id="search-container">
+        <form id="search-form" action="" method="post" autocomplete="on">
+            <h3 id="search-header">Search:</h3>
+            <input id="search-bar" type="text" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
+        </form>
+    </div>
 </body>
 </html>
