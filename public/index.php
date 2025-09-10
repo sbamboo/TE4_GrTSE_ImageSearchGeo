@@ -29,7 +29,7 @@ if(!empty($_POST["query"])){
 </head>
 <body>
     <div id="search-container">
-        <form id="search-form" action="unsplash_api.php" method="post" autocomplete="on">
+        <form id="search-form" action="php/unsplash_api.php" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
             <input type="submit" value="Search">
