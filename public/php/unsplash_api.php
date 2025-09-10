@@ -191,12 +191,22 @@ class UnsplashAPIImage {
         return 'data:image/png;base64,' . base64_encode($imageData);
     }
 
+    // Function to get the prefered url for displaying the image on the website
     public function GetImageDisplayUrl(): string {
         return $this->urls['regular'] ?? '';
     }
 
+    // Function to get the prefered download url for the image
     public function GetDownloadUrl(): string {
         return $this->links['download'] ?? '';
+    }
+
+    // Getters
+    public function GetLocation(): UnsplashAPILocation {
+        return $this->location;
+    }
+    public function GetExif(): UnsplashAPIExif {
+        return $this->exif;
     }
 }
 ?>
