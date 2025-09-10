@@ -40,8 +40,23 @@ require_once('./php/unsplash_api.php');
                 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
                 $images = $unsplash->SearchPhotos($query, 10, 1);
                 foreach ($images as $image) {
-                    $displayUrl = $image->GetImageDisplayUrl();
-                    echo "<img src='$displayUrl'/>";
+
+                    ?>
+                    <div id="image-container">
+                        <?php
+                        $displayUrl = $image->GetImageDisplayUrl();
+                        ?> 
+                        <div id="image"> 
+                            <?php echo "<img src='$displayUrl'/>"; ?> 
+                        </div>
+                        <div id="image-location-data">
+                            <?php
+                            $location = $image->GetLocation();
+                            echo $location['city'];
+                            ?>
+                        </div>
+                    </div>
+                    <?php
                 }
             }
         ?>

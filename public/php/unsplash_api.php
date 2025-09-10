@@ -108,8 +108,8 @@ class UnsplashAPIImage {
     private string $asset_type; // "photo",...
     private string $user_username; // <APIResponse>.User.username
     private string $user_unsplash_profile; // <APIResponse>.User.links.self
-    private UnsplashAPIExif $exif;
-    private UnsplashAPILocation $location;
+    private array $exif;
+    private array $location;
     private array $meta; // meta keyedarray "index"=>"value"
     private array $tags; // tags array of keyedarray "type"=>"value","title"=>"value","source"=>keyedarray
     //private int $views;
@@ -189,10 +189,10 @@ class UnsplashAPIImage {
     }
 
     // Getters
-    public function GetLocation(): UnsplashAPILocation {
+    public function GetLocation(): array {
         return $this->location;
     }
-    public function GetExif(): UnsplashAPIExif {
+    public function GetExif(): array {
         return $this->exif;
     }
 }
