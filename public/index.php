@@ -8,8 +8,8 @@
 $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
-// require_once('./php/blurhash.php');
-// require_once('./php/unsplash_api.php');
+require_once('./php/libs/blurhash.php');
+require_once('./php/unsplash_api.php');
 
 if(!empty($_POST["query"])){
     $query = $_POST["query"];
