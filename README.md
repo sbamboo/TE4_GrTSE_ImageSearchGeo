@@ -10,3 +10,14 @@
     - `/public/js` contains js
     - `/public/php` contains all helper php
 - `/host.bat` a quick script that runs `php` on `localhost:8080` from `/public`
+
+
+## Code Formatting
+- `PHP BuiltIn Functions` are `snake_case`
+- `Classes` are `PascalCase`
+    - Public methods are `PascalCase`
+    - Private methods are `camelCase` or `_camelCase` 
+- `Functions` are `camelCase`
+- `Variables` are `camelCase`
+- `Constant variables` are `UPPER_SNAKE_CASE`
+- `HTML-Element-Ids` are `kebab-case` (all lowercase)
