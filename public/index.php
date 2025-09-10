@@ -13,7 +13,6 @@ require_once('./php/unsplash_api.php');
 
 if(!empty($_POST["query"])){
     $query = $_POST["query"];
-    echo $query;
 }
 
 ?>
