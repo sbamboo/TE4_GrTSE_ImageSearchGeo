@@ -1,11 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>hej</p>
-</body>
-</html>
+<?php
+require_once('./../../php/unsplash_api.php');
+
+$SECRETS = parse_ini_file(__DIR__ . '/../../../php_secrets.ini', false, INI_SCANNER_TYPED); // Replace with your Unsplash API Access Key
+
+
+$unsplash = new UnsplashAPI($SECRETS['unsplash_access_key']);
+
+try {
+    $random_photo = $unsplash->make_get_request('photos/random');
+    echo '<pre>';
+    print_r($random_photo);
+    echo '</pre>';
+} catch (Exception $e) {
+    echo 'Error: ' . $e->getMessage();
+}
+?>
