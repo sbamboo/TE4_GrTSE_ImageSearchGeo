@@ -1,5 +1,6 @@
 <?php
 // This file contians classes to wrap the Unsplash API
+// Uses Extension: GD
 // Requires: blurhash.php
 
 class UnsplashAPI {
@@ -162,18 +163,32 @@ class UnsplashAPIImage {
     }
 
     // Use blurHashToDataUrl to get image of blur hash
-    public function GetBlurAsImage($width = 32, $height = 32): string {
-        return blurHashToDataUrl($this->blur_hash, $width, $height);
+    public function GetBlurAsImage(int $width = 32, int $height = 32): string {
+        // If this image does not have a blurhash return empty string
+        if (empty($this->blur_hash)) {
+            return '';
+        }
+
+        // Decode the blurhash into RGB pixels
+        $pixels = Blurhash::decode($this->blur_hash, $width, $height);
+        $image  = imagecreatetruecolor($width, $height);
+        for ($y = 0; $y < $height; ++$y) {
+            for ($x = 0; $x < $width; ++$x) {
+                [$r, $g, $b] = $pixels[$y][$x];
+                imagesetpixel($image, $x, $y, imagecolorallocate($image, $r, $g, $b));
+            }
+        }
+
+        // Capture image output as data URI
+        ob_start();
+        imagepng($image);
+        $imageData = ob_get_clean();
+
+        // Free memory
+        imagedestroy($image);
+
+        // Return data URI
+        return 'data:image/png;base64,' . base64_encode($imageData);
     }
 }
-
-// Example search photos dog
-$unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
-$search_results = $unsplash->GetRandomImage();
-echo '<pre>';
-print_r($search_results);
-echo '</pre>';
-
-// Make image with blur hash
-echo '<img src="' . $search_results->GetBlurAsImage(128, 128) . '" alt="Blur Hash Image">';
 ?>

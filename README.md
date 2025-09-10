@@ -9,6 +9,7 @@
     - `/public/css` contains css
     - `/public/js` contains js
     - `/public/php` contains all helper php
+        - `/public/php/libs` contains other peoples PHP code that we use as dependencies
 - `/host.bat` a quick script that runs `php` on `localhost:8080` from `/public`
 
 
