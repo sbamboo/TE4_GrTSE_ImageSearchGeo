@@ -46,9 +46,10 @@ require_once('./php/unsplash_api.php');
                         $displayUrl = $image->GetImageDisplayUrl();
                         ?> 
                         <div id="image"> 
-                            <?php echo "<img src='$displayUrl'/>"; ?> 
+                            <?php echo "<img id='image' src='$displayUrl'/>"; ?> 
                         </div>
                         <div id="image-location-data">
+                            <p>hej</p>
                             <?php
                             $location = $image->GetLocation();
                             echo $location['country'] . $location['city'];
