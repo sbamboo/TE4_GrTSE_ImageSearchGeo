@@ -41,8 +41,12 @@ class UnsplashAPI {
         ];
         $response = $this->makeGetRequest('search/photos', $params);
         $images = [];
+        // foreach ($response['results'] as $imageData) {
+        //     $images[] = new UnsplashAPIImage($imageData);
+        // }
         foreach ($response['results'] as $imageData) {
-            $images[] = new UnsplashAPIImage($imageData);
+            $fullData = $this->makeGetRequest('photos/' . $imageData['id']);
+            $images[] = new UnsplashAPIImage($fullData);
         }
         return $images;
     }
