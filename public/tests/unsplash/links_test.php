@@ -5,10 +5,14 @@ $SECRETS = parse_ini_file(__DIR__ . '/../../../php_secrets.ini', false, INI_SCAN
 
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
 
-$response = $unsplash->GetRandomImage();
+$images = $unsplash->SearchPhotos("Dog", 10, 1);
 
-echo '<pre>';   
-print_r($response);
-echo '</pre>';
+foreach ($images as $image) {
+    $location = $image->GetLocation();
+    echo '<pre>';
+    print_r($image);
+    print_r($location);
+    echo '</pre>';
+}
 
 ?>
