@@ -20,5 +20,7 @@ function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
 
 }
 
+// Return <select> with <option>s inside for the filter options
+
 
 ?>
