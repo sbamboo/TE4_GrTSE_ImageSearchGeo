@@ -35,7 +35,7 @@ class UnsplashAPI {
         return new UnsplashAPIImage($this, $response);
     }
 
-    public function SearchPhotos(string $query, int $perPage = 10, int $page = 1) {
+    public function SearchPhotos(string $query, int $perPage = 10, int $page = 1, bool $filterNonGeo = false): array {
         $params = [
             'query' => $query,
             'per_page' => $perPage,
@@ -47,6 +47,11 @@ class UnsplashAPI {
         //     $images[] = new UnsplashAPIImage($imageData);
         // }
         foreach ($response['results'] as $imageData) {
+            // If filterNonGeo is true we skip images without geodata
+            if ($filterNonGeo === true && !$this->HasGeoData($imageData)) {
+                continue;
+            }
+            // Instantiate as UnsplashAPIImage
             $images[] = new UnsplashAPIImage($this, $imageData);
         }
         return $images;
@@ -59,6 +64,29 @@ class UnsplashAPI {
     public function GetPhotoDetails(string $photoId) {
         $response = $this->getPhotoDetailsAsArray($photoId);
         return new UnsplashAPIImage($this, $response);
+    }
+
+    // Checks if an imageData is considered to have Geodata
+    // Either city or country or lat/lon set in location or exif
+    public function HasGeoData(array $imageData): bool {
+        // Check if imageData.location.city or imageData.location.country or imageData.location.latitude/longitude or imageData.exif.location.latitude/longitude is set
+        // We must consider that data might be missing location or exif or exif.location and also the actuall city,country,latitude,longitude fields
+        if (isset($imageData['location'])) {
+            if (!empty($imageData['location']['city']) || !empty($imageData['location']['country'])) {
+                return true;
+            }
+            if (isset($imageData['location']['position'])) {
+                if (!empty($imageData['location']['position']['latitude']) && !empty($imageData['location']['position']['longitude'])) {
+                    return true;
+                }
+            }
+        }
+        if (isset($imageData['exif']) && isset($imageData['exif']['location'])) {
+            if (!empty($imageData['exif']['location']['latitude']) && !empty($imageData['exif']['location']['longitude'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Getters
@@ -271,6 +299,17 @@ class UnsplashAPIImage {
     // Function to get the prefereed description
     public function GetDescription(): string {
         return !empty($this->description) ? $this->description : $this->alt_description;
+    }
+
+    // Function to get the prefered lon/lat coordinates
+    public function GetLonLat(): array {
+        if (!empty($this->location['latitude']) && !empty($this->location['longitude'])) {
+            return ['latitude' => $this->location['latitude'], 'longitude' => $this->location['longitude']];
+        }
+        if (!empty($this->exif['location']['latitude']) && !empty($this->exif['location']['longitude'])) {
+            return ['latitude' => $this->exif['location']['latitude'], 'longitude' => $this->exif['location']['longitude']];
+        }
+        return ['latitude' => null, 'longitude' => null];
     }
 
     // Getters
