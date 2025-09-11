@@ -23,3 +23,6 @@
 - `Constant variables` are `UPPER_SNAKE_CASE`
 - `HTML-Element-Ids` are `kebab-case` (all lowercase)
 - `HTML-Element-Classes` are `kebab-case`
+
+## Code best practise
+- CSS responsiv, använd `rem` units.
