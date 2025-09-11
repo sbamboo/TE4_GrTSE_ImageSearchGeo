@@ -179,6 +179,30 @@ class UnsplashAPIImage {
         $this->topics = $imageData['topics'] ?? [];
     }
 
+    // Function to return the entire image as keyedarray
+    public function ToArray(): array {
+        // Return only cared abt data that we use
+        return [
+            "id" => $this->id,
+            "slug" => $this->slug,
+            "created_at" => $this->created_at->format(DateTime::ATOM), // ATOM is Y-m-d\TH:i:sP ex. 2005-08-15T15:52:01+00:00
+            "updated_at" => $this->updated_at->format(DateTime::ATOM),
+            "color" => $this->color,
+            "dimentions" => $this->GetDimentions(),
+            "description" => $this->GetDescription(),
+            "download" => $this->GetDownloadUrl(),
+            "user" => [
+                "username" => $this->user_username,
+                "profile" => $this->user_unsplash_profile
+            ],
+            "exif" => $this->exif,
+            "location" => $this->location,
+            "meta" => $this->meta,
+            "tags" => $this->tags,
+            "topics" => $this->topics,
+        ];
+    }
+
     // Function to fetch the details for this image from the API
     public function FetchDetails() {
         // If details are already fetched do nothing
@@ -242,6 +266,11 @@ class UnsplashAPIImage {
     // Function to get the prefered download url for the image
     public function GetDownloadUrl(): string {
         return $this->links['download'] ?? '';
+    }
+
+    // Function to get the prefereed description
+    public function GetDescription(): string {
+        return !empty($this->description) ? $this->description : $this->alt_description;
     }
 
     // Getters

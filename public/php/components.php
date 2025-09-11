@@ -20,12 +20,32 @@ function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
 
 }
 
-// Return <select> with <option>s inside for the filter options
+// Function to return the HTML for an image
+function echoImageHTML(UnsplashAPIImage $image) {
+    $displayUrl = $image->GetImageDisplayUrl();
+    $blurUrl = $image->GetImageThumbnailUrl();
+    $location = $image->GetLocation();
+    
+    echo '<div id="image-container">';
+        echo '<div id="image">';
+            echoProgImg($blurUrl, $displayUrl, "",'image');
+        echo '</div>';
+        echo '<div id="image-location-data">';
+            if(!empty($location['country'])){echo $location['country'] . "<br>";}
+            if(!empty($location['city'])){echo $location['city'] . "<br>";}
+            if(!empty($location['name'])){echo $location['name'] . "<br>";}
+            if(!empty($location['latitude'])){echo $location['latitude'] . "<br>";}
+            if(!empty($location['longitude'])){echo $location['longitude'] . "<br>";}
+        echo '</div>';
+    echo '</div>';
+}
 
-function echoFilter($name, array $options, $selected = null){
-    $html = "<select name=\"$name\" id=\$name\">\n";
+// Return <select> with <option>s inside for the filter options
+function echoFilter(array $options, $selected = null){
+    $html = "<select name=\"filter\" id=\"filter\">\n";
     foreach($options as $value => $label){
         $isSelected = ($value == $selected) ? " selected" : "";
+        $valueLC = strtolower($value);
         $html .= "<option value=\"$value\"$isSelected>$label</option>\n";
     }
     $html .= "</select>\n";
