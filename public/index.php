@@ -61,7 +61,7 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
                 return;
             }
             $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
-            $images = $unsplash->SearchPhotos($queryStr, 10, 1);
+            $images = $unsplash->SearchPhotos($queryStr, 10, 1, false, $orderBy);
             foreach ($images as $image) {
                 echoImageHTML($image);
             }

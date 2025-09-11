@@ -42,11 +42,11 @@ function echoImageHTML(UnsplashAPIImage $image) {
 
 // Return <select> with <option>s inside for the filter options
 function echoFilter(array $options, $selected = null){
-    $html = "<select name=\"filter\" id=\"filter\">\n";
+    $html = "<select name=\"orderBy\" id=\"orderBy\">\n";
     foreach($options as $value => $label){
-        $isSelected = ($value == $selected) ? " selected" : "";
         $valueLC = strtolower($value);
-        $html .= "<option value=\"$value\"$isSelected>$label</option>\n";
+        $isSelected = ($valueLC == strtolower($selected)) ? " selected" : "";
+        $html .= "<option value=\"$valueLC\"$isSelected>$label</option>\n";
     }
     $html .= "</select>\n";
     return $html;

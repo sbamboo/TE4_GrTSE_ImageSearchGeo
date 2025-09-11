@@ -35,11 +35,12 @@ class UnsplashAPI {
         return new UnsplashAPIImage($this, $response);
     }
 
-    public function SearchPhotos(string $query, int $perPage = 10, int $page = 1, bool $filterNonGeo = false): array {
+    public function SearchPhotos(string $query, int $perPage = 10, int $page = 1, bool $filterNonGeo = false, string $orderBy = 'relevant'): array {
         $params = [
             'query' => $query,
             'per_page' => $perPage,
-            'page' => $page
+            'page' => $page,
+            'order_by' => $orderBy
         ];
         $response = $this->makeGetRequest('search/photos', $params);
         $images = [];
