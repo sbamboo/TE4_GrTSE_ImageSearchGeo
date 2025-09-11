@@ -4,16 +4,18 @@
 // Requires: blurhash.php
 
 class UnsplashAPI {
-    private $access_key;
-    private $api_url = 'https://api.unsplash.com/';
+    private string $accessKey;
+    private bool $autoGetDetails;
+    private string $apiUrl = 'https://api.unsplash.com/';
 
-    public function __construct($access_key) {
-        $this->access_key = $access_key;
+    public function __construct(string $accessKey, $autoGetDetails = false) {
+        $this->accessKey = $accessKey;
+        $this->autoGetDetails = $autoGetDetails;
     }
 
     // lower level make GET request function without curl extension
-    private function makeGetRequest($endpoint, $params = []) {
-        $url = $this->api_url . $endpoint . '?' . http_build_query(array_merge($params, ['client_id' => $this->access_key]));
+    private function makeGetRequest(string $endpoint, array $params = []) {
+        $url = $this->apiUrl . $endpoint . '?' . http_build_query(array_merge($params, ['client_id' => $this->accessKey]));
         $options = [
             'http' => [
                 'method' => 'GET',
@@ -30,13 +32,13 @@ class UnsplashAPI {
 
     public function GetRandomImage() {
         $response = $this->makeGetRequest('photos/random', []);
-        return new UnsplashAPIImage($response);
+        return new UnsplashAPIImage($this, $response);
     }
 
-    public function SearchPhotos($query, $per_page = 10, $page = 1) {
+    public function SearchPhotos(string $query, int $perPage = 10, int $page = 1) {
         $params = [
             'query' => $query,
-            'per_page' => $per_page,
+            'per_page' => $perPage,
             'page' => $page
         ];
         $response = $this->makeGetRequest('search/photos', $params);
@@ -45,10 +47,23 @@ class UnsplashAPI {
         //     $images[] = new UnsplashAPIImage($imageData);
         // }
         foreach ($response['results'] as $imageData) {
-            $fullData = $this->makeGetRequest('photos/' . $imageData['id']);
-            $images[] = new UnsplashAPIImage($fullData);
+            $images[] = new UnsplashAPIImage($this, $imageData);
         }
         return $images;
+    }
+
+    public function getPhotoDetailsAsArray(string $photoId): array {
+        return $this->makeGetRequest('photos/' . $photoId);
+    }
+
+    public function GetPhotoDetails(string $photoId) {
+        $response = $this->getPhotoDetailsAsArray($photoId);
+        return new UnsplashAPIImage($this, $response);
+    }
+
+    // Getters
+    public function IsAutoFetchingDetails(): bool {
+        return $this->autoGetDetails;
     }
 }
 
@@ -89,6 +104,9 @@ class UnsplashAPILocation {
 
 // Represents an image from the Unsplash API
 class UnsplashAPIImage {
+    private UnsplashAPI $parent;
+    private bool $detailsAreFetched = false;
+
     private string $id;
     private string $slug;
     private array $alternative_slugs; // alternative_slugs keyedarray "langcode"=>"altslug"
@@ -120,7 +138,15 @@ class UnsplashAPIImage {
     //private int $downloads;
     private array $topics; // topics is array of "id","title","slug","visibility" => string:s
 
-    public function __construct(array $imageData) {
+    public function __construct(UnsplashAPI $parent, array $imageData) {
+        $this->parent = $parent;
+
+        // If parent has IsAutoFetchingDetails() enabled we fetch details now
+        if ($parent->IsAutoFetchingDetails() === true && $this->detailsAreFetched === false) {
+            $imageData = $parent->getPhotoDetailsAsArray($imageData['id'] ?? '');
+            $this->detailsAreFetched = true;
+        }
+
         $this->id = $imageData['id'] ?? '';
         $this->slug = $imageData['slug'] ?? '';
         $this->alternative_slugs = $imageData['alternative_slugs'] ?? [];
@@ -153,8 +179,28 @@ class UnsplashAPIImage {
         $this->topics = $imageData['topics'] ?? [];
     }
 
+    // Function to fetch the details for this image from the API
+    public function FetchDetails() {
+        // If details are already fetched do nothing
+        if ($this->detailsAreFetched) {
+            return;
+        }
+
+        $imageData = $this->parent->getPhotoDetailsAsArray($this->id);
+        // Update all properties from the fetched data
+        $this->__construct($this->parent, $imageData);
+    }
+
     // Use blurHashToDataUrl to get image of blur hash
-    public function GetBlurAsImage(int $width = 32, int $height = 32): string {
+    public function GetBlurAsImage(int $width = -1, int $height = -1): string {
+        // If width and/or height is <0 set to $this->width and/or $this->height
+        if ($width < 0) {
+            $width = $this->width;
+        }
+        if ($height < 0) {
+            $height = $this->height;
+        }
+
         // If this image does not have a blurhash return empty string
         if (empty($this->blur_hash)) {
             return '';
@@ -198,6 +244,9 @@ class UnsplashAPIImage {
     }
     public function GetExif(): array {
         return $this->exif;
+    }
+    public function GetDimentions(): array {
+        return ['width' => $this->width, 'height' => $this->height];
     }
 }
 ?>
