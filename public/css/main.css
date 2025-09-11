@@ -7,7 +7,7 @@
     display: flex;
     width: 10rem;
     align-items: center;
-    flex-flow: column;
+    flex-flow: row;
 }
 #search-label{
     font-size: 1.5rem;
@@ -24,11 +24,22 @@
 }
 #image-container{
     width: 35rem;
+    height: 22rem;
     display: flex;
     flex-flow: row;
+    background-color: aqua;
+    margin: 3rem;
+    margin-left: 1rem;
+    padding: 1rem;
+    align-items: center;
+    border-radius: 2rem;
 }
 #image{
     width: 25rem;
     height: 20rem;
     object-fit: contain;
+}
+#image-location-data{
+    display: flex;
+    flex-flow: column;
 }

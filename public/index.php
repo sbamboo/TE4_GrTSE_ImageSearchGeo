@@ -30,6 +30,7 @@ require_once('./php/components.php');
         <form id="search-form" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="query" value="<?php echo $_POST['query'] ?? ''; ?>">
+            <input id="search-bar" type="checkbox" name="filter" value="">
             <input type="submit" value="Search">
         </form>
     </div>
@@ -38,28 +39,28 @@ require_once('./php/components.php');
             if(!empty($_POST["query"])){
                 $query = $_POST["query"];
 
-                $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
+                $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], true);
                 $images = $unsplash->SearchPhotos($query, 10, 1);
                 foreach ($images as $image) {
                     ?>
                     <div id="image-container">
                         <?php
                         $displayUrl = $image->GetImageDisplayUrl();
-                        $blurUrl = $image->GetBlurAsImage();
+                        //$blurUrl = $image->GetBlurAsImage();
+                        $blurUrl = $image->GetImageThumbnailUrl();
                         ?> 
                         <div id="image"> 
                             <?php echoProgImg($blurUrl, $displayUrl, "",'image');?> 
                            
                         </div>
                         <div id="image-location-data">
-                            <p>hej</p>
                             <?php
                             $location = $image->GetLocation();
-                            echo $location['country'];
-                            echo $location['city'];
-                            echo $location['name'];
-                            echo $location['latitude'];
-                            echo $location['longitude'];
+                            echo $location['country'] . "<br>";
+                            echo $location['city'] . "<br>";
+                            echo $location['name'] . "<br>";
+                            echo $location['latitude'] . "<br>";
+                            echo $location['longitude'] . "<br>";
                             ?>
                         </div>
                     </div>
