@@ -228,6 +228,12 @@ class UnsplashAPIImage {
         return 'data:image/png;base64,' . base64_encode($imageData);
     }
 
+    // Function to get the prefered thumbnail (not blurhash)
+    public function GetImageThumbnailUrl(): string {
+        // Does thumb exists else use small else use small_s3
+        return $this->urls['thumb'] ?? $this->urls['small'] ?? $this->urls['small_s3'] ?? '';
+    }
+
     // Function to get the prefered url for displaying the image on the website
     public function GetImageDisplayUrl(): string {
         return $this->urls['regular'] ?? '';
