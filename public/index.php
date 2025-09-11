@@ -57,6 +57,9 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
     </div>
     <div class="php-endpoint-response">
         <?php
+            if(empty($queryStr)){
+                return;
+            }
             $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
             $images = $unsplash->SearchPhotos($queryStr, 10, 1);
             foreach ($images as $image) {
