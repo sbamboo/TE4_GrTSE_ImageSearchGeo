@@ -10,6 +10,7 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 // Imports
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
+require_once('./php/components.php');
 
 
 ?>
@@ -44,15 +45,21 @@ require_once('./php/unsplash_api.php');
                     <div id="image-container">
                         <?php
                         $displayUrl = $image->GetImageDisplayUrl();
+                        $blurUrl = $image->GetBlurAsImage();
                         ?> 
                         <div id="image"> 
-                            <?php echo "<img id='image' src='$displayUrl'/>"; ?> 
+                            <?php echoProgImg($blurUrl, $displayUrl, "",'image');?> 
+                           
                         </div>
                         <div id="image-location-data">
                             <p>hej</p>
                             <?php
                             $location = $image->GetLocation();
-                            echo $location['country'] . $location['city'];
+                            echo $location['country'];
+                            echo $location['city'];
+                            echo $location['name'];
+                            echo $location['latitude'];
+                            echo $location['longitude'];
                             ?>
                         </div>
                     </div>
