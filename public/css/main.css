@@ -60,3 +60,32 @@ body:has(#toggle-layout:checked) .php-endpoint-response {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
+
+#toggle-layout {
+    display: none;
+}
+
+#toggle-layout-label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    background: #f3f3f3;
+    transition: background 0.2s;
+}
+
+#toggle-layout-label:hover {
+    background: #e0e0e0;
+}
+
+body:has(#toggle-layout:checked) #list-icon{
+    display: inline;
+}
+
+body:has(#toggle-layout:checked) #grid-icon {
+    display: none;
+}
+
+body :has(#toggle-layout:not(:checked)) #list-icon {
+    display: none;
+}

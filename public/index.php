@@ -84,7 +84,21 @@ if(!empty($queryStr)){
             <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
             <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
-            <label for="toggle-layout">Toggle Layout</label>
+            <label for="toggle-layout" id="toggle-layout-label">
+                <svg id="grid-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 4h6v6H4z" />
+                    <path d="M14 4h6v6h-6z" />
+                    <path d="M4 14h6v6H4z" />
+                    <path d="M14 14h6v6h-6z" />
+                </svg>
+                <svg id="list-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 6h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 18h16" />
+                </svg>
+            </label>
             <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <?php
                 echoFilter(
