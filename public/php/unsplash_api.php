@@ -416,5 +416,11 @@ class UnsplashAPIImage {
             'alternative_slugs' => $this->alternative_slugs
         ];
     }
+    public function GetUserInfo(): array {
+        return [
+            'username' => $this->user_username,
+            'profile' => $this->user_unsplash_profile
+        ];
+    }
 }
 ?>
