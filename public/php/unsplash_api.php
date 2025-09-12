@@ -191,7 +191,7 @@ class UnsplashAPIImage {
     //private array $topic_submissions; 
     private string $asset_type; // "photo",...
     private string $user_username; // <APIResponse>.User.username
-    private string $user_unsplash_profile; // <APIResponse>.User.links.self
+    private string $user_unsplash_profile; // <APIResponse>.User.links.html
     private array $exif;
     private array $location;
     private array $meta; // meta keyedarray "index"=>"value"
@@ -231,7 +231,7 @@ class UnsplashAPIImage {
         // $this->topic_submissions = $imageData['topic_submissions'] ?? [];
         $this->asset_type = $imageData['asset_type'] ?? '';
         $this->user_username = $imageData['user']['username'] ?? '';
-        $this->user_unsplash_profile = $imageData['user']['links']['self'] ?? '';
+        $this->user_unsplash_profile = $imageData['user']['links']['html'] ?? '';
         $this->exif = UnsplashAPIExif::Create($imageData['exif'] ?? []);
         $this->location = UnsplashAPILocation::Create($imageData['location'] ?? []);
         $this->meta = $imageData['meta'] ?? [];

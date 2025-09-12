@@ -8,10 +8,11 @@ $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
 $images = $unsplash->SearchPhotos("Dog", 10, 1);
 
 foreach ($images as $image) {
-    $location = $image->GetLocation();
+    $profile = $image->GetUserInfo();
     echo '<pre>';
-    print_r($image);
-    print_r($location);
+    //print_r($image);
+    print_r($profile);
+    
     echo '</pre>';
 }
 
