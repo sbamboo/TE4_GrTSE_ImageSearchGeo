@@ -34,6 +34,7 @@
     background-color: aqua;
     margin: 3rem;
     margin-left: 1rem;
+    margin-right: 1rem;
     padding: 1rem;
     align-items: center;
     border-radius: 2rem;
@@ -45,7 +46,17 @@
     object-fit: contain;
 }
 
-.image-location-data{
+.image-location-data {
     display: flex;
     flex-flow: column;
+}
+
+.php-endpoint-response{
+    display: flex;
+    flex-flow: column;
+}
+
+#toggle-layout:checked ~ .php-endpoint-response {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
