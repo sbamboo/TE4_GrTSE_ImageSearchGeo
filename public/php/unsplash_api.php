@@ -278,13 +278,22 @@ class UnsplashAPIImage {
     }
 
     // Use blurHashToDataUrl to get image of blur hash
+    // Takes $width and $height of the blurImage to generate, height is default -1 which means base it of aspect ratio
+    //   GetBlurAsImage(32,32) => 32x32 1:1 ratio
+    //   GetBlurAsImage(32,-1) => 32x(height based on aspect ratio) x:? ratio
+    //   GetBlurAsImage(-1,32) => (width based on aspect ratio)x32 ?:x ratio
+    //   GetBlurAsImage(-1,-1) => (width,height) of original image ?:? ratio (NOT RECOMMENDED SINCE IT MIGHT BE LARGE)
     public function GetBlurAsImage(int $width = -1, int $height = -1): string {
-        // If width and/or height is <0 set to $this->width and/or $this->height
-        if ($width < 0) {
+        $orgAspectRatio = $this->width / $this->height;
+        if ($width < 0 && $height < 0) {
             $width = $this->width;
-        }
-        if ($height < 0) {
             $height = $this->height;
+        } else if ($width < 0) {
+            // Calculate width based on $height and aspect ratio of the image
+            $width = (int) round($height * $orgAspectRatio);
+        } else if ($height < 0) {
+            // Calculate height based on $width and aspect ratio of the image
+            $height = (int) round($width / $orgAspectRatio);
         }
 
         // If this image does not have a blurhash return empty string
@@ -295,6 +304,9 @@ class UnsplashAPIImage {
         // Decode the blurhash into RGB pixels
         $pixels = Blurhash::decode($this->blur_hash, $width, $height);
         $image  = imagecreatetruecolor($width, $height);
+        if (!$image) {
+            throw new Exception("Failed to create image resource");
+        }
         for ($y = 0; $y < $height; ++$y) {
             for ($x = 0; $x < $width; ++$x) {
                 [$r, $g, $b] = $pixels[$y][$x];
