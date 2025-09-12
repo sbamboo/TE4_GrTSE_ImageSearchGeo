@@ -32,7 +32,6 @@ function echoImageHTML(UnsplashAPIImage $image) {
             echoProgImg($blurUrl, $displayUrl, "",'image');
         echo '</div>';
         echo '<div id="image-location-data">';
-            echo $image->ToArray()['id'] . "<br>";
             if(!empty($location['country'])){echo "country: " . $location['country'] . "<br>";}
             if(!empty($location['city'])){echo "city: " . $location['city'] . "<br>";}
             if(!empty($location['name'])){echo "place: " . $location['name'] . "<br>";}
