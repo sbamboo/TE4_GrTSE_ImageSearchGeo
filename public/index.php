@@ -54,6 +54,7 @@ if(!empty($queryStr)){
 
     <link rel="stylesheet" href="./css/main.css">
     
+    <script src="./js/popups.js"></script>
     <script src="./js/main.js"></script>
     
     <!-- Context Meta (Use already validated values) -->
