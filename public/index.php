@@ -103,13 +103,13 @@ if(!empty($queryStr)){
                 </svg>
             </label>
             <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
-            <label for="">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
+            <label for="toggle-language" id="toggle-language-label">
+                <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
                     <rect width="16" height="10" fill="#005cbf"/>
                     <rect x="5" width="2" height="10" fill="#ffc720"/>
                     <rect y="4" width="16" height="2" fill="#ffc720"/>    
                 </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="12" viewBox="0 0 60 30">
+                <svg id="english-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="12" viewBox="0 0 60 30">
                     <rect width="60" height="30" fill="#012169"/>
 
                     <polygon points="0,0 6,0 60,24 60,30 54,30 0,6" fill="#fff"/>
