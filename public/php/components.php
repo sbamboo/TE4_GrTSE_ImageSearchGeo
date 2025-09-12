@@ -1,6 +1,6 @@
 <?php
 // This file creates reusable components for the website
-
+require_once('translate.php');
 //MARK: Should we instead move the JS to an observer? Use CSS background-swap or apply preload/lazy?
 function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
     // Ensure special chars in alt text will be handled correctly
@@ -32,11 +32,22 @@ function echoImageHTML(UnsplashAPIImage $image) {
             echoProgImg($blurUrl, $displayUrl, "",'image');
         echo '</div>';
         echo '<div id="image-location-data">';
-            if(!empty($location['country'])){echo "country: " . $location['country'] . "<br>";}
-            if(!empty($location['city'])){echo "city: " . $location['city'] . "<br>";}
-            if(!empty($location['name'])){echo "place: " . $location['name'] . "<br>";}
-            if(!empty($coords['latitude'])){echo $coords['latitude'] . "<br>";}
-            if(!empty($coords['longitude'])){echo $coords['longitude'] . "<br>";}
+            $locationOrder = ['country', 'city', 'name', 'latitude', 'longitude'];
+            foreach($locationOrder as $key){
+                if(!empty($location[$key])){
+                    $text = $location[$key];
+                    if(containsNonLatinLetters_regex($text)){
+                        echo translateNonLatin($text) . "<br>";
+                    } 
+                    else{
+                        if(!empty($location['country']) && !translateNonLatin($text)){echo "country: " . $location['country'] . "<br>";}
+                        if(!empty($location['city']) && !translateNonLatin($text)){echo "city: " . $location['city'] . "<br>";}
+                        if(!empty($location['name']) && !translateNonLatin($text)){echo "place: " . $location['name'] . "<br>";}
+                        if(!empty($coords['latitude']) && !translateNonLatin($text)){echo $coords['latitude'] . "<br>";}
+                        if(!empty($coords['longitude']) && !translateNonLatin($text)){echo $coords['longitude'] . "<br>";}
+                    }
+                }
+            }
         echo '</div>';
     echo '</div>';
 }

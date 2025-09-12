@@ -1,6 +1,6 @@
 <?php
 
-$SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED);
+// $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED);
 
 //determines if a string contains nonlatin characters
 function containsNonLatinLetters_regex(string $str): bool {
@@ -9,7 +9,7 @@ function containsNonLatinLetters_regex(string $str): bool {
 
 // translates strings with non latin charcters
 function translateNonLatin(string $foreignText){
-    
+    $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED);
     $url = "https://translation.googleapis.com/language/translate/v2?key=" 
            . $SECRETS['GTRANSLATE_API_KEY']
            . "&q=" . urlencode($foreignText) 
@@ -20,6 +20,9 @@ function translateNonLatin(string $foreignText){
 
     $translated = $result['data']['translations'][0]['translatedText'] ?? null;
     
-    echo $translated;
+    //return $translated;
+    if($translated && $translated !== $foreignText){
+        return $foreignText . "(" . $translated . ")";
+    } 
 }
 ?>
