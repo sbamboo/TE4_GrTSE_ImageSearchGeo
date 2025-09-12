@@ -38,47 +38,7 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
         echo '</div>';
         echo '<div class="image-location-data">';
 
-            // $locationOrder = ['country', 'city', 'name', 'latitude', 'longitude'];
-            // foreach($locationOrder as $key){
-            //     if(!empty($location[$key])){
-            //         $text = $location[$key];
-            //         if(containsNonLatinLetters_regex($text)){
-            //             echo translateNonLatin($text) . "<br>";
-            //         } 
-            //         else{
-            //             if(!empty($location['country']) && !translateNonLatin($text)){echo "country: " . $location['country'] . "<br>";}
-            //             if(!empty($location['city']) && !translateNonLatin($text)){echo "city: " . $location['city'] . "<br>";}
-            //             if(!empty($location['name']) && !translateNonLatin($text)){echo "place: " . $location['name'] . "<br>";}
-            //             if(!empty($coords['latitude']) && !translateNonLatin($text)){echo $coords['latitude'] . "<br>";}
-            //             if(!empty($coords['longitude']) && !translateNonLatin($text)){echo $coords['longitude'] . "<br>";}
-            //         }
-            //     }
-            // }
-        
-            
-            // Echo location names
-            // Echoes either
-            //     <div class="location-text">
-            //         <p>span>KEY</span> <span>TEXT</span></p>
-            //     </div>
-            // or
-            //     <div class="location-text location-text-translated">
-            //         <p><span>KEY</span> <span>TRANSLATED</span></p>
-            //         <p class="text-info-smaller">(translated)</p>
-            //         <div class="location-text-original" style="display:none;">
-            //             <p>TEXT</p>
-            //         </div>
-            //     </div>
-            //
             foreach ($geoNames as $key => $text) {
-                // if ($translateNonLatin && $translator) {
-                //     if (!empty($text) && containsNonLatinLetters($text)) {
-                //         $translated = $translator->translate($text);
-                //         if ($translated) {
-                //             $geoNames[$key] = $translated;
-                //         }
-                //     }
-                // }
 
                 // If empty continue
                 if (empty($text)) {
