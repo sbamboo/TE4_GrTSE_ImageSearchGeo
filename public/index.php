@@ -43,6 +43,10 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
             <input type="checkbox" id="autoFetchDetails" name="autoFetchDetails" value="true" <?php if ($autoFetchDetails) echo 'checked'; ?>>
+            <select name="orderBy" id="orderBy">
+                <option value="relevant" <?php echo ($orderBy === "relevant" ? "selected" : "") ?>>Relevance</option>
+                <option value="latest" <?php echo ($orderBy === "latest" ? "selected" : "") ?>>Latest</option>
+            </select>
             <?php
                 echoFilter(
                     [
