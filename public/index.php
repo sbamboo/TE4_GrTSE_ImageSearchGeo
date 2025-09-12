@@ -23,6 +23,7 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']);
 $filterNonGeo = isset($_POST['filterNonGeo']);
 $translateNonLatin = isset($_POST['translateNonLatin']);
 $toggleLayout = isset($_POST['toggleLayout']);
+$toggleLanguage = isset($_POST['toggleLanguage']);
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -62,6 +63,7 @@ if(!empty($queryStr)){
     <meta name="filterNonGeo" content="<?php echo $filterNonGeo ? 'true' : 'false'; ?>">
     <meta name="translateNonLatin" content="<?php echo $translateNonLatin ? 'true' : 'false'; ?>">
     <meta name="toggleLayout" content="<?php echo $toggleLayout ? 'true' : 'false'; ?>">
+    <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
 
     <title>Document</title>
@@ -100,6 +102,29 @@ if(!empty($queryStr)){
                 </svg>
             </label>
             <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
+            <label for="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
+                    <rect width="16" height="10" fill="#005cbf"/>
+                    <rect x="5" width="2" height="10" fill="#ffc720"/>
+                    <rect y="4" width="16" height="2" fill="#ffc720"/>    
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="12" viewBox="0 0 60 30">
+                    <rect width="60" height="30" fill="#012169"/>
+
+                    <polygon points="0,0 6,0 60,24 60,30 54,30 0,6" fill="#fff"/>
+                    <polygon points="60,0 60,6 6,30 0,30 0,24 54,0" fill="#fff"/>
+
+                    <polygon points="0,0 3,0 60,27 60,30 57,30 0,3" fill="#C8102E"/>
+                    <polygon points="60,0 60,3 3,30 0,30 0,27 57,0" fill="#C8102E"/>
+
+                    <rect x="25" width="10" height="30" fill="#fff"/>
+                    <rect y="10" width="60" height="10" fill="#fff"/>
+
+                    <rect x="27" width="6" height="30" fill="#C8102E"/>
+                    <rect y="12" width="60" height="6" fill="#C8102E"/>
+                </svg>
+            </label>
+            <input type="checkbox" id="toggle-language" name="toggleLanguage"<?php if(!$hasSearched || $toggleLanguage) echo 'checked' ?>>
             <?php
                 echoFilter(
                     [
