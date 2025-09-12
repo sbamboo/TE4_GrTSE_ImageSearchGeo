@@ -367,7 +367,7 @@ class UnsplashAPIImage {
     }
 
     // Function to get the prefered geolocation names
-    public function GetGeoName(): array {
+    public function GetGeoNames(): array {
         // Clears city if city is strContained inside name, clears country if country is strContained inside name
         $toRet = [
             'name' => $this->location['name'] ?? '',
@@ -396,6 +396,13 @@ class UnsplashAPIImage {
     }
     public function GetDimentions(): array {
         return ['width' => $this->width, 'height' => $this->height];
+    }
+    public function GetIdentifiers() : array {
+        return [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'alternative_slugs' => $this->alternative_slugs
+        ];
     }
 }
 ?>

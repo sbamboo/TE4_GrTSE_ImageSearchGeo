@@ -13,11 +13,15 @@ require_once('./php/unsplash_api.php');
 require_once('./php/translate.php');
 require_once('./php/components.php');
 
+// Instantiate translator
+$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
+
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
 $queryStr = $_POST['queryStr'] ?? '';
 $orderBy = $_POST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
 $autoFetchDetails = isset($_POST['autoFetchDetails']);
 $filterNonGeo = isset($_POST['filterNonGeo']);
+$translateNonLatin = isset($_POST['translateNonLatin']);
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -69,7 +73,7 @@ if(!empty($queryStr)){
             <label for="filter-non-geo">Filter Non Geo</label>
             <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
-            <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched && $translateNonLatin) echo 'checked'; ?>>
+            <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
             <?php
                 echoFilter(
                     [
@@ -93,7 +97,7 @@ if(!empty($queryStr)){
             }
 
             foreach ($images as $image) {
-                echoImageHTML($image);
+                echoImageHTML($image, $translateNonLatin, $translator);
             }
         ?>
     </div>

@@ -1,15 +1,19 @@
 <?php
 // This file creates reusable components for the website
-require_once('translate.php');
+
+
 //MARK: Should we instead move the JS to an observer? Use CSS background-swap or apply preload/lazy?
-function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
+function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array $classes = [], ?string $id = null) {
     // Ensure special chars in alt text will be handled correctly
     $alt = htmlspecialchars($alt, ENT_QUOTES, 'UTF-8');
     // Echo the progressive image HTML
+    $idStr = ($id != null) ? ('data-id="' . $id . '"') : '';
     echo '
-    <img id="' . $id . '"
+    <img
+        class="progressive-image ' . implode(' ', $classes) . '"
         src="' . $blurrySrc . '" 
-        alt="' . $alt . '" 
+        alt="' . $alt . '"
+        ' . $idStr . '
         onload="{
             const full = new Image();
             full.src = \'' . $fullSrc . '\';
@@ -21,33 +25,104 @@ function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
 }
 
 // Function to return the HTML for an image
-function echoImageHTML(UnsplashAPIImage $image) {
+function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null) {
     $displayUrl = $image->GetImageDisplayUrl();
     $blurUrl = $image->GetImageThumbnailUrl();
-    $location = $image->GetGeoName();
+    $geoNames = $image->GetGeoNames();
     $coords = $image->GetCoordinates();
+    $id = $image->GetIdentifiers()["id"];
     
-    echo '<div id="image-container">';
-        echo '<div id="image">';
-            echoProgImg($blurUrl, $displayUrl, "",'image');
+    echo '<div class="image-container" data-id="' . $id . '">';
+        echo '<div class="image">';
+            echoProgImg($blurUrl, $displayUrl, "", [], $id);
         echo '</div>';
-        echo '<div id="image-location-data">';
-            $locationOrder = ['country', 'city', 'name', 'latitude', 'longitude'];
-            foreach($locationOrder as $key){
-                if(!empty($location[$key])){
-                    $text = $location[$key];
-                    if(containsNonLatinLetters_regex($text)){
-                        echo translateNonLatin($text) . "<br>";
-                    } 
-                    else{
-                        if(!empty($location['country']) && !translateNonLatin($text)){echo "country: " . $location['country'] . "<br>";}
-                        if(!empty($location['city']) && !translateNonLatin($text)){echo "city: " . $location['city'] . "<br>";}
-                        if(!empty($location['name']) && !translateNonLatin($text)){echo "place: " . $location['name'] . "<br>";}
-                        if(!empty($coords['latitude']) && !translateNonLatin($text)){echo $coords['latitude'] . "<br>";}
-                        if(!empty($coords['longitude']) && !translateNonLatin($text)){echo $coords['longitude'] . "<br>";}
+        echo '<div class="image-location-data">';
+
+            // $locationOrder = ['country', 'city', 'name', 'latitude', 'longitude'];
+            // foreach($locationOrder as $key){
+            //     if(!empty($location[$key])){
+            //         $text = $location[$key];
+            //         if(containsNonLatinLetters_regex($text)){
+            //             echo translateNonLatin($text) . "<br>";
+            //         } 
+            //         else{
+            //             if(!empty($location['country']) && !translateNonLatin($text)){echo "country: " . $location['country'] . "<br>";}
+            //             if(!empty($location['city']) && !translateNonLatin($text)){echo "city: " . $location['city'] . "<br>";}
+            //             if(!empty($location['name']) && !translateNonLatin($text)){echo "place: " . $location['name'] . "<br>";}
+            //             if(!empty($coords['latitude']) && !translateNonLatin($text)){echo $coords['latitude'] . "<br>";}
+            //             if(!empty($coords['longitude']) && !translateNonLatin($text)){echo $coords['longitude'] . "<br>";}
+            //         }
+            //     }
+            // }
+        
+            
+            // Echo location names
+            // Echoes either
+            //     <div class="location-text">
+            //         <p>span>KEY</span> <span>TEXT</span></p>
+            //     </div>
+            // or
+            //     <div class="location-text location-text-translated">
+            //         <p><span>KEY</span> <span>TRANSLATED</span></p>
+            //         <p class="text-info-smaller">(translated)</p>
+            //         <div class="location-text-original" style="display:none;">
+            //             <p>TEXT</p>
+            //         </div>
+            //     </div>
+            //
+            foreach ($geoNames as $key => $text) {
+                // if ($translateNonLatin && $translator) {
+                //     if (!empty($text) && containsNonLatinLetters($text)) {
+                //         $translated = $translator->translate($text);
+                //         if ($translated) {
+                //             $geoNames[$key] = $translated;
+                //         }
+                //     }
+                // }
+
+                // If empty continue
+                if (empty($text)) {
+                    continue;
+                }
+
+                // name => place
+                if ($key === 'name') {
+                    $key = 'place';
+                }
+
+                $containsNonLatin = ($translateNonLatin && $translator) ? containsNonLatinLetters($text) : false;
+
+                echo '<div class="location-text'; if ($containsNonLatin) { echo ' location-text-translated'; } echo '">';
+                $didTranslate = false;
+                if ($containsNonLatin) {
+                    $translated = $translator->translate($text);
+                    if ($translated) {
+                        $didTranslate = true;
+                        echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($translated, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                        echo '<p class="text-info-smaller">(translated)</p>';
+                        echo '<div class="location-text-original" style="display:none;">';
+                            echo '<p>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</p>';
+                        echo '</div>';
                     }
                 }
+                if (!$didTranslate) {
+                    echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                }
+                echo '</div>';
             }
+
+            // // Echo the location data HTML
+            if (!empty($coords['latitude'])) {
+                echo '<div class="location-text">';
+                    echo '<p> <span>Latitude: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                echo '</div>';
+            }
+            if (!empty($coords['longitude'])) {
+                echo '<div class="location-text">';
+                    echo '<p> <span>Longitude: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                echo '</div>';
+            }
+
         echo '</div>';
     echo '</div>';
 }
