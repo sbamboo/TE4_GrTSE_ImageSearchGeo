@@ -37,8 +37,6 @@ function containsNonLatinLetters_regex(string $str): bool {
 // var_dump(containsNonLatinLetters_regex("Hola! 😀"));    // false
 // var_dump(containsNonLatinLetters_regex("Café"));        // false
 
-
-$apiKey = "AIzaSyAljk6pDpPBc40jJN0P6H0w190aOuc_gzg";
 $text = "Һаумыһығыҙ, минең исемем Элиас";
 
 $url = "https://translation.googleapis.com/language/translate/v2?key=" 
