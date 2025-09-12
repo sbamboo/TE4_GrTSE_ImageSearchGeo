@@ -96,8 +96,11 @@ if(!empty($queryStr)){
             <input type="submit" id="search-button" value="Search">
         </form>
     </div>
-    <label for="toggle-layout">Toggle Layout</label>
-    <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
+    <form action="" method="post">
+        <label for="toggle-layout">Toggle Layout</label>
+        <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
+    </form>
+    <?php var_dump($toggleLayout); ?>
     <div class="php-endpoint-response">
         <?php
             if ($searchInfo) {
