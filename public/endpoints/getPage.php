@@ -8,6 +8,7 @@ $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER
 require_once('./../php/endpoint_helpers.php');
 require_once('./../php/libs/blurhash.php');
 require_once('./../php/unsplash_api.php');
+require_once('./../php/translate.php');
 require_once('./../php/components.php');
 
 // Setup enviroment

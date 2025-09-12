@@ -10,6 +10,7 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 // Imports
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
+require_once('./php/translate.php');
 require_once('./php/components.php');
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)

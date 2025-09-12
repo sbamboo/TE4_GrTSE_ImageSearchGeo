@@ -24,7 +24,7 @@ function echoProgImg($blurrySrc, $fullSrc, $alt = "", $id="") {
 function echoImageHTML(UnsplashAPIImage $image) {
     $displayUrl = $image->GetImageDisplayUrl();
     $blurUrl = $image->GetImageThumbnailUrl();
-    $location = $image->GetLocation();
+    $location = $image->GetGeoName();
     $coords = $image->GetCoordinates();
     
     echo '<div id="image-container">';
@@ -33,9 +33,9 @@ function echoImageHTML(UnsplashAPIImage $image) {
         echo '</div>';
         echo '<div id="image-location-data">';
             echo $image->ToArray()['id'] . "<br>";
-            if(!empty($location['country'])){echo $location['country'] . "<br>";}
-            if(!empty($location['city'])){echo $location['city'] . "<br>";}
-            if(!empty($location['name'])){echo $location['name'] . "<br>";}
+            if(!empty($location['country'])){echo "country: " . $location['country'] . "<br>";}
+            if(!empty($location['city'])){echo "city: " . $location['city'] . "<br>";}
+            if(!empty($location['name'])){echo "place: " . $location['name'] . "<br>";}
             if(!empty($coords['latitude'])){echo $coords['latitude'] . "<br>";}
             if(!empty($coords['longitude'])){echo $coords['longitude'] . "<br>";}
         echo '</div>';
