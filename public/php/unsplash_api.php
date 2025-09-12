@@ -49,11 +49,20 @@ class UnsplashAPI {
         // }
         foreach ($response['results'] as $imageData) {
             // If filterNonGeo is true we skip images without geodata
-            if ($filterNonGeo === true && !$this->HasGeoData($imageData)) {
-                continue;
-            }
+            // if ($filterNonGeo === true || !$this->HasGeoData($imageData)) {
+            //     print_r($imageData, $this->HasGeoData($imageData));
+            // }
             // Instantiate as UnsplashAPIImage
-            $images[] = new UnsplashAPIImage($this, $imageData);
+            //$images[] = new UnsplashAPIImage($this, $imageData);
+            if($filterNonGeo === true){
+                if($this->HasGeoData($imageData)){
+                    $images[] = new UnsplashAPIImage($this, $imageData);
+                }
+            }
+            else{
+                $images[] = new UnsplashAPIImage($this, $imageData);
+            }
+
         }
         return $images;
     }
