@@ -42,8 +42,8 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
         <form id="search-form" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
-            <input type="checkbox" id="autoFetchDetails" name="autoFetchDetails" value="true" <?php if ($autoFetchDetails) echo 'checked'; ?>>
-            <select name="orderBy" id="orderBy">
+            <input type="checkbox" id="auto-fetch-details" name="autoFetchDetails" value="true" <?php if ($autoFetchDetails) echo 'checked'; ?>>
+            <select name="orderBy" id="order-by">
                 <option value="relevant" <?php echo ($orderBy === "relevant" ? "selected" : "") ?>>Relevance</option>
                 <option value="latest" <?php echo ($orderBy === "latest" ? "selected" : "") ?>>Latest</option>
             </select>
@@ -56,7 +56,7 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
                     $orderBy
                 );
             ?>
-            <input type="submit" value="Search">
+            <input type="submit" id="search-button" value="Search">
         </form>
     </div>
     <div class="php-endpoint-response">
