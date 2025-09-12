@@ -22,6 +22,7 @@ $orderBy = $_POST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
 $autoFetchDetails = isset($_POST['autoFetchDetails']);
 $filterNonGeo = isset($_POST['filterNonGeo']);
 $translateNonLatin = isset($_POST['translateNonLatin']);
+$toggleLayout = isset($_POST['toggleLayout']);
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -58,6 +59,7 @@ if(!empty($queryStr)){
     <meta name="autoFetchDetails" content="<?php echo $autoFetchDetails ? 'true' : 'false'; ?>">
     <meta name="filterNonGeo" content="<?php echo $filterNonGeo ? 'true' : 'false'; ?>">
     <meta name="translateNonLatin" content="<?php echo $translateNonLatin ? 'true' : 'false'; ?>">
+    <meta name="toggleLayout" content="<?php echo $toggleLayout ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
 
     <title>Document</title>
@@ -86,6 +88,8 @@ if(!empty($queryStr)){
             <input type="submit" id="search-button" value="Search">
         </form>
     </div>
+    <label for="toggle-layout">Toggle Layout</label>
+    <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
     <div class="php-endpoint-response">
         <?php
             if ($searchInfo) {
