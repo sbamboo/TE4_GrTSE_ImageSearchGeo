@@ -366,6 +366,27 @@ class UnsplashAPIImage {
         return ['latitude' => null, 'longitude' => null];
     }
 
+    // Function to get the prefered geolocation names
+    public function GetGeoName(): array {
+        // Clears city if city is strContained inside name, clears country if country is strContained inside name
+        $toRet = [
+            'name' => $this->location['name'] ?? '',
+            'city' => $this->location['city'] ?? '',
+            'country' => $this->location['country'] ?? ''
+        ];
+
+        if (!empty($toRet['name'])) {
+            if (!empty($toRet['city']) && stripos($toRet['name'], $toRet['city']) !== false) {
+                $toRet['city'] = '';
+            }
+            if (!empty($toRet['country']) && stripos($toRet['name'], $toRet['country']) !== false) {
+                $toRet['country'] = '';
+            }
+        }
+
+        return $toRet;
+    }
+
     // Getters
     public function GetLocation(): array {
         return $this->location;
