@@ -27,7 +27,8 @@ function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array
 // Function to return the HTML for an image
 function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null) {
     $displayUrl = $image->GetImageDisplayUrl();
-    $blurUrl = $image->GetImageThumbnailUrl();
+    //$blurUrl = $image->GetImageThumbnailUrl();
+    $blurUrl = $image->GetBlurAsImage(32); // width=32, height=auto (based on original aspect ratio)
     $geoNames = $image->GetGeoNames();
     $coords = $image->GetCoordinates();
     $id = $image->GetIdentifiers()["id"];
