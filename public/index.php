@@ -84,6 +84,8 @@ if(!empty($queryStr)){
             <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
             <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
+            <label for="toggle-layout">Toggle Layout</label>
+            <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <?php
                 echoFilter(
                     [
@@ -96,11 +98,6 @@ if(!empty($queryStr)){
             <input type="submit" id="search-button" value="Search">
         </form>
     </div>
-    <form action="" method="post">
-        <label for="toggle-layout">Toggle Layout</label>
-        <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
-    </form>
-    <?php var_dump($toggleLayout); ?>
     <div class="php-endpoint-response">
         <?php
             if ($searchInfo) {

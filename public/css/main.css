@@ -51,12 +51,12 @@
     flex-flow: column;
 }
 
-.php-endpoint-response{
+.php-endpoint-response {
     display: flex;
     flex-flow: column;
 }
 
-#toggle-layout:checked ~ .php-endpoint-response {
+body:has(#toggle-layout:checked) .php-endpoint-response {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
