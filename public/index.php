@@ -52,6 +52,8 @@ if(!empty($queryStr)){
 
     <link rel="stylesheet" href="./css/main.css">
     
+    <script src="./js/main.js"></script>
+    
     <!-- Context Meta (Use already validated values) -->
     <meta name="queryStr" content="<?php echo htmlspecialchars($queryStr, ENT_QUOTES); ?>">
     <meta name="orderBy" content="<?php echo htmlspecialchars($orderBy, ENT_QUOTES); ?>">
