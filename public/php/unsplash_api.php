@@ -399,6 +399,29 @@ class UnsplashAPIImage {
         return $toRet;
     }
 
+    public function GetMostPreciseGMapsUrl(): ?string {
+        $coords = $this->GetCoordinates();
+        $location = $this->GetLocation();
+        // 1 if non of coords empty
+        // 2 if place is not empty
+        // 3 if city and country is not empty
+        // 4 if only country
+        if (!empty($coords["latitude"]) && !empty($coords["longitude"])) {
+            return '<a href="https://maps.google.com/?q=' . $coords["latitude"]. ',' . $coords["longitude"]. '"> Maps</a>';
+        }
+        elseif (!empty($location["name"])) {
+            return '<a href="https://www.google.com/maps/place/'.urlencode($location["name"]).'"> Maps</a>';
+        }
+        elseif (!empty($location["city"]) && !empty($location["country"])) {
+            return '<a href="https://www.google.com/maps/place/'.urlencode($location["country"]. ',' . $location["city"]). '"> Maps</a>';
+        }
+        elseif (!empty($location["country"])) {
+            return '<a href="https://www.google.com/maps/place/'.urlencode($location["country"]). '"> Maps</a>';
+        }
+        return null;
+
+    }
+
     // Getters
     public function GetLocation(): array {
         return $this->location;

@@ -32,10 +32,14 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
     $geoNames = $image->GetGeoNames();
     $coords = $image->GetCoordinates();
     $id = $image->GetIdentifiers()["id"];
+    $userLink = $image->GetUserInfo();
+    $GMapsLink = $image->GetMostPreciseGMapsUrl();
     
     echo '<div class="image-container" data-id="' . $id . '">';
         echo '<div class="image">';
+            echo $GMapsLink;
             echoProgImg($blurUrl, $displayUrl, "", [], $id);
+            echo '<a href="' . $userLink["profile"]. '"> Photo taken by: ' . $userLink["username"]. '</a>';
         echo '</div>';
         echo '<div class="image-location-data">';
 
