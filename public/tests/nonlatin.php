@@ -37,5 +37,20 @@ function containsNonLatinLetters_regex(string $str): bool {
 // var_dump(containsNonLatinLetters_regex("Hola! 😀"));    // false
 // var_dump(containsNonLatinLetters_regex("Café"));        // false
 
-var_dump(containsNonLatinLetters("日本"));
-var_dump(containsNonLatinLetters_regex("日本"));
+
+$apiKey = "AIzaSyAljk6pDpPBc40jJN0P6H0w190aOuc_gzg";
+$text = "Һаумыһығыҙ, минең исемем Элиас";
+
+$url = "https://translation.googleapis.com/language/translate/v2?key=" 
+       . $apiKey 
+       . "&q=" . urlencode($text) 
+       . "&target=en";
+
+// Example with file_get_contents
+$response = file_get_contents($url);
+$result = json_decode($response, true);
+
+// Access first translation
+$translated = $result['data']['translations'][0]['translatedText'] ?? null;
+
+echo $translated;
