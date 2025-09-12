@@ -23,10 +23,11 @@ $params = getUrlParameters();
 $queryStr = rawurldecode($params['queryStr']) ?? '';
 $orderBy = $params['orderBy'] ?? 'relevant'; // "relevant" or "latest"
 $autoFetchDetails = $params['autoFetchDetails'] === 'true' ? true : false;
+$filterNonGeo = $params['filterNonGeo'] === 'true' ? true : false;
 $pageNr = isset($params['pageNr']) && is_numeric($params['pageNr']) ? (int)$params['pageNr'] : 1;
 
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
-$images = $unsplash->SearchPhotos($queryStr, 10, $pageNr);
+$images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 echo '<div class="php-endpoint-response">';
 foreach ($images as $image) {
     echoImageHTML($image);

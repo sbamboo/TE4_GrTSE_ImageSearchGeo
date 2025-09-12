@@ -48,21 +48,14 @@ class UnsplashAPI {
         //     $images[] = new UnsplashAPIImage($imageData);
         // }
         foreach ($response['results'] as $imageData) {
-            // If filterNonGeo is true we skip images without geodata
-            // if ($filterNonGeo === true || !$this->HasGeoData($imageData)) {
-            //     print_r($imageData, $this->HasGeoData($imageData));
-            // }
-            // Instantiate as UnsplashAPIImage
-            //$images[] = new UnsplashAPIImage($this, $imageData);
-            if($filterNonGeo === true){
-                if($this->HasGeoData($imageData)){
-                    $images[] = new UnsplashAPIImage($this, $imageData);
-                }
-            }
-            else{
-                $images[] = new UnsplashAPIImage($this, $imageData);
+            $image = new UnsplashAPIImage($this, $imageData);
+
+            // If we automatically fetch details we can filter out non-geo images here
+            if ($this->autoGetDetails && $filterNonGeo && !$image->HasGeoData()) {
+                continue;
             }
 
+            $images[] = $image;
         }
         return $images;
     }
@@ -78,7 +71,7 @@ class UnsplashAPI {
 
     // Checks if an imageData is considered to have Geodata
     // Either city or country or lat/lon set in location or exif
-    public function HasGeoData(array $imageData): bool {
+    public function DataHasGeoData(array $imageData): bool {
         // Check if imageData.location.city or imageData.location.country or imageData.location.latitude/longitude or imageData.exif.location.latitude/longitude is set
         // We must consider that data might be missing location or exif or exif.location and also the actuall city,country,latitude,longitude fields
         if (isset($imageData['location'])) {
@@ -98,6 +91,37 @@ class UnsplashAPI {
         }
         return false;
     }
+    // public function DataHasGeoData(array $imageData): bool {
+    //     // Helper to check if lat/lon are set and non-empty
+    //     $hasLatLon = function ($data): bool {
+    //         return isset($data['latitude'], $data['longitude']) 
+    //             && $data['latitude'] !== null && $data['longitude'] !== null 
+    //             && $data['latitude'] !== '' && $data['longitude'] !== '';
+    //     };
+    
+    //     // Check in location
+    //     if (isset($imageData['location'])) {
+    //         $loc = $imageData['location'];
+    //         if (
+    //             (!empty($loc['city'])) ||
+    //             (!empty($loc['country'])) ||
+    //             $hasLatLon($loc)
+    //         ) {
+    //             return true;
+    //         }
+    //     }
+    
+    //     // Check in exif.location
+    //     if (isset($imageData['exif']['location'])) {
+    //         $exifLoc = $imageData['exif']['location'];
+    //         if ($hasLatLon($exifLoc)) {
+    //             return true;
+    //         }
+    //     }
+    
+    //     return false;
+    // }
+    
 
     // Getters
     public function IsAutoFetchingDetails(): bool {
@@ -134,8 +158,8 @@ class UnsplashAPILocation {
             'name' => $locationData['name'] ?? '',
             'city' => $locationData['city'] ?? '',
             'country' => $locationData['country'] ?? '',
-            'latitude' => $locationData['position']['latitude'] ?? 0.0,
-            'longitude' => $locationData['position']['longitude'] ?? 0.0
+            'latitude' => $locationData['position']['latitude'] ?? null,
+            'longitude' => $locationData['position']['longitude'] ?? null
         ];
     }
 }
@@ -290,6 +314,26 @@ class UnsplashAPIImage {
         return 'data:image/png;base64,' . base64_encode($imageData);
     }
 
+    // Function to check if this image is considered to have Geodata
+    public function HasGeoData(): bool {
+        // Check if imageData.location.city or imageData.location.country or imageData.location.latitude/longitude or imageData.exif.location.latitude/longitude is set
+        // We must consider that data might be missing location or exif or exif.location and also the actuall city,country,latitude,longitude fields
+        if (isset($this->location)) {
+            if (!empty($this->location['city']) || !empty($this->location['country'])) {
+                return true;
+            }
+            if (!empty($this->location['latitude']) && !empty($this->location['longitude'])) {
+                    return true;
+            }
+        }
+        if (isset($this->exif) && isset($this->exif['location'])) {
+            if (!empty($this->exif['location']['latitude']) && !empty($this->exif['location']['longitude'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Function to get the prefered thumbnail (not blurhash)
     public function GetImageThumbnailUrl(): string {
         // Does thumb exists else use small else use small_s3
@@ -312,7 +356,7 @@ class UnsplashAPIImage {
     }
 
     // Function to get the prefered lon/lat coordinates
-    public function GetLonLat(): array {
+    public function GetCoordinates(): array {
         if (!empty($this->location['latitude']) && !empty($this->location['longitude'])) {
             return ['latitude' => $this->location['latitude'], 'longitude' => $this->location['longitude']];
         }

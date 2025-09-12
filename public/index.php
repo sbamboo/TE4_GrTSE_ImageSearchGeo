@@ -15,10 +15,28 @@ require_once('./php/components.php');
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
 $queryStr = $_POST['queryStr'] ?? '';
 $orderBy = $_POST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
-$autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetails'] === 'true' || $_POST['autoFetchDetails'] === '1') : false;
+$autoFetchDetails = isset($_POST['autoFetchDetails']);
+$filterNonGeo = isset($_POST['filterNonGeo']);
 
-// Main page and perform the first search using the UnsplashAPI class
-// Saving stuff a contextual data for the frontend to be able to send subsequent requests with
+$hasSearched = !empty($queryStr);
+$pageNr = 1;
+$searchInfo = null;
+
+// Perform search
+if(!empty($queryStr)){
+    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
+    $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
+
+    // If length is 0 
+    if (count($images) === 0) {
+        //MARK: Should probably search again atleast once but for now show info text
+        $searchInfo = "No results in first page, check next page or try changing filter.";
+
+        // Search again for page +1 also
+        //$pageNr = 2;
+        //$images = $unsplash->SearchPhotos($queryStr, 10, 2, $filterNonGeo, $orderBy);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +51,8 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
     <meta name="queryStr" content="<?php echo htmlspecialchars($queryStr, ENT_QUOTES); ?>">
     <meta name="orderBy" content="<?php echo htmlspecialchars($orderBy, ENT_QUOTES); ?>">
     <meta name="autoFetchDetails" content="<?php echo $autoFetchDetails ? 'true' : 'false'; ?>">
+    <meta name="filterNonGeo" content="<?php echo $filterNonGeo ? 'true' : 'false'; ?>">
+    <meta name="pageNr" content="<?php echo $pageNr ?>">
 
     <title>Document</title>
 </head>
@@ -42,11 +62,10 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
         <form id="search-form" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
-            <input type="checkbox" id="auto-fetch-details" name="autoFetchDetails" value="true" <?php if ($autoFetchDetails) echo 'checked'; ?>>
-            <select name="orderBy" id="order-by">
-                <option value="relevant" <?php echo ($orderBy === "relevant" ? "selected" : "") ?>>Relevance</option>
-                <option value="latest" <?php echo ($orderBy === "latest" ? "selected" : "") ?>>Latest</option>
-            </select>
+            <label for="auto-fetch-details">Auto Fetch Details</label>
+            <input type="checkbox" id="auto-fetch-details" name="autoFetchDetails" <?php if ($hasSearched && $autoFetchDetails) echo 'checked'; ?>>
+            <label for="filter-non-geo">Filter Non Geo</label>
+            <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <?php
                 echoFilter(
                     [
@@ -61,11 +80,14 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']) ? ($_POST['autoFetchDetail
     </div>
     <div class="php-endpoint-response">
         <?php
+            if ($searchInfo) {
+                echo "<p id=\"search-info\">$searchInfo</p>";
+            }
+
             if(empty($queryStr)){
                 return;
             }
-            $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
-            $images = $unsplash->SearchPhotos($queryStr, 10, 1, false, $orderBy);
+
             foreach ($images as $image) {
                 echoImageHTML($image);
             }

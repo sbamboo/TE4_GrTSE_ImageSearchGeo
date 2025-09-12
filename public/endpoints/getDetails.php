@@ -19,15 +19,25 @@ $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
 $params = getUrlParameters();
 
 // Get details for photo and respond
-if (isset($params['id']) && is_string($params['id'])) {
-    try {
-        $photoDetails = $unsplash->GetPhotoDetails($params['id']);
-        respondOKContent($photoDetails->ToArray());
-    } catch (Throwable $e) {
-        respondError($e);
-    }
-} else {
+if (!isset($params['id']) || !is_string($params['id'])) {
     respondBadRequest("Missing or invalid 'id' parameter");
+}
+
+// Check for the filterNonGeo parameter
+$filterNonGeo = isset($params['filterNonGeo']) ? true : false;
+
+// Perform check
+try {
+    $photoDetails = $unsplash->GetPhotoDetails($params['id']);
+
+    // If filtering
+    if ($filterNonGeo && !$photoDetails->HasGeoData()) {
+        respondOK("Photo has no geo data, filtered out");
+    } else {
+        respondOKContent($photoDetails->ToArray());
+    }
+} catch (Throwable $e) {
+    respondError($e);
 }
 
 ?>
