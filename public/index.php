@@ -65,6 +65,12 @@ if(!empty($queryStr)){
     <title>Document</title>
 </head>
 <body>
+    <!-- Wrapper for overlays -->
+    <div id="overlay-wrapper">
+        <div id="popup-wrapper"></div>
+        <div id="portal-wrapper"></div>
+    </div>
+
     <!-- Main Content, With initial page -->
     <div id="search-container">
         <form id="search-form" action="" method="post" autocomplete="on">
