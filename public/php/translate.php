@@ -8,7 +8,10 @@ function containsNonLatinLetters_regex(string $str): bool {
 }
 
 // translates strings with non latin charcters
-function translateNonLatin(string $foreignText){
+function translateNonLatin(string $foreignText, bool $translateNonLatin = false){
+    if(!$translateNonLatin){
+        return;
+    }
     $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED);
     $url = "https://translation.googleapis.com/language/translate/v2?key=" 
            . $SECRETS['GTRANSLATE_API_KEY']

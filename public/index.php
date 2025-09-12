@@ -53,6 +53,7 @@ if(!empty($queryStr)){
     <meta name="orderBy" content="<?php echo htmlspecialchars($orderBy, ENT_QUOTES); ?>">
     <meta name="autoFetchDetails" content="<?php echo $autoFetchDetails ? 'true' : 'false'; ?>">
     <meta name="filterNonGeo" content="<?php echo $filterNonGeo ? 'true' : 'false'; ?>">
+    <meta name="translateNonLatin" content="<?php echo $translateNonLatin ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
 
     <title>Document</title>
@@ -67,6 +68,8 @@ if(!empty($queryStr)){
             <input type="checkbox" id="auto-fetch-details" name="autoFetchDetails" <?php if ($hasSearched && $autoFetchDetails) echo 'checked'; ?>>
             <label for="filter-non-geo">Filter Non Geo</label>
             <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
+            <label for="translate-non-latin">Translate Non Latin</label>
+            <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched && $translateNonLatin) echo 'checked'; ?>>
             <?php
                 echoFilter(
                     [
