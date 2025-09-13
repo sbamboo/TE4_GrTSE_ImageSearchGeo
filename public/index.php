@@ -47,7 +47,7 @@ if(!empty($queryStr)){
 ?>
 
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +68,7 @@ if(!empty($queryStr)){
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
 
-    <title>Document</title>
+    <title>Image Search</title>
 </head>
 <body>
     <!-- Wrapper for overlays -->

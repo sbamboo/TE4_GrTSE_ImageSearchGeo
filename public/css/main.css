@@ -8,6 +8,40 @@ html {
     font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+/* Theming */
+[data-theme="light"] {
+    --main-bg-color: #ffffff;
+    --text-color: #000000;
+    
+    --image-container-bg-color: #f0f0f0;
+
+    --toggle-bg-color: #f3f3f3;
+    --toggle-bg-color-hover: #e0e0e0;
+
+    --overlay-text-color: white;
+    --overlay-bg-color: rgba(0, 0, 0, 0.5);
+    --overlay-bg-color-ligher: rgba(137, 136, 136, 0.5);
+}
+
+[data-theme="dark"] {
+    --main-bg-color: #121212;
+    --text-color: #ffffff;
+
+    --image-container-bg-color: #1e1e1e;
+
+    --toggle-bg-color: #2c2c2c;
+    --toggle-bg-color-hover: #3a3a3a;
+
+    --overlay-text-color: #000000;
+    --overlay-bg-color: rgba(255, 255, 255, 0.5);
+    --overlay-bg-color-ligher: rgba(255, 255, 255, 0.3);
+}
+
+html {
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+}
+
 /* Topbar */
 #search-container {
     width: 100%;
@@ -33,9 +67,6 @@ html {
     margin-bottom: 1rem;
     border-radius: 0.5rem;
 }
-#search-bar a:active {
-    background-color: rgb(0, 0, 0);
-}
 
 /* Main Content */
 .image-container {
@@ -43,7 +74,7 @@ html {
     height: 22rem;
     display: flex;
     flex-flow: row;
-    background-color: aqua;
+    background-color: var(--image-container-bg-color);
     margin: 3rem;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -85,11 +116,11 @@ html {
     cursor: pointer;
     padding: 4px;
     border-radius: 6px;
-    background: #f3f3f3;
+    background: var(--toggle-bg-color);
     transition: background 0.2s;
 }
 #toggle-layout-label:hover {
-    background: #e0e0e0;
+    background: var(--toggle-bg-color-hover);
 }
 
 .reoderable-image-container {
@@ -124,8 +155,11 @@ body :has(#toggle-layout:not(:checked)) #list-icon {
     cursor: pointer;
     padding: 4px;
     border-radius: 6px;
-    background: #f3f3f3;
+    background: var(--toggle-bg-color);
     transition: background 0.2s;
+}
+#toggle-language-label:hover {
+    background: var(--toggle-bg-color-hover);
 }
 
 body:has(#toggle-language:checked) #swedish-flag {
@@ -159,8 +193,8 @@ body :has(#toggle-language:not(:checked)) #swedish-flag {
 .grid-item-text {
     align-self: end;
     justify-self: end;
-    background: rgba(0,0,0,0.5);
-    color: white;
+    background: var(--overlay-bg-color);
+    color: var(--overlay-text-color);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
 }
@@ -168,7 +202,7 @@ body :has(#toggle-language:not(:checked)) #swedish-flag {
 .grid-item-badge {
     align-self: start;
     justify-self: start;
-    color: white;
+    color: var(--overlay-text-color);
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
     font-size: 0.8rem;
@@ -177,8 +211,8 @@ body :has(#toggle-language:not(:checked)) #swedish-flag {
 .grid-item-download-badge {
     justify-self: end;
     align-self: start;
-    color: white;
-    background: rgba(137, 136, 136, 0.5);
+    color: var(--overlay-text-color);
+    background: var(--overlay-bg-color-ligher);
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
     font-size: 0.1rem;
