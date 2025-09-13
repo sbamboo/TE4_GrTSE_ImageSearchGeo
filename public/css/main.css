@@ -14,6 +14,7 @@ html {
     --text-color: #000000;
     
     --image-container-bg-color: #f0f0f0;
+    --image-bg-color: #000000;
 
     --toggle-bg-color: #f3f3f3;
     --toggle-bg-color-hover: #e0e0e0;
@@ -34,10 +35,14 @@ html {
 
     --toggle-bg-color: #2c2c2c;
     --toggle-bg-color-hover: #3a3a3a;
+    --image-bg-color: #000000;
 
     --overlay-text-color: #000000;
     --overlay-bg-color: rgba(255, 255, 255, 0.5);
     --overlay-bg-color-ligher: rgba(255, 255, 255, 0.3);
+    --overlay-text-color-hover: rgb(55, 55, 55);
+    --overlay-bg-color-hover: rgba(255, 255, 255, 0.4);
+    --overlay-bg-color-ligher-hover: rgba(255, 255, 255, 0.2);
 }
 
 html {
@@ -99,8 +104,10 @@ html {
     height: auto;
 }
 
-.image {
+.image, .image > img {
     display: inline-block; 
+    border-radius: 1rem;
+    background-color: var(--image-bg-color);
 }
 
 .image, .progressive-image {
@@ -262,9 +269,9 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 
     background: var(--overlay-bg-color-ligher);
     color: var(--overlay-text-color);
-    border-radius: 0.45rem;
+    border-radius: 1rem;
 
-    padding: 0.3rem;
+    padding: 0.35rem;
 
     margin-top: 0.25rem;
     margin-right: 0.25rem;
