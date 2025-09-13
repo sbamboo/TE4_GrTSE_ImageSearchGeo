@@ -52,6 +52,7 @@ if(!empty($queryStr)){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="./css/helpers.css">
     <link rel="stylesheet" href="./css/main.css">
     
     <script src="./js/popups.js"></script>
@@ -138,7 +139,7 @@ if(!empty($queryStr)){
             <input type="submit" id="search-button" value="Search">
         </form>
     </div>
-    <div class="php-endpoint-response">
+    <div class="reoderable-image-container php-endpoint-response">
         <?php
             if ($searchInfo) {
                 echo "<p id=\"search-info\">$searchInfo</p>";

@@ -1,0 +1,56 @@
+/* Contains re-usable css classes */
+.no-link-style {
+    color: inherit;    
+    text-decoration: none; 
+}
+
+.vflex {
+    display: flex;
+    flex-direction: column;
+}
+
+.hflex {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Same as .vflex but spaces entries out as far as they can */
+.vflex-space-out {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* Same as .hflex but spaces entries out as far as they can */
+.hflex-space-out {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Same as .vflex but centers entries together as much as possible */
+.vflex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* Same as .hflex but centers entries together as much as possible */
+.hflex-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.hcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vcenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

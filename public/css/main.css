@@ -1,3 +1,14 @@
+/* General */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Topbar */
 #search-container {
     width: 100%;
     display: flex;
@@ -26,6 +37,7 @@
     background-color: rgb(0, 0, 0);
 }
 
+/* Main Content */
 .image-container {
     width: 35rem;
     height: 22rem;
@@ -46,55 +58,8 @@
     height: max-content;
 }
 
-.image, 
-.progressive-image,
-.grid-item-text,
-.grid-item-badge,
-.grid-item-download-badge {
-    grid-area: 1 / 1;  
-}
-
 .image {
     display: inline-block; 
-}
-
-.grid-item-text {
-    align-self: end;
-    justify-self: end;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-.position-grid-container {
-    place-items: center;
-    align-content: center;
-    height: 20rem;
-    width: 25rem;
-}
-
-.grid-item-badge {
-    align-self: start;
-    justify-self: start;
-    color: white;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
-    font-size: 0.8rem;
-}
-
-.no-link-style {
-    color: inherit;    
-    text-decoration: none; 
-}
-
-.grid-item-download-badge {
-    justify-self: end;
-    align-self: start;
-    color: white;
-    background: rgba(137, 136, 136, 0.5);
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
-    font-size: 0.1rem;
 }
 
 .image, .progressive-image {
@@ -110,16 +75,7 @@
     flex-flow: column;
 }
 
-.php-endpoint-response {
-    display: flex;
-    flex-flow: column;
-}
-
-body:has(#toggle-layout:checked) .php-endpoint-response {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-}
-
+/* Main Content - ToggleLayout */
 #toggle-layout {
     display: none;
 }
@@ -132,12 +88,21 @@ body:has(#toggle-layout:checked) .php-endpoint-response {
     background: #f3f3f3;
     transition: background 0.2s;
 }
-
 #toggle-layout-label:hover {
     background: #e0e0e0;
 }
 
-body:has(#toggle-layout:checked) #list-icon{
+.reoderable-image-container {
+    display: flex;
+    flex-flow: column;
+}
+
+body:has(#toggle-layout:checked) .reoderable-image-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+body:has(#toggle-layout:checked) #list-icon {
     display: inline;
 }
 
@@ -149,18 +114,7 @@ body :has(#toggle-layout:not(:checked)) #list-icon {
     display: none;
 }
 
-body:has(#toggle-language:checked) #swedish-flag{
-    opacity: 100%;
-}
-
-body:has(#toggle-language:checked) #english-flag {
-    opacity: 30%;
-}
-
-body :has(#toggle-language:not(:checked)) #swedish-flag {
-    opacity: 30%;
-}
-
+/* Main Content - ToggleLanguage */
 #toggle-language {
     display: none;
 }
@@ -172,4 +126,60 @@ body :has(#toggle-language:not(:checked)) #swedish-flag {
     border-radius: 6px;
     background: #f3f3f3;
     transition: background 0.2s;
+}
+
+body:has(#toggle-language:checked) #swedish-flag {
+    opacity: 100%;
+}
+
+body:has(#toggle-language:checked) #english-flag {
+    opacity: 30%;
+}
+
+body :has(#toggle-language:not(:checked)) #swedish-flag {
+    opacity: 30%;
+}
+
+/* Main Content - GridItems */
+.position-grid-container {
+    place-items: center;
+    align-content: center;
+    height: 20rem;
+    width: 25rem;
+}
+
+.image, 
+.progressive-image,
+.grid-item-text,
+.grid-item-badge,
+.grid-item-download-badge {
+    grid-area: 1 / 1;  
+}
+
+.grid-item-text {
+    align-self: end;
+    justify-self: end;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.grid-item-badge {
+    align-self: start;
+    justify-self: start;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.grid-item-download-badge {
+    justify-self: end;
+    align-self: start;
+    color: white;
+    background: rgba(137, 136, 136, 0.5);
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    font-size: 0.1rem;
 }
