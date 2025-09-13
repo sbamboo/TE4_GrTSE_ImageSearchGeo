@@ -25,4 +25,13 @@
 - `HTML-Element-Classes` are `kebab-case`
 
 ## Code best practise
-- CSS responsiv, använd `rem` units.
+- HTML property order:
+    1. ID
+    2. CLASS
+    3. (FOR)
+    4. (TYPE)
+    5. (NAME)
+    6. VALUE
+- CSS use `var(--)` for colors so they can be styled with light/dark mode.
+- CSS/HTML use reusable classes `helpers.css` to make styling easier and more consistent.
+- CSS responsive, use `rem` units.
