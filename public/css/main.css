@@ -107,6 +107,9 @@ html {
 .image, .image > img {
     display: inline-block; 
     border-radius: 1rem;
+}
+
+.image:not(.image-w-blur-bg) {
     background-color: var(--image-bg-color);
 }
 

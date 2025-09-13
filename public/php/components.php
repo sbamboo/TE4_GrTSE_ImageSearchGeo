@@ -61,7 +61,7 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
     echo '<div class="image-container" data-id="' . $identifiers["id"] . '">';
         echo '<div class="position-grid-container">';
             echo '<div class="image-layer-container">';
-                echo '<div class="image">';
+                echo '<div class="image" class="image-w-blur-bg" style="background-image: url(' . $blurUrl . '); background-size: cover;">';
                     echoProgImg($blurUrl, $displayUrl, "", [], $identifiers["id"]);
                 echo '</div>';
                 echoImageDownloadBadge($identifiers["slug"], $downloadUrl);
