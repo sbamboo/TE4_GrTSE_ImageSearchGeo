@@ -55,6 +55,8 @@ class Popups {
     // Show a overlay popup (A popup that is above all content and centered on the screen)
     showAsOverlay(elementId, closeOnClickOutside=false, closeOnMouseOut=false) {
         // If element is not child of overlay container, clone it and append it
+        // Add data attributes for closeOnClickOutside and closeOnMouseOut
+        // If closeOnMouseOut is true, add mouseout listener to hide popup when mouse leaves it
     }
 
     // Hide a overlay popup
@@ -73,6 +75,8 @@ class Popups {
         // OriginX: left, center, right
 
         // If element is not child of overlay container, clone it and append it
+        // Add data attributes for closeOnClickOutside and closeOnMouseOut
+        // If closeOnMouseOut is true, add mouseout listener to hide popup when mouse leaves it
     }
 
     // Hide a portal popup
