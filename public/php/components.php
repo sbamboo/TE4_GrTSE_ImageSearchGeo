@@ -41,9 +41,9 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
                 echo '<div class="image">';
                     echoProgImg($blurUrl, $displayUrl, "", [], $id);
                 echo '</div>';
-                echo '<div class="grid-item-download-badge"><a class="no-link-style" href=""><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-download"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a></div>';
-                echo '<div class="grid-item-badge">' . $GMapsLink. '</div>';
-                echo '<div class="grid-item-text"> Photo taken by: <a href="' . $userLink["profile"]. '">' . $userLink["username"]. '</a></div>';
+                echo '<div class="image-photo-download grid-item-download-badge"><a class="no-link-style" href=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a></div>';
+                echo '<div class="image-photo-gmaps grid-item-badge">' . $GMapsLink. '</div>';
+                echo '<div class="image-photo-credit grid-item-text"> Photo taken by <a href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> from unsplash.</div>';
             echo '</div>';
         echo '</div>';
         echo '<div class="image-location-data">';
