@@ -72,24 +72,24 @@ if(!empty($queryStr)){
 </head>
 <body>
     <!-- Wrapper for overlays -->
-    <div id="overlay-wrapper">
-        <div id="popup-wrapper"></div>
-        <div id="portal-wrapper"></div>
+    <div id="overlay-container">
+        <div id="popup-container"></div>
+        <div id="portal-container"></div>
     </div>
 
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
-        <form id="search-form" action="" method="post" autocomplete="on" class="hflex-vcenter">
+        <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
             <label for="auto-fetch-details">Auto Fetch Details</label>
-            <input type="checkbox" id="auto-fetch-details" name="autoFetchDetails" <?php if ($hasSearched && $autoFetchDetails) echo 'checked'; ?>>
+            <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if ($hasSearched && $autoFetchDetails) echo 'checked'; ?>>
             <label for="filter-non-geo">Filter Non Geo</label>
-            <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
+            <input id="filter-non-geo" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
-            <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
-            <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
-            <label id="toggle-language-label" for="toggle-language" class="vflex vflex-vcenter">
+            <input id="translate-non-latin" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
+            <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
+            <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
                 <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
                     <rect width="16" height="10" fill="#005cbf"/>
                     <rect x="5" width="2" height="10" fill="#ffc720"/>
@@ -111,7 +111,7 @@ if(!empty($queryStr)){
                     <rect y="12" width="60" height="6" fill="#C8102E"/>
                 </svg>
             </label>
-            <input type="checkbox" id="toggle-language" name="toggleLanguage"<?php if(!$hasSearched || $toggleLanguage) echo 'checked' ?>>
+            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if(!$hasSearched || $toggleLanguage) echo 'checked' ?>>
             <?php
                 echoFilter(
                     [
@@ -121,12 +121,12 @@ if(!empty($queryStr)){
                     $orderBy
                 );
             ?>
-            <input type="submit" id="search-button" value="Search">
+            <input id="search-button" type="submit" value="Search">
         </form>
     </div>
     <main class="vflex-center">
         <div id="results-filter-bar" class="hflex">
-            <label for="toggle-layout" id="toggle-layout-label">
+            <label id="toggle-layout-label" for="toggle-layout">
                 <svg id="grid-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M4 4h6v6H4z" />

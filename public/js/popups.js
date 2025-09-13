@@ -9,9 +9,9 @@ class Popups {
         }
 
         // Get containers
-        this.overlayContainer = document.getElementById('overlay-wrapper');
-        this.popupContainer = document.getElementById('popup-wrapper');
-        this.portalContainer = document.getElementById('portal-wrapper');
+        this.overlayContainer = document.getElementById('overlay-container');
+        this.popupContainer = document.getElementById('popup-container');
+        this.portalContainer = document.getElementById('portal-container');
 
         this.shownPopups = []; // Stores elements
         this.shownPortals = []; // Stores elements
