@@ -78,8 +78,8 @@ if(!empty($queryStr)){
     </div>
 
     <!-- Main Content, With initial page -->
-    <div id="search-container">
-        <form id="search-form" action="" method="post" autocomplete="on">
+    <div id="search-container" class="vflex-center">
+        <form id="search-form" action="" method="post" autocomplete="on" class="hflex-vcenter">
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
             <label for="auto-fetch-details">Auto Fetch Details</label>
@@ -88,23 +88,8 @@ if(!empty($queryStr)){
             <input type="checkbox" id="filter-non-geo" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
             <input type="checkbox" id="translate-non-latin" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
-            <label for="toggle-layout" id="toggle-layout-label">
-                <svg id="grid-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M4 4h6v6H4z" />
-                    <path d="M14 4h6v6h-6z" />
-                    <path d="M4 14h6v6H4z" />
-                    <path d="M14 14h6v6h-6z" />
-                </svg>
-                <svg id="list-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M4 6h16" />
-                    <path d="M4 12h16" />
-                    <path d="M4 18h16" />
-                </svg>
-            </label>
             <input type="checkbox" id="toggle-layout" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
-            <label for="toggle-language" id="toggle-language-label">
+            <label id="toggle-language-label" for="toggle-language" class="vflex vflex-vcenter">
                 <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
                     <rect width="16" height="10" fill="#005cbf"/>
                     <rect x="5" width="2" height="10" fill="#ffc720"/>
@@ -139,20 +124,40 @@ if(!empty($queryStr)){
             <input type="submit" id="search-button" value="Search">
         </form>
     </div>
-    <div class="reoderable-image-container php-endpoint-response">
-        <?php
-            if ($searchInfo) {
-                echo "<p id=\"search-info\">$searchInfo</p>";
-            }
+    <main class="vflex-center">
+        <div id="results-filter-bar" class="hflex">
+            <label for="toggle-layout" id="toggle-layout-label">
+                <svg id="grid-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 4h6v6H4z" />
+                    <path d="M14 4h6v6h-6z" />
+                    <path d="M4 14h6v6H4z" />
+                    <path d="M14 14h6v6h-6z" />
+                </svg>
+                <svg id="list-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 6h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 18h16" />
+                </svg>
+            </label>
+        </div>
 
-            if(empty($queryStr)){
-                return;
-            }
+        <div class="reoderable-image-container php-endpoint-response">
+            <?php
+                if ($searchInfo) {
+                    echo "<p id=\"search-info\">$searchInfo</p>";
+                }
 
-            foreach ($images as $image) {
-                echoImageHTML($image, $translateNonLatin, $translator);
-            }
-        ?>
-    </div>
+                if(empty($queryStr)){
+                    return;
+                }
+
+                foreach ($images as $image) {
+                    echoImageHTML($image, $translateNonLatin, $translator);
+                }
+            ?>
+        </div>
+    </main>
 </body>
 </html>

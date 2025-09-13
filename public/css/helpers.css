@@ -34,11 +34,32 @@
     justify-content: center;
     align-items: center;
 }
+.vflex-vcenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.vflex-hcenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Same as .hflex but centers entries together as much as possible */
 .hflex-center {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+}
+.hflex-hcenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.hflex-vcenter {
+    display: flex;
+    flex-direction: row;
     align-items: center;
 }
 

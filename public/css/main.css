@@ -45,15 +45,14 @@ html {
 /* Topbar */
 #search-container {
     width: 100%;
-    display: flex;
-    justify-content: center;
 }
 
 #search-form {
-    display: flex;
-    width: 10rem;
-    align-items: center;
-    flex-flow: row;
+    gap: 0.3rem;
+}
+
+#search-bar {
+    max-width: 30rem;
 }
 
 #search-label {
@@ -62,10 +61,11 @@ html {
 
 #search-bar {
     height: 1.5rem;
-    width: 20rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
     border-radius: 0.5rem;
+}
+
+#search-button, #order-by {
+    height: fit-content;
 }
 
 /* Main Content */
@@ -112,11 +112,19 @@ html {
 }
 
 #toggle-layout-label {
-    display: inline-block;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 1.7rem;
+    height: 1.7rem;
+
     padding: 4px;
     border-radius: 6px;
+
     background: var(--toggle-bg-color);
+    cursor: pointer;
+
     transition: background 0.2s;
 }
 #toggle-layout-label:hover {
@@ -136,13 +144,15 @@ body:has(#toggle-layout:checked) .reoderable-image-container {
 body:has(#toggle-layout:checked) #list-icon {
     display: inline;
 }
-
 body:has(#toggle-layout:checked) #grid-icon {
     display: none;
 }
 
-body :has(#toggle-layout:not(:checked)) #list-icon {
+body:has(#toggle-layout:not(:checked)) #list-icon {
     display: none;
+}
+body:has(#toggle-layout:not(:checked)) #grid-icon {
+    display: inline;
 }
 
 /* Main Content - ToggleLanguage */
@@ -151,11 +161,14 @@ body :has(#toggle-layout:not(:checked)) #list-icon {
 }
 
 #toggle-language-label {
-    display: inline-block;
-    cursor: pointer;
     padding: 4px;
     border-radius: 6px;
+
+    gap: 0.1rem;
+    
     background: var(--toggle-bg-color);
+    cursor: pointer;
+
     transition: background 0.2s;
 }
 #toggle-language-label:hover {
@@ -163,15 +176,17 @@ body :has(#toggle-layout:not(:checked)) #list-icon {
 }
 
 body:has(#toggle-language:checked) #swedish-flag {
-    opacity: 100%;
+    opacity: 1;
 }
-
 body:has(#toggle-language:checked) #english-flag {
-    opacity: 30%;
+    opacity: 0.3;
 }
 
-body :has(#toggle-language:not(:checked)) #swedish-flag {
-    opacity: 30%;
+body:has(#toggle-language:not(:checked)) #swedish-flag {
+    opacity: 0.3;
+}
+body:has(#toggle-language:not(:checked)) #english-flag {
+    opacity: 1;
 }
 
 /* Main Content - GridItems */
