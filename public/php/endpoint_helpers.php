@@ -16,6 +16,13 @@ function setupHeadersHTML() {
     setupHeaders();
 }
 
+function setupHeadersFile(int $len, string $filename) {
+    header('Content-Type: application/octet-stream');
+    header("Content-Disposition: attachment; filename=\"{$filename}\"");
+    header("Content-Length: " . $len);
+    setupHeaders();
+}
+
 function respondOK(string $message = "") {
     http_response_code(200); // OK
     echo json_encode(['status' => 'success', 'message' => $message]);

@@ -3,7 +3,7 @@
 
 
 //MARK: Should we instead move the JS to an observer? Use CSS background-swap or apply preload/lazy?
-function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array $classes = [], ?string $id = null) {
+function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array $classes = [], ?string $id = null): void {
     // Ensure special chars in alt text will be handled correctly
     $alt = htmlspecialchars($alt, ENT_QUOTES, 'UTF-8');
     // Echo the progressive image HTML
@@ -24,25 +24,49 @@ function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array
 
 }
 
+function echoImageDownloadBadge(string $slug, string $url): void {
+    $proxyUrl = "endpoints/downloadProxy.php?url=" . urlencode($url) . "&filename=" . urlencode($slug) . "&filetype=png";
+
+    $html = <<<EOF
+<a class="image-photo-download grid-item-download-badge" 
+   href="{$proxyUrl}" target="_blank">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+         <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+         <path d="M7 11l5 5l5 -5" />
+         <path d="M12 4l0 12" />
+    </svg>
+</a>
+EOF;
+
+    echo $html;
+}
+
 // Function to return the HTML for an image
-function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null) {
+function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null): void {
     $displayUrl = $image->GetImageDisplayUrl();
     //$blurUrl = $image->GetImageThumbnailUrl();
     $blurUrl = $image->GetBlurAsImage(32); // width=32, height=auto (based on original aspect ratio)
     $geoNames = $image->GetGeoNames();
     $coords = $image->GetCoordinates();
-    $id = $image->GetIdentifiers()["id"];
+    $identifiers = $image->GetIdentifiers();
     $userLink = $image->GetUserInfo();
     $GMapsLink = $image->GetMostPreciseGMapsUrl();
+
+    //$downloadUrl = $image->GetDownloadUrl();
+    $downloadUrl = $image->GetRawUrl();
     
-    echo '<div class="image-container" data-id="' . $id . '">';
+    echo '<div class="image-container" data-id="' . $identifiers["id"] . '">';
         echo '<div class="position-grid-container">';
             echo '<div class="image-layer-container">';
                 echo '<div class="image">';
-                    echoProgImg($blurUrl, $displayUrl, "", [], $id);
+                    echoProgImg($blurUrl, $displayUrl, "", [], $identifiers["id"]);
                 echo '</div>';
-                echo '<div class="image-photo-download grid-item-download-badge"><a class="no-link-style" href=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a></div>';
-                echo '<div class="image-photo-gmaps grid-item-badge">' . $GMapsLink. '</div>';
+                echoImageDownloadBadge($identifiers["slug"], $downloadUrl);
+                //echo '<a class="image-photo-download grid-item-download-badge" href="' . $downloadUrl . '" download="' . $identifiers["slug"] . '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a>';
+                echo '<div class="image-photo-gmaps grid-item-badge">' . $GMapsLink . '</div>';
                 echo '<div class="image-photo-credit grid-item-text"> Photo taken by <a href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> from unsplash.</div>';
             echo '</div>';
         echo '</div>';
@@ -98,7 +122,7 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
 }
 
 // Return <select> with <option>s inside for the filter options
-function echoFilter(array $options, $selected = null){
+function echoFilter(array $options, $selected = null): void {
     $html = "<select name=\"orderBy\" id=\"order-by\">\n";
     foreach($options as $value => $label){
         $valueLC = strtolower($value);

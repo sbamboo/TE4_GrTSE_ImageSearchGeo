@@ -445,5 +445,8 @@ class UnsplashAPIImage {
             'profile' => $this->user_unsplash_profile
         ];
     }
+    public function GetRawUrl(): string {
+        return $this->urls['raw'] ?? '';
+    }
 }
 ?>

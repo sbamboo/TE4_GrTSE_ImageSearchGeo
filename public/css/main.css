@@ -21,6 +21,9 @@ html {
     --overlay-text-color: white;
     --overlay-bg-color: rgba(0, 0, 0, 0.5);
     --overlay-bg-color-ligher: rgba(137, 136, 136, 0.5);
+    --overlay-text-color-hover: rgb(210, 230, 248);
+    --overlay-bg-color-hover: rgba(0, 0, 0, 0.4);
+    --overlay-bg-color-ligher-hover: rgba(137, 136, 136, 0.4);
 }
 
 [data-theme="dark"] {
@@ -69,24 +72,31 @@ html {
 }
 
 /* Main Content */
+.reoderable-image-container {
+    display: grid;
+
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
 .image-container {
-    width: 35rem;
-    height: 22rem;
     display: flex;
     flex-flow: row;
-    background-color: var(--image-container-bg-color);
-    margin: 3rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    padding: 1rem;
     align-items: center;
+
+    gap: 0.8rem;
+
+    background-color: var(--image-container-bg-color);
+
     border-radius: 2rem;
+
+    padding: 1rem;
 }
 
 .image-layer-container {
     display: grid;
-    width: max-content; 
-    height: max-content;
+    width: 100%;
+    height: auto;
 }
 
 .image {
@@ -94,9 +104,9 @@ html {
 }
 
 .image, .progressive-image {
+    width: 100%;
     height: auto;
-    width: auto;
-    max-width: 25rem;
+    max-width: 100%;
     max-height: 20rem;
     object-fit: contain;
 }
@@ -132,13 +142,13 @@ html {
 }
 
 .reoderable-image-container {
-    display: flex;
-    flex-flow: column;
+    /* Grid with all items in single centered column */
+    grid-template-columns: 1fr;
 }
 
 body:has(#toggle-layout:checked) .reoderable-image-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    /* Grid with items split over two columns */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 body:has(#toggle-layout:checked) #list-icon {
@@ -208,27 +218,58 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 .grid-item-text {
     align-self: end;
     justify-self: end;
+
     background: var(--overlay-bg-color);
     color: var(--overlay-text-color);
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
+
+    padding: 0.3rem 0.5rem;
+
+    margin-bottom: 0.25rem;
+
+    font-size: 0.6rem;
 }
 
 .grid-item-badge {
     align-self: start;
     justify-self: start;
-    color: var(--overlay-text-color);
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
+
     font-size: 0.8rem;
+
+    color: var(--overlay-text-color);
+    border-radius: 0.3rem;
+    
+    padding: 0.3rem;
+}
+.grid-item-badge:hover {
+    color: var(--overlay-text-color-hover);
+}
+
+.image-photo-gmaps {
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
 }
 
 .grid-item-download-badge {
     justify-self: end;
     align-self: start;
-    color: var(--overlay-text-color);
-    background: var(--overlay-bg-color-ligher);
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-size: 0.1rem;
+
+    background: var(--overlay-bg-color-ligher);
+    color: var(--overlay-text-color);
+    border-radius: 0.45rem;
+
+    padding: 0.3rem;
+
+    margin-top: 0.25rem;
+    margin-right: 0.25rem;
+}
+
+.grid-item-download-badge:hover {
+    color: var(--overlay-text-color-hover);
 }

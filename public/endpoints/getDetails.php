@@ -1,5 +1,5 @@
 <?php
-// This is and endpoint and returns JSON data
+// This is an endpoint and returns JSON data
 
 // Load secrets
 $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..

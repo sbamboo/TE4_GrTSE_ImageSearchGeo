@@ -10,8 +10,8 @@ $images = $unsplash->SearchPhotos("Dog", 10, 1);
 foreach ($images as $image) {
     $profile = $image->GetUserInfo();
     echo '<pre>';
-    //print_r($image);
-    print_r($profile);
+    print_r($image);
+    //print_r($profile);
     
     echo '</pre>';
 }
