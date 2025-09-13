@@ -50,6 +50,38 @@ html {
     color: var(--text-color);
 }
 
+/* Container styles */
+#popup-container,
+#portal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+#popup-container > *,
+#portal-container > * {
+    pointer-events: all;
+}
+
+#popup-container {
+    display: none;
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-container-darken-background {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#portal-container {
+    z-index: 1002;
+}
+
 /* Topbar */
 #search-container {
     width: 100%;

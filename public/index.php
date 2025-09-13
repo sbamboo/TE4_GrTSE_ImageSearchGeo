@@ -41,7 +41,7 @@ if(!empty($queryStr)){
 
         // Search again for page +1 also
         //$pageNr = 2;
-        //$images = $unsplash->SearchPhotos($queryStr, 10, 2, $filterNonGeo, $orderBy);
+        //$images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
     }
 }
 ?>
