@@ -1,6 +1,7 @@
 // File containing reusable code for popups
 
-//TODO: Take elements instead of elementId? And add check if element has no parents just append to container isntead of cloning
+//MARK: TODO: Take elements instead of elementId? And add check if element has no parents just append to container isntead of cloning
+//MARK: TODO: Add getElementOfPortal and getElementOfOverlay methods to get the actual element in the container (if cloned, or moved etc.)
 
 // Click handler for clickOutside must be assigned to document, because the overlay-container, popup-container and portal-container should be able to be clicked through and translucent
 window.addedGlobalEventListener = false;

@@ -12,6 +12,9 @@ html {
 [data-theme="light"] {
     --main-bg-color: #ffffff;
     --text-color: #000000;
+    --text-color-grayed: #606060;
+
+    --border-light: #e0e0e0;
     
     --image-container-bg-color: #f0f0f0;
     --image-bg-color: #000000;
@@ -30,6 +33,9 @@ html {
 [data-theme="dark"] {
     --main-bg-color: #121212;
     --text-color: #ffffff;
+    --text-color-grayed: #a0a0a0;
+
+    --border-light: #2c2c2c;
 
     --image-container-bg-color: #1e1e1e;
 
@@ -48,6 +54,11 @@ html {
 html {
     background-color: var(--main-bg-color);
     color: var(--text-color);
+}
+
+.text-info-smaller {
+    font-size: 0.8rem;
+    color: var(--text-color-grayed);
 }
 
 /* Container styles */
@@ -156,6 +167,19 @@ html {
 .image-location-data {
     display: flex;
     flex-flow: column;
+}
+
+.translated-geonames {
+    width: min-content;
+}
+
+.translated-geonames-content {
+    background-color: var(--main-bg-color);
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+
+    border: 1px solid var(--border-light);
 }
 
 /* Main Content - ToggleLayout */
