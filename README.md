@@ -23,6 +23,7 @@
 - `Constant variables` are `UPPER_SNAKE_CASE`
 - `HTML-Element-Ids` are `kebab-case` (all lowercase)
 - `HTML-Element-Classes` are `kebab-case`
+- `Language Placeholders` are surrounded by `%` and inside is cased as `kebab-case` but for context `.` can be used as delim, eg: `button.search` instead of just `search` or `search-button`
 
 ## Code best practise
 - HTML property order:
