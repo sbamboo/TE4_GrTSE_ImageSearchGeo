@@ -51,6 +51,12 @@ window.addEventListener('DOMContentLoaded', () => {
             });
 
         }
+        document.getElementById("settings-button").addEventListener("click", () => {
+            POPUPS.showAsOverlay('settings', closeOnClickOutside = true, closeOnMouseOut = false, darkenBackground = true);
+            /*console.log("working")*/
+        });
+    });
+    
     });
 
     // Add onclick to all ".img-fetch-geonames" elements

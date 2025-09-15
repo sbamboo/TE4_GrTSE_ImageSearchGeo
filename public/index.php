@@ -76,9 +76,11 @@ if(!empty($queryStr)){
     <!-- Wrapper for overlays -->
     <div id="overlay-container">
         <div id="popup-container">
-            <div id="settings">
+            <div id="settings" style="display:none;">
+                <label for="auto-fetch-details">Auto Fetch Details</label>
+                <label for="filter-non-geo">Filter Non Geo</label>
+                <label for="translate-non-latin">Translate Non Latin</label>
             </div>
-        </div>
         <div id="portal-container"></div>
     </div>
 
@@ -87,11 +89,11 @@ if(!empty($queryStr)){
         <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
             <label id="search-label" for="search-bar"><?php echo translateLanguage("search.image") ?></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
-            <label for="auto-fetch-details">Auto Fetch Details</label>
+          
             <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
-            <label for="filter-non-geo">Filter Non Geo</label>
+           
             <input id="filter-non-geo" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
-            <label for="translate-non-latin">Translate Non Latin</label>
+  
             <input id="translate-non-latin" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">

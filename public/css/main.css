@@ -211,6 +211,17 @@ html {
     background: var(--toggle-bg-color-hover);
 }
 
+#settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    
+    width: 15rem;
+    height: 20rem;
+    background:  var(--image-container-bg-color);
+}
+
 #settings-button {
     display: flex;
     align-self: start;
