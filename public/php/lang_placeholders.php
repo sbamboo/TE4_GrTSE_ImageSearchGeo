@@ -13,47 +13,56 @@ $toggleLanguage = isset($_POST['toggleLanguage']);
 
 $translations = [
     "en" => [
-    "search.image" => "Search image",
-    "search" => "Search",
-    "autofetch" => "Search",
-    "filter.non.geo" => "Search",
-    "translate.non.latin" => "Search",
-    "country" => "Country",
-    "city" => "City",
-    "place" => "Place",
-    "lat" => "Latitude",
-    "lon" => "Longitude",
+        "search.image" => "Search image",
+        "search.button" => "Search",
+        "autofetch" => "Search",
+        "filter.non.geo" => "Search",
+        "translate.non.latin" => "Search",
+        "country" => "Country",
+        "city" => "City",
+        "place" => "Place",
+        "lat" => "Latitude: ",
+        "lon" => "Longitude: ",
+        "img.credit.start" => "Photo taken by ",
+        "img.credit.end" => "from unsplash.",
+        "translated.place" => "translated",
+        "fetch.geo.data" => "Get location data",
+        "relevance" => "Relevance",
+        "latest" => "Latest",
     ],
     "sv" => [
         "search.image" => "Sök bild",
-        "search" => "Sök",
+        "search.button" => "Sök",
         "autofetch" => "Search",
         "filter.non.geo" => "Search",
         "translate.non.latin" => "Search",
         "country" => "Land",
         "city" => "Stad",
         "place" => "Plats",
-        "lat" => "Latitud",
-        "lon" => "Longitud",
+        "lat" => "Latitud: ",
+        "lon" => "Longitud: ",
+        "img.credit.start" => "Bild tagen av ",
+        "img.credit.end" => "från unsplash.",
+        "translated.place" => "översatt",
+        "fetch.geo.data" => "Hämta geo data",
+        "relevance" => "Relevans",
+        "latest" => "Senast"
     ] 
 ];
 
-// echo $toggleLanguage;
-// var_dump($toggleLanguage);
-// var_dump($_POST['toggleLanguage']);
-
-
-function translateLanguage(string $key): string{
+// replaces every %string% that is echoed with its corresponding value from the translations dictionary based on current language
+function localize(string $string): string {
     global $translations, $toggleLanguage;
-    var_dump($toggleLanguage);
-    $currentLang = $toggleLanguage ? 'en' : 'sv';
-    if($key != null){
-        return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
-    }
-}
+    $currentLang = $toggleLanguage ? 'sv' : 'en';
 
-function echoT(string $string): string {
-    // Replaces any %placeholder% with their localized strings.
+    return preg_replace_callback(
+        '/%([^%]+)%/',
+        function($matches) use ($translations, $currentLang){
+            $key = $matches[1];
+            return $translations[$currentLang][$key] ?? $key;
+        },
+        $string
+    );
 }
 
 ?>
