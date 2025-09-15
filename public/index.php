@@ -119,10 +119,10 @@ if(!empty($queryStr)){
             <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php 
             if(!$hasSearched || $toggleLanguage) {
                 echo 'checked'; 
-                $_SESSION["currentLang"] = "en";
+                $_SESSION["currentLang"] = "sv";
             }
             elseif(!$hasSearched || !$toggleLanguage){
-                $_SESSION["currentLang"] = "sv";
+                $_SESSION["currentLang"] = "en";
             }
                 ?>>
             <?php

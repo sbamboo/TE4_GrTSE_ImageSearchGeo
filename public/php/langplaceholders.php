@@ -47,6 +47,8 @@ $translations = [
 function translateLanguage(string $key): string{
     global $translations;
     $currentLang = $_SESSION["currentLang"];
+    var_dump($currentLang);
+    var_dump($_SESSION["currentLang"]);
     if($key != null){
         return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
     }
