@@ -15,7 +15,8 @@ html {
     --text-color-grayed: #606060;
 
     --border-light: #e0e0e0;
-    
+    --border-dark: #2c2c2c;
+
     --image-container-bg-color: #f0f0f0;
     --image-bg-color: #000000;
 
@@ -38,6 +39,7 @@ html {
     --text-color-grayed: #a0a0a0;
 
     --border-light: #2c2c2c;
+    --border-dark: #e0e0e0;
 
     --image-container-bg-color: #1e1e1e;
 
@@ -214,19 +216,46 @@ html {
 #settings {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
+    justify-content: center;
+    border: 0.1rem solid var(--border-dark);
+    border-radius: 1rem;
     
-    width: 15rem;
-    height: 20rem;
+    padding: 0.5rem;
+    width: auto;
+    height: 25rem;
     background:  var(--image-container-bg-color);
+
+}
+
+#settings-container-box {
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    width: inherit;
+    height: inherit;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+#settings-container-box label {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+    gap: 2rem;
+}
+
+#settings-head-line {
+    justify-self: center;
+    color: var(--text-color);
 }
 
 #settings-button {
     display: flex;
     align-self: start;
+    justify-self: end;
     align-items: center;
     justify-content: center;
+
 
     width: 1.7rem;
     height: 1.7rem;
@@ -240,6 +269,29 @@ html {
     transition: background 0.2s;
 }
 #settings-button:hover {
+    background: var(--toggle-bg-color-hover);
+}
+
+#settings-closer {
+    display: flex;
+    align-self: end;
+    
+    align-items: center;
+    justify-content: center;
+
+    width: 1.7rem;
+    height: 1.7rem;
+
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+
+    color: white;
+    background: red;
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+#settings-closer:hover {
     background: var(--toggle-bg-color-hover);
 }
 
