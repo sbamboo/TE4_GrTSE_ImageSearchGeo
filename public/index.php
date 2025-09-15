@@ -55,6 +55,7 @@ if(!empty($queryStr)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="./css/helpers.css">
+    <link rel="stylesheet" href="./css/ui.css">
     <link rel="stylesheet" href="./css/main.css">
     
     <script src="./js/popups.js"></script>
@@ -79,19 +80,12 @@ if(!empty($queryStr)){
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
                     <button id="settings-closer">X</button>
-                    <div class="settings-container">
-                        <label for="auto-fetch-details">Auto Fetch Details</label>
-                       
 
-                    </div>
-                    <div class="settings-container">
-                        <label for="filter-non-geo">Filter Non Geo</label>
-                      
-                    </div>
-                    <div class="settings-container">
-                        <label for="translate-non-latin">Translate Non Latin</label>
-                     
-                    </div>
+                    <label class="fake-checkbox" for="auto-fetch-details"><span>Auto Fetch Details</span><span class="checkmark"></span></label>
+
+                    <label class="fake-checkbox" for="filter-non-geo"><span>Filter Non Geo</span><span class="checkmark"></span></label>
+
+                    <label class="fake-checkbox" for="translate-non-latin"><span>Translate Non Latin</span><span class="checkmark"></span></label>
                 </div>
             </div>
         </div>
@@ -104,11 +98,12 @@ if(!empty($queryStr)){
             <label id="search-label" for="search-bar"><?php echo translateLanguage("search.image") ?></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
           
-            <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
+            <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
            
-            <input id="filter-non-geo" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
+            <input id="filter-non-geo" class="hidden-checkbox" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
   
-            <input id="translate-non-latin" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
+            <input id="translate-non-latin" class="hidden-checkbox" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
+            
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
                 <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">

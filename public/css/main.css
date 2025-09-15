@@ -237,7 +237,7 @@ html {
     scrollbar-width: thin;
 }
 
-.settings-container {
+#settings-container-box label {
     display: flex;
     justify-content: space-between;
     margin: 1rem;
