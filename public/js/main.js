@@ -96,13 +96,29 @@ window.addEventListener('DOMContentLoaded', () => {
                     // if first char is [ or { it is JSON
                     const firstChar = text.trim().charAt(0);
                     if (firstChar === '{' || firstChar === '[') {
+                        
+                        todisp = `Error: ${text}`;
+
+                        try {
+                            const json = JSON.parse(text);
+                            if (json.error) {
+                                todisp = `Error: ${json.error}`;
+                            } else if (json.message) {
+                                todisp = `Error: ${json.message}`;
+                            }
+                        } catch (e) {
+                            // Ignore
+                        }
+
+                        
+
                         // Get the .img-fetch-geonames-info under parent of el set its display to block and innerText to error
                         const infoEl = document.querySelector(`.img-fetch-geonames-info[data-id="${id}"]`);
                         console.log(infoEl);
                         if (infoEl) {
                             infoEl.style.display = 'block';
                             infoEl.style.color = 'red';
-                            infoEl.innerText = `Error: ${text.trim()}`;
+                            infoEl.innerText = todisp;
                         }
 
                         return;
