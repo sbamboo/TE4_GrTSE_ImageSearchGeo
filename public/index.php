@@ -6,11 +6,13 @@
 
 // Get all the secrets from php.ini file
 $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
+session_start();
 
 // Imports
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
 require_once('./php/translate.php');
+require_once('./php/langplaceholders.php');
 require_once('./php/components.php');
 
 // Instantiate translator
@@ -83,7 +85,7 @@ if(!empty($queryStr)){
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
         <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar">Search image</label>
+            <label id="search-label" for="search-bar"><?php echo translateLanguage("search.image") ?></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
             <label for="auto-fetch-details">Auto Fetch Details</label>
             <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
@@ -114,7 +116,15 @@ if(!empty($queryStr)){
                     <rect y="12" width="60" height="6" fill="#C8102E"/>
                 </svg>
             </label>
-            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if(!$hasSearched || $toggleLanguage) echo 'checked' ?>>
+            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php 
+            if(!$hasSearched || $toggleLanguage) {
+                echo 'checked'; 
+                $_SESSION["currentLang"] = "en";
+            }
+            elseif(!$hasSearched || !$toggleLanguage){
+                $_SESSION["currentLang"] = "sv";
+            }
+                ?>>
             <?php
                 echoFilter(
                     [

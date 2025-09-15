@@ -8,4 +8,48 @@
 // Placeholders can be either from a folder or directly here as keyed arrays: $placeholders = ["<languageCode>" => ["<placeholder>" => "<localizedString>"]];
 
 // Also provides just a string->string function (used by the echo/buffer function).
+
+$translations = [
+    "en" => [
+    "search.image" => "Search image",
+    "search" => "Search",
+    "autofetch" => "Search",
+    "filter.non.geo" => "Search",
+    "translate.non.latin" => "Search",
+    "country" => "Country",
+    "city" => "City",
+    "place" => "Place",
+    "lat" => "Latitude",
+    "lon" => "Longitude",
+    ],
+    "sv" => [
+        "search.image" => "Sök bild",
+        "search" => "Sök",
+        "autofetch" => "Search",
+        "filter.non.geo" => "Search",
+        "translate.non.latin" => "Search",
+        "country" => "Land",
+        "city" => "Stad",
+        "place" => "Plats",
+        "lat" => "Latitud",
+        "lon" => "Longitud",
+    ] 
+];
+
+session_start();
+// if($translateLanguage){
+//     $lang = "sv";
+// }
+// elseif(!$translateLanguage){
+//     $lang = "en";
+// }
+
+function translateLanguage(string $key): string{
+    global $translations;
+    $currentLang = $_SESSION["currentLang"];
+    if($key != null){
+        return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
+    }
+}
+
 ?>
