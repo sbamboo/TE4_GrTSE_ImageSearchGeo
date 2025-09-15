@@ -23,6 +23,8 @@ html {
     --toggle-bg-color-hover: #e0e0e0;
 
     --overlay-text-color: white;
+    --overlay-link-color: rgb(210, 230, 248);
+    --overlay-link-color-hover: rgb(180, 210, 228);
     --overlay-bg-color: rgba(0, 0, 0, 0.5);
     --overlay-bg-color-ligher: rgba(137, 136, 136, 0.5);
     --overlay-text-color-hover: rgb(210, 230, 248);
@@ -44,6 +46,8 @@ html {
     --image-bg-color: #000000;
 
     --overlay-text-color: #000000;
+    --overlay-link-color: rgb(55, 55, 55);
+    --overlay-link-color-hover: rgb(85, 85, 85);
     --overlay-bg-color: rgba(255, 255, 255, 0.5);
     --overlay-bg-color-ligher: rgba(255, 255, 255, 0.3);
     --overlay-text-color-hover: rgb(55, 55, 55);
@@ -296,6 +300,15 @@ body:has(#toggle-language:not(:checked)) #english-flag {
     font-size: 0.6rem;
 }
 
+.grid-item-text a,
+.grid-item-text a:active {
+    color: var(--overlay-link-color);
+}
+.grid-item-text a:hover {
+    color: var(--overlay-link-color-hover);
+}
+
+
 .grid-item-badge {
     align-self: start;
     justify-self: start;
@@ -314,10 +327,6 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 .image-photo-gmaps {
     margin-top: 0.2rem;
     margin-left: 0.2rem;
-}
-
-.image-photo-credit-link:active{
-    color: #364eda;
 }
 
 .grid-item-download-badge {
