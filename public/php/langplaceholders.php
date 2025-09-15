@@ -9,6 +9,8 @@
 
 // Also provides just a string->string function (used by the echo/buffer function).
 
+$toggleLanguage = $_POST['toggleLanguage'];
+
 $translations = [
     "en" => [
     "search.image" => "Search image",
@@ -36,19 +38,21 @@ $translations = [
     ] 
 ];
 
-//session_start();
-// if($translateLanguage){
-//     $lang = "sv";
-// }
-// elseif(!$translateLanguage){
-//     $lang = "en";
-// }
+echo $toggleLanguage;
+var_dump($toggleLanguage);
+var_dump($_POST['toggleLanguage']);
+
 
 function translateLanguage(string $key): string{
     global $translations;
-    $currentLang = $_SESSION["currentLang"];
-    var_dump($currentLang);
-    var_dump($_SESSION["currentLang"]);
+    global $toggleLanguage;
+    $toggleLanguage = $_POST['toggleLanguage'] ?? 'en';
+    if(isset($toggleLanguage)){
+        $currentLang = 'sv';
+    }
+    elseif(!isset($toggleLanguage)){
+        $currentLang = 'en';
+    }
     if($key != null){
         return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
     }
