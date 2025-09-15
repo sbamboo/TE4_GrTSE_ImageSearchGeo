@@ -1,4 +1,5 @@
 <?php
+$toggleLanguage = isset($_POST['toggleLanguage']);
 //determines if a string contains nonlatin characters
 function containsNonLatinLetters(string $str): bool {
     return (bool) preg_match('/(?:(?!\p{Latin})\p{L})/u', $str);
@@ -7,12 +8,21 @@ function containsNonLatinLetters(string $str): bool {
 // Wrapper class for Google Translate API
 class GTranslate {
     private string $apiKey;
-
+    
     public function __construct(string $apiKey) {
         $this->apiKey = $apiKey;
     }
 
-    public function translate(string $text, string $targetLanguage = 'en'): ?string {
+    public function currentTargetLang($toggleLanguage){
+        $currentLanguage = $toggleLanguage ? 'sv' : 'en';
+        return $currentLanguage;
+    }
+
+    public function translate(string $text, ?string $targetLanguage = null): ?string {
+        if ($targetLanguage === null) {
+            $targetLanguage = $this->currentTargetLang($_POST['toggleLanguage'] ?? false);
+        }
+        
         $url = "https://translation.googleapis.com/language/translate/v2?key=" 
                . $this->apiKey
                . "&q=" . urlencode($text) 
@@ -24,8 +34,9 @@ class GTranslate {
         return $result['data']['translations'][0]['translatedText'] ?? null;
     }
 
-    public function translateKeepOrg(string $text, string $targetLanguage = 'en'): string {
-        $translated = $this->translate($text, $targetLanguage);
+    public function translateKeepOrg(string $text, string $targetLanguage = 'sv'): string {
+        $currentLanguage = $this->currentTargetLang($_POST('toggleLanguage') ?? false);
+        $translated = $this->translate($text);
         if ($translated && $translated !== $text) {
             return $text . " (" . $translated . ")";
         }

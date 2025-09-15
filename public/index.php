@@ -25,7 +25,7 @@ $autoFetchDetails = isset($_POST['autoFetchDetails']);
 $filterNonGeo = isset($_POST['filterNonGeo']);
 $translateNonLatin = isset($_POST['translateNonLatin']);
 $toggleLayout = isset($_POST['toggleLayout']);
-$toggleLanguage = isset($_POST['toggleLanguage']);
+$toggleLanguage = isset($_POST['toggleLanguage']) ? true : false;
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -95,7 +95,7 @@ if(!empty($queryStr)){
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
         <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar"></label>
+            <label id="search-label" for="search-bar"> <?php echo localize("%search.image%") ?></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
           
             <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
@@ -127,17 +127,18 @@ if(!empty($queryStr)){
                     <rect y="12" width="60" height="6" fill="#C8102E"/>
                 </svg>
             </label>
-            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if(!$toggleLanguage) {echo 'checked'; }?>>
+            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if($toggleLanguage) {echo 'checked'; }?> onchange="this.form.submit()">
             <?php
                 echoFilter(
                     [
-                        "relevant" => "Relevance",
-                        "latest" => "Latest"
+                        "relevant" => localize("%relevance%"),
+                        "latest" => localize("%latest%")
                     ],
                     $orderBy
                 );
             ?>
-            <input id="search-button" type="submit" value="Search">
+
+            <input id="search-button" type="submit" value="<?php echo localize("%search.button%")?>">
             <div id="settings-button">  
             <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>

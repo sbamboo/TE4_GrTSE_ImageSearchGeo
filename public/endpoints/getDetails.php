@@ -9,6 +9,7 @@ require_once('./../php/endpoint_helpers.php');
 require_once('./../php/libs/blurhash.php');
 require_once('./../php/unsplash_api.php');
 require_once('./../php/translate.php');
+require_once('./../php/lang_placeholders.php');
 require_once('./../php/components.php');
 
 // Setup enviroment

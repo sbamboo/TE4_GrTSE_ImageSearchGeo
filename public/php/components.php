@@ -51,7 +51,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
 
             echo '<div class="image-geonames-wrapper image-geonames-notfetched">';
-                echo '<button class="img-fetch-geonames" data-id="' . $identifiers["id"] . '">Fetch geo data</button>';
+                echo localize('<button class="img-fetch-geonames" data-id="' . $identifiers["id"] . '">%fetch.geo.data%</button>');
                 echo '<p class="img-fetch-geonames-info text-info-smaller" data-id="' . $identifiers["id"] . '" style="display:none;"></p>';
             echo '</div>';
 
@@ -87,23 +87,23 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
                 foreach ($translated as $key => [$text, $translatedText]) {
                     echo '<div class="location-text'; if ($translatedText !== null) { echo ' location-text-translated'; } echo '">';
                     if ($translatedText !== null) {
-                        echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                        echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                     }
                     else {
-                        echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                        echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                     }
                     echo '</div>';
                 }
 
                 //// If any translation was done, show a note about it
                 if ($didTranslateAny) {
-                    echo '<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(translated)</p>';
+                    echo localize('<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(%translated.place%)</p>');
                     echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
                     // Echo the original texts here
                     foreach ($translated as $key => [$text, $translatedText]) {
                         if ($translatedText !== null) {
                             echo '<div class="location-text-original">';
-                                echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                                echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                             echo '</div>';
                         }
                     }
@@ -115,12 +115,12 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             // Echo the location data HTML
             if (!empty($coords['latitude'])) {
                 echo '<div class="location-text">';
-                    echo '<p> <span>Latitude: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                    echo localize('<p> <span> %lat% </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
             if (!empty($coords['longitude'])) {
                 echo '<div class="location-text">';
-                    echo '<p> <span>Longitude: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                    echo localize('<p> <span> %lon% </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
 
@@ -152,7 +152,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
                 echoImageDownloadBadge($identifiers["slug"], $downloadUrl);
                 //echo '<a class="image-photo-download grid-item-download-badge" href="' . $downloadUrl . '" download="' . $identifiers["slug"] . '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a>';
                 echo '<div class="image-photo-gmaps grid-item-badge"> <a class="no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
-                echo '<div class="image-photo-credit grid-item-text"> Photo taken by <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> from unsplash.</div>';
+                echo localize('<div class="image-photo-credit grid-item-text"> %img.credit.start% <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> %img.credit.end%</div>');
             echo '</div>';
         echo '</div>';
 
