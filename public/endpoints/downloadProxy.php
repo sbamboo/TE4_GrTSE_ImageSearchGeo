@@ -1,5 +1,8 @@
 <?php
+// This is an endpoint and returns file
 require_once('./../php/endpoint_helpers.php');
+
+// downloadProxy.php?url=<Unsplash-download-url>&filename=<filename>&filetype=jpg
 
 function fetchWithStatus(string $url, int $maxRedirects = 10): array {
     $redirectCount = 0;
