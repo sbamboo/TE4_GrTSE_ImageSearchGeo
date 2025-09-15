@@ -9,7 +9,7 @@
 
 // Also provides just a string->string function (used by the echo/buffer function).
 
-$toggleLanguage = $_POST['toggleLanguage'];
+$toggleLanguage = isset($_POST['toggleLanguage']);
 
 $translations = [
     "en" => [
@@ -38,21 +38,15 @@ $translations = [
     ] 
 ];
 
-echo $toggleLanguage;
-var_dump($toggleLanguage);
-var_dump($_POST['toggleLanguage']);
+// echo $toggleLanguage;
+// var_dump($toggleLanguage);
+// var_dump($_POST['toggleLanguage']);
 
 
 function translateLanguage(string $key): string{
-    global $translations;
-    global $toggleLanguage;
-    $toggleLanguage = $_POST['toggleLanguage'] ?? 'en';
-    if(isset($toggleLanguage)){
-        $currentLang = 'sv';
-    }
-    elseif(!isset($toggleLanguage)){
-        $currentLang = 'en';
-    }
+    global $translations, $toggleLanguage;
+    var_dump($toggleLanguage);
+    $currentLang = $toggleLanguage ? 'en' : 'sv';
     if($key != null){
         return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
     }

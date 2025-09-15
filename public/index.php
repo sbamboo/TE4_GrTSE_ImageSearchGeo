@@ -12,7 +12,7 @@ session_start();
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
 require_once('./php/translate.php');
-require_once('./php/langplaceholders.php');
+require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
 // Instantiate translator
@@ -89,7 +89,7 @@ if(!empty($queryStr)){
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
         <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar"><?php echo translateLanguage("search.image") ?></label>
+            <label id="search-label" for="search-bar"></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
           
             <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
@@ -120,15 +120,7 @@ if(!empty($queryStr)){
                     <rect y="12" width="60" height="6" fill="#C8102E"/>
                 </svg>
             </label>
-            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php 
-            if(!$hasSearched || $toggleLanguage) {
-                echo 'checked'; 
-                $_SESSION["currentLang"] = "sv";
-            }
-            elseif(!$hasSearched || !$toggleLanguage){
-                $_SESSION["currentLang"] = "en";
-            }
-                ?>>
+            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if(!$toggleLanguage) {echo 'checked'; }?>>
             <?php
                 echoFilter(
                     [
