@@ -316,6 +316,10 @@ body:has(#toggle-language:not(:checked)) #english-flag {
     margin-left: 0.2rem;
 }
 
+.image-photo-credit-link:active{
+    color: #364eda;
+}
+
 .grid-item-download-badge {
     justify-self: end;
     align-self: start;
