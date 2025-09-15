@@ -244,6 +244,11 @@ html {
     gap: 2rem;
 }
 
+#settings-head-line {
+    justify-self: center;
+    color: var(--text-color);
+}
+
 #settings-button {
     display: flex;
     align-self: start;

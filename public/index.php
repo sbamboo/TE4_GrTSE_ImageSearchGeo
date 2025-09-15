@@ -80,7 +80,7 @@ if(!empty($queryStr)){
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
                     <button id="settings-closer">X</button>
-
+                    <a id="settings-head-line">Settings</a>
                     <label class="fake-checkbox" for="auto-fetch-details"><span>Auto Fetch Details</span><span class="checkmark"></span></label>
 
                     <label class="fake-checkbox" for="filter-non-geo"><span>Filter Non Geo</span><span class="checkmark"></span></label>
