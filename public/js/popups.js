@@ -96,7 +96,7 @@ class Popups {
         }
 
         // Show the popup
-        popupElement.style.display = "block";
+        popupElement.style.display = "flex";
         this.popupContainer.style.display = "flex";
 
         // Add to shown popups array if not already there
@@ -187,7 +187,7 @@ class Popups {
         portalElement.dataset.closeOnMouseOut = closeOnMouseOut.toString();
 
         // Show the portal
-        portalElement.style.display = "block";
+        portalElement.style.display = "flex";
         portalElement.style.position = "absolute";
 
         // Calculate position based on origin
