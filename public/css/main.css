@@ -315,11 +315,13 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 
     font-size: 0.8rem;
 
+    background: var(--overlay-bg-color-ligher);
     color: var(--overlay-text-color);
-    border-radius: 0.3rem;
-    
-    padding: 0.3rem;
+    border-radius: 1.4rem;
+
+    padding: 0.18rem 0.3rem;
 }
+
 .grid-item-badge:hover {
     color: var(--overlay-text-color-hover);
 }
