@@ -44,7 +44,7 @@ EOF;
     echo $html;
 }
 
-function echoLocationData(array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null): void {
+function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null): void {
     echo '<div class="image-location-data">';
 
         // Echo geonames
@@ -118,7 +118,7 @@ function echoLocationData(array $geoNames = [], array $coords = [], array $ident
 }
 
 // Function to return the HTML for an image
-function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null): void {
+function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null): void {
     $displayUrl = $image->GetImageDisplayUrl();
     //$blurUrl = $image->GetImageThumbnailUrl();
     $blurUrl = $image->GetBlurAsImage(32); // width=32, height=auto (based on original aspect ratio)
@@ -144,7 +144,7 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
             echo '</div>';
         echo '</div>';
 
-        echoLocationData($geoNames, $coords, $identifiers, $translateNonLatin, $translator);
+        echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
     echo '</div>';
 }
 

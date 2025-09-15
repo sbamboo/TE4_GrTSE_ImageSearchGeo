@@ -167,7 +167,7 @@ if(!empty($queryStr)){
                 }
 
                 foreach ($images as $image) {
-                    echoImageHTML($image, $translateNonLatin, $translator);
+                    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
                 }
             ?>
         </div>
