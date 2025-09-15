@@ -73,7 +73,10 @@ if(!empty($queryStr)){
 <body>
     <!-- Wrapper for overlays -->
     <div id="overlay-container">
-        <div id="popup-container"></div>
+        <div id="popup-container">
+            <div id="settings">
+            </div>
+        </div>
         <div id="portal-container"></div>
     </div>
 
@@ -83,7 +86,7 @@ if(!empty($queryStr)){
             <label id="search-label" for="search-bar">Search image</label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
             <label for="auto-fetch-details">Auto Fetch Details</label>
-            <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if ($hasSearched && $autoFetchDetails) echo 'checked'; ?>>
+            <input id="auto-fetch-details" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
             <label for="filter-non-geo">Filter Non Geo</label>
             <input id="filter-non-geo" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
             <label for="translate-non-latin">Translate Non Latin</label>
