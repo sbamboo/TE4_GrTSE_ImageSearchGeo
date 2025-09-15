@@ -32,7 +32,9 @@
     3. (FOR)
     4. (TYPE)
     5. (NAME)
-    6. VALUE
+    6. (DATA)
+    7. Style
+    8. VALUE
 - CSS use `var(--)` for colors so they can be styled with light/dark mode.
 - CSS/HTML use reusable classes `helpers.css` to make styling easier and more consistent.
 - CSS responsive, use `rem` units.

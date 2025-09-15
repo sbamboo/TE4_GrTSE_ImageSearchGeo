@@ -14,6 +14,9 @@ require_once('./../php/components.php');
 // Setup enviroment
 setupHeadersHTML();
 
+// Instantiate translator
+$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
+
 // Make unsplash instance
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
 
@@ -25,13 +28,14 @@ $queryStr = rawurldecode($params['queryStr']) ?? '';
 $orderBy = $params['orderBy'] ?? 'relevant'; // "relevant" or "latest"
 $autoFetchDetails = $params['autoFetchDetails'] === 'true' ? true : false;
 $filterNonGeo = $params['filterNonGeo'] === 'true' ? true : false;
+$translateNonLatin = $params['translateNonLatin'] === 'true' ? true : false;
 $pageNr = isset($params['pageNr']) && is_numeric($params['pageNr']) ? (int)$params['pageNr'] : 1;
 
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
 $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 echo '<div class="php-endpoint-response">';
 foreach ($images as $image) {
-    echoImageHTML($image);
+    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
 }
 echo '</div>';
 ?>

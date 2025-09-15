@@ -1,5 +1,5 @@
 <?php
-// This is an endpoint and returns JSON data
+// This is an endpoint and returns HTML data
 
 // Load secrets
 $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
@@ -8,9 +8,14 @@ $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER
 require_once('./../php/endpoint_helpers.php');
 require_once('./../php/libs/blurhash.php');
 require_once('./../php/unsplash_api.php');
+require_once('./../php/translate.php');
+require_once('./../php/components.php');
 
 // Setup enviroment
-setupHeadersJSON();
+setupHeadersHTML();
+
+// Instantiate translator
+$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
 
 // Make unsplash instance
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
@@ -25,6 +30,7 @@ if (!isset($params['id']) || !is_string($params['id'])) {
 
 // Check for the filterNonGeo parameter
 $filterNonGeo = isset($params['filterNonGeo']) ? true : false;
+$translateNonLatin = isset($params['translateNonLatin']) ? true : false;
 
 // Perform check
 try {
@@ -34,7 +40,11 @@ try {
     if ($filterNonGeo && !$photoDetails->HasGeoData()) {
         respondOK("Photo has no geo data, filtered out");
     } else {
-        respondOKContent($photoDetails->ToArray());
+        // Respond with HTML
+        $geoNames = $photoDetails->GetGeoNames();
+        $coords = $photoDetails->GetCoordinates();
+        $identifiers = $photoDetails->GetIdentifiers();
+        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
     }
 } catch (Throwable $e) {
     respondError($e);
