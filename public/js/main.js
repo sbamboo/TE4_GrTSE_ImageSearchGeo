@@ -51,13 +51,19 @@ window.addEventListener('DOMContentLoaded', () => {
             });
 
         }
-        document.getElementById("settings-button").addEventListener("click", () => {
-            POPUPS.showAsOverlay('settings', closeOnClickOutside = true, closeOnMouseOut = false, darkenBackground = true);
-            /*console.log("working")*/
-        });
-    });
+  
     
     });
+    
+    // doing smth   
+    document.getElementById("settings-button").addEventListener("click", () => {
+        POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+        console.log("working");
+    });
+    document.getElementById("settings-closer").addEventListener("click", () => {
+        POPUPS.hideAsOverlay('settings')
+    });
+
 
     // Add onclick to all ".img-fetch-geonames" elements
     document.querySelectorAll('.img-fetch-geonames').forEach(el => {
