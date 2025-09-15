@@ -36,7 +36,7 @@ $translations = [
     ] 
 ];
 
-session_start();
+//session_start();
 // if($translateLanguage){
 //     $lang = "sv";
 // }
@@ -50,6 +50,10 @@ function translateLanguage(string $key): string{
     if($key != null){
         return $translations[$currentLang][$key] ?? $translations['sv'][$key] ?? $key;
     }
+}
+
+function echoT(string $string): string {
+    // Replaces any %placeholder% with their localized strings.
 }
 
 ?>

@@ -44,6 +44,79 @@ EOF;
     echo $html;
 }
 
+function echoLocationData(array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null): void {
+    echo '<div class="image-location-data">';
+
+        // Echo geonames
+        echo '<div class="image-geonames-wrapper">';
+            //// Iterate all geo names and translate if needed
+            $translated = [];
+            $didTranslateAny = false;
+
+            foreach ($geoNames as $key => $text) {
+                // If empty continue
+                if (empty($text)) {
+                    continue;
+                }
+
+                // name => place
+                if ($key === 'name') {
+                    $key = 'place';
+                }
+                
+                $containsNonLatin = ($translateNonLatin && $translator) ? containsNonLatinLetters($text) : false;
+                if ($containsNonLatin) {
+                    $translated[$key] = [$text, $translator->translate($text)];
+                    $didTranslateAny = true;
+                } else {
+                    $translated[$key] = [$text, null];
+                }
+            }
+
+            //// Echo all the geonames using the translated text if any
+            foreach ($translated as $key => [$text, $translatedText]) {
+                echo '<div class="location-text'; if ($translatedText !== null) { echo ' location-text-translated'; } echo '">';
+                if ($translatedText !== null) {
+                    echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                }
+                else {
+                    echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                }
+                echo '</div>';
+            }
+
+            //// If any translation was done, show a note about it
+            if ($didTranslateAny) {
+                echo '<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(translated)</p>';
+                echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
+                // Echo the original texts here
+                foreach ($translated as $key => [$text, $translatedText]) {
+                    if ($translatedText !== null) {
+                        echo '<div class="location-text-original">';
+                            echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
+                        echo '</div>';
+                    }
+                }
+                echo '</div>';
+            }
+        //// End geonames container
+        echo '</div>';
+
+        // Echo the location data HTML
+        if (!empty($coords['latitude'])) {
+            echo '<div class="location-text">';
+                echo '<p> <span>Latitude: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+            echo '</div>';
+        }
+        if (!empty($coords['longitude'])) {
+            echo '<div class="location-text">';
+                echo '<p> <span>Longitude: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
+            echo '</div>';
+        }
+
+    echo '</div>';
+}
+
 // Function to return the HTML for an image
 function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTranslate $translator = null): void {
     $displayUrl = $image->GetImageDisplayUrl();
@@ -70,76 +143,8 @@ function echoImageHTML(UnsplashAPIImage $image, $translateNonLatin = false, ?GTr
                 echo '<div class="image-photo-credit grid-item-text"> Photo taken by <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> from unsplash.</div>';
             echo '</div>';
         echo '</div>';
-        echo '<div class="image-location-data">';
 
-            // Echo geonames
-            echo '<div class="image-geonames-wrapper">';
-                //// Iterate all geo names and translate if needed
-                $translated = [];
-                $didTranslateAny = false;
-
-                foreach ($geoNames as $key => $text) {
-                    // If empty continue
-                    if (empty($text)) {
-                        continue;
-                    }
-
-                    // name => place
-                    if ($key === 'name') {
-                        $key = 'place';
-                    }
-                    
-                    $containsNonLatin = ($translateNonLatin && $translator) ? containsNonLatinLetters($text) : false;
-                    if ($containsNonLatin) {
-                        $translated[$key] = [$text, $translator->translate($text)];
-                        $didTranslateAny = true;
-                    } else {
-                        $translated[$key] = [$text, null];
-                    }
-                }
-
-                //// Echo all the geonames using the translated text if any
-                foreach ($translated as $key => [$text, $translatedText]) {
-                    echo '<div class="location-text'; if ($translatedText !== null) { echo ' location-text-translated'; } echo '">';
-                    if ($translatedText !== null) {
-                        echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>';
-                    }
-                    else {
-                        echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
-                    }
-                    echo '</div>';
-                }
-
-                //// If any translation was done, show a note about it
-                if ($didTranslateAny) {
-                    echo '<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(translated)</p>';
-                    echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
-                    // Echo the original texts here
-                    foreach ($translated as $key => [$text, $translatedText]) {
-                        if ($translatedText !== null) {
-                            echo '<div class="location-text-original">';
-                                echo '<p> <span>' . ucfirst($key) . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>';
-                            echo '</div>';
-                        }
-                    }
-                    echo '</div>';
-                }
-            //// End geonames container
-            echo '</div>';
-
-            // Echo the location data HTML
-            if (!empty($coords['latitude'])) {
-                echo '<div class="location-text">';
-                    echo '<p> <span>Latitude: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
-                echo '</div>';
-            }
-            if (!empty($coords['longitude'])) {
-                echo '<div class="location-text">';
-                    echo '<p> <span>Longitude: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>';
-                echo '</div>';
-            }
-
-        echo '</div>';
+        echoLocationData($geoNames, $coords, $identifiers, $translateNonLatin, $translator);
     echo '</div>';
 }
 
