@@ -1,0 +1,59 @@
+.fake-checkbox .checkmark {
+    -webkit-user-select: none; 
+    -moz-user-select: none;
+    user-select: none;
+
+    position: relative;
+    height: 0.9rem;
+    width: 0.925rem;
+    margin-bottom: 0.2rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    background-color: #eee;
+}
+
+.hidden-checkbox {
+    display: none;
+}
+
+/* black magic checkbox, AKA: Uses a small ::after box with a border on two sides to make a checkmark, this to have full styling support */
+/* MARK: Maybe use checkmark symbol? */
+body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark::after,
+body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark::after,
+body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark::after {
+    content: "";
+    position: absolute;
+    left: 0.32rem;
+    top: 0.08rem;
+    
+    width: 0.25rem;
+    height: 0.5rem;
+
+    border: solid white;
+    border-width: 0 1px 1px 0;
+    transform: rotate(45deg);
+}
+
+[data-theme="light"] .fake-checkbox .checkmark {
+    background-color: #fff;
+    border: 1px solid #888;
+}
+  
+[data-theme="light"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
+[data-theme="light"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
+[data-theme="light"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark {
+    background-color: #2196F3;
+}
+
+[data-theme="dark"] .fake-checkbox .checkmark {
+    background-color: #444;
+    border: 1px solid #888;
+}
+  
+[data-theme="dark"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
+[data-theme="dark"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
+[data-theme="dark"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark {
+    background-color: #2196F3;
+}
