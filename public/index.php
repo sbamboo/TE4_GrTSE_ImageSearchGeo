@@ -17,7 +17,8 @@ require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY']);
+
 
 // Instantiate Caches
 $imgDetailsCache = new ImgDetailsCache();
@@ -37,7 +38,7 @@ $searchInfo = null;
 
 // Perform search
 if(!empty($queryStr)){
-    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $imgDetailsCache);
+    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY'], $imgDetailsCache);
     $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 
     // If length is 0 
@@ -83,14 +84,38 @@ if(!empty($queryStr)){
         <div id="popup-container">
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
-                    <button id="settings-closer">X</button>
-                    <a id="settings-head-line"><?php echo localize("%settings%") ?></a>
+                    <div id="settings-top-box">
+                        <div><!--Empty div ;) --></div>
+                        <a id="settings-head-line"><?php echo localize("%settings%") ?></a>
+                        <button id="settings-closer">
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M10 8l4 8" />
+                                <path d="M10 16l4 -8" />
+                            </svg>
+                        </button>
+                    </div>
                     <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%autofetch%") ?></span><span class="checkmark"></span></label>
 
                     <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%filter.non.geo%") ?></span><span class="checkmark"></span></label>
 
                     <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%translate.non.latin%") ?></span><span class="checkmark"></span></label>
                 </div>
+            </div>
+
+            <div id="gmaps-popup">
+                <iframe 
+                    id="iframe-interactive-map"
+                    width="600"
+                    height="450"
+                    style="border:0"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed/v1/place?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&q=35.6617773,139.7040506">
+                </iframe>
+                <button id="map-closer">X</button>
             </div>
         </div>
         <div id="portal-container"></div>
@@ -172,7 +197,7 @@ if(!empty($queryStr)){
             </label>
         </div>
 
-        <div class="reoderable-image-container php-endpoint-response">
+        <div id="image-container" class="reoderable-image-container php-endpoint-response">
             <?php
                 if ($searchInfo) {
                     echo "<p id=\"search-info\">$searchInfo</p>";
@@ -182,15 +207,15 @@ if(!empty($queryStr)){
                     return;
                 }
 
-                foreach ($images as $image) {
-                    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
-                }
+
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator); //add true later
             ?>
         </div>
         <div class="hflex-center">
-            <form id="see-more-form" class="hflex-vcenter" action="" method="post">
-                <input class="get-more-images-button" type="submit" value="<?php echo localize("%get.more.images%") ?>">
-            </form>
+            <div class="vflex">
+                <button id="get-more-images-button"><?php echo localize("%get.more.images%") ?></button>
+                <p id="get-more-images-info" style="display:none;"></p>
+            </div>
         </div>
     </main>
 </body>

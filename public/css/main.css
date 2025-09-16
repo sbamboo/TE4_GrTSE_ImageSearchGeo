@@ -126,7 +126,7 @@ html {
 }
 
 /* Main Content */
-.reoderable-image-container {
+.images-page-container {
     display: grid;
 
     gap: 1.5rem;
@@ -244,9 +244,21 @@ html {
     gap: 2rem;
 }
 
+#settings-top-box {
+    width: inherit;
+    display: flex;
+    align-items: start;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 #settings-head-line {
+    display: flex;
+    gap: 4rem;
     justify-self: center;
+    align-self: end;
     color: var(--text-color);
+    font-size: large;
 }
 
 #settings-button {
@@ -275,32 +287,29 @@ html {
 #settings-closer {
     display: flex;
     align-self: end;
-    
+    justify-self: end;
     align-items: center;
     justify-content: center;
 
-    width: 1.7rem;
-    height: 1.7rem;
+
+    font-size: 2rem;
 
     padding: 0.25rem;
-    border-radius: 0.375rem;
-
-    color: white;
-    background: red;
+    color: var(--text-color);
     cursor: pointer;
-
-    transition: background 0.2s;
+    border: none;
+    transition: color 0.2s;
 }
 #settings-closer:hover {
-    background: var(--toggle-bg-color-hover);
+    color: var(--toggle-bg-color-hover);
 }
 
-.reoderable-image-container {
+.images-page-container {
     /* Grid with all items in single centered column */
     grid-template-columns: 1fr;
 }
 
-body:has(#toggle-layout:checked) .reoderable-image-container {
+body:has(#toggle-layout:checked) .images-page-container {
     /* Grid with items split over two columns */
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -437,4 +446,40 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 
 .grid-item-download-badge:hover {
     color: var(--overlay-text-color-hover);
+}
+
+#gmaps-popup {
+    width: 40rem;
+    display: flex;
+    justify-content: end;
+    border: 0.5rem solid var(--border-dark);
+    border-radius: 0.5rem;
+}
+
+#map-closer {
+    display: flex;
+    align-self: start;
+    position: absolute;
+    
+    align-items: center;
+    justify-content: center;
+
+    width: 1.7rem;
+    height: 1.7rem;
+
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+
+    color: white;
+    background: red;
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+#map-closer:hover {
+    background: var(--toggle-bg-color-hover);
+}
+#iframe-interactive-map {
+    width: 40rem;
+    background-color: #ffffff;
 }

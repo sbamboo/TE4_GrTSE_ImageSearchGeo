@@ -64,11 +64,12 @@ class ReducedPhotoDetails {
 
 class UnsplashAPI {
     private string $accessKey;
+    public ?string $googleKey;
     private bool $autoGetDetails;
     private string $apiUrl = 'https://api.unsplash.com/';
     private ?ImgDetailsCache $imgDetailsCache;
 
-    public function __construct(string $accessKey, $autoGetDetails = false, ?ImgDetailsCache $imgDetailsCache = null) {
+    public function __construct(string $accessKey, $autoGetDetails = false, ?string $googleKey = null, ?ImgDetailsCache $imgDetailsCache = null) {
         $this->accessKey = $accessKey;
         $this->autoGetDetails = $autoGetDetails;
         $this->imgDetailsCache = $imgDetailsCache;
@@ -507,13 +508,36 @@ class UnsplashAPIImage {
         return $toRet;
     }
 
-    public function GetMostPreciseGMapsUrl(): ?string {
+    public function ParentHasGoogleKey(){
+        return $this->parent->googleKey !== null;
+    }
+
+    public function GetMostPreciseGMapsUrl(bool $embed = false): ?string {
         $coords = $this->GetCoordinates();
         $location = $this->GetLocation();
         // 1 if non of coords empty
         // 2 if place is not empty
         // 3 if city and country is not empty
         // 4 if only country
+        if ($embed && $this->ParentHasGoogleKey()) {
+            if (!empty($coords["latitude"]) && !empty($coords["longitude"])) {
+                //return 'https://maps.google.com/?q=' . $coords["latitude"]. ',' . $coords["longitude"];
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' .  $coords["latitude"] . ',' . $coords["longitude"];
+            }
+            elseif (!empty($location["name"])) {
+                // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["name"]).'';
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["name"]);
+            }
+            elseif (!empty($location["city"]) && !empty($location["country"])) {
+                // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["country"]. ',' . $location["city"]);
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]. ',' . $location["city"]);
+            }
+            elseif (!empty($location["country"])) {
+                // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["country"]);
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]);
+            }
+        }
+        
         if (!empty($coords["latitude"]) && !empty($coords["longitude"])) {
             return 'https://maps.google.com/?q=' . $coords["latitude"]. ',' . $coords["longitude"];
         }

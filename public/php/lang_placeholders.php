@@ -21,16 +21,17 @@ $translations = [
         "country" => "Country",
         "city" => "City",
         "place" => "Place",
-        "lat" => "Latitude: ",
-        "lon" => "Longitude: ",
-        "img.credit.start" => "Photo taken by ",
+        "lat" => "Latitude",
+        "lon" => "Longitude",
+        "img.credit.start" => "Photo taken by",
         "img.credit.end" => "from unsplash.",
         "translated.place" => "translated",
         "fetch.geo.data" => "Get location data",
         "relevance" => "Relevance",
         "latest" => "Latest",
         "get.more.images" => "See more",
-        "settings" => "Settings"
+        "settings" => "Settings",
+        "search.page" => "Page"
     ],
     "sv" => [
         "search.image" => "Sök bild",
@@ -41,16 +42,17 @@ $translations = [
         "country" => "Land",
         "city" => "Stad",
         "place" => "Plats",
-        "lat" => "Latitud: ",
-        "lon" => "Longitud: ",
-        "img.credit.start" => "Bild tagen av ",
+        "lat" => "Latitud",
+        "lon" => "Longitud",
+        "img.credit.start" => "Bild tagen av",
         "img.credit.end" => "från unsplash.",
         "translated.place" => "översatt",
         "fetch.geo.data" => "Hämta platsdata",
         "relevance" => "Relevans",
         "latest" => "Senast",
         "get.more.images" => "Se mer",
-        "settings" => "Inställningar"
+        "settings" => "Inställningar",
+        "search.page" => "Sida"
     ] 
 ];
 
@@ -63,7 +65,7 @@ function localize(string $string): string {
         '/%([^%]+)%/',
         function($matches) use ($translations, $currentLang){
             $key = $matches[1];
-            return $translations[$currentLang][$key] ?? $key;
+            return $translations[$currentLang][$key] ?? $matches[0]; // keep %...% if not found
         },
         $string
     );

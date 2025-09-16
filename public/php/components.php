@@ -115,12 +115,12 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             // Echo the location data HTML
             if (!empty($coords['latitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lat% </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %lat%: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
             if (!empty($coords['longitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lon% </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %lon%: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
 
@@ -130,7 +130,8 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
 }
 
 // Function to return the HTML for an image
-function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null): void {
+function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null, bool $embed = false): void {
+    $embed = ($embed === true) ? $image->ParentHasGoogleKey() : false;
     $displayUrl = $image->GetImageDisplayUrl();
     //$blurUrl = $image->GetImageThumbnailUrl();
     $blurUrl = $image->GetBlurAsImage(32); // width=32, height=auto (based on original aspect ratio)
@@ -138,7 +139,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
     $coords = $image->GetCoordinates();
     $identifiers = $image->GetIdentifiers();
     $userLink = $image->GetUserInfo();
-    $GMapsLink = $image->GetMostPreciseGMapsUrl();
+    $GMapsLink = $image->GetMostPreciseGMapsUrl($embed);
 
     //$downloadUrl = $image->GetDownloadUrl();
     $downloadUrl = $image->GetRawUrl();
@@ -151,12 +152,30 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
                 echo '</div>';
                 echoImageDownloadBadge($identifiers["slug"], $downloadUrl);
                 //echo '<a class="image-photo-download grid-item-download-badge" href="' . $downloadUrl . '" download="' . $identifiers["slug"] . '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a>';
-                echo '<div class="image-photo-gmaps grid-item-badge"> <a class="no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
+                if($embed){
+                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="embed-gmap-link no-link-style" data-url="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';   
+                }
+                else{
+                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
+                }
                 echo localize('<div class="image-photo-credit grid-item-text"> %img.credit.start% <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> %img.credit.end%</div>');
             echo '</div>';
         echo '</div>';
 
         echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
+    echo '</div>';
+}
+
+function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null): void {
+    echo '<div class="images-page" data-page-nr="' . $pageNr . '">';
+        echo '<div class="images-page-title hflex-space-out">';
+            echo '<h3>' . localize('%search.page%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
+        echo '</div>';
+        echo '<div class="images-page-container">';
+            foreach ($images as $image) {
+                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
+            }
+        echo '</div>';
     echo '</div>';
 }
 
