@@ -1,5 +1,4 @@
 <?php
-$toggleLanguage = isset($_POST['toggleLanguage']);
 //determines if a string contains nonlatin characters
 function containsNonLatinLetters(string $str): bool {
     return (bool) preg_match('/(?:(?!\p{Latin})\p{L})/u', $str);
@@ -8,25 +7,25 @@ function containsNonLatinLetters(string $str): bool {
 // Wrapper class for Google Translate API
 class GTranslate {
     private string $apiKey;
-    
-    public function __construct(string $apiKey) {
+    private ?string $targetLanguage;
+    public function __construct(string $apiKey, ?string $targetLanguage = null) {
         $this->apiKey = $apiKey;
+        $this->targetLanguage = $targetLanguage;
     }
 
-    public function currentTargetLang($toggleLanguage){
-        $currentLanguage = $toggleLanguage ? 'sv' : 'en';
-        return $currentLanguage;
+    public function GetTargetLang(): ?string{
+        return $this->targetLanguage;
     }
 
-    public function translate(string $text, ?string $targetLanguage = null): ?string {
-        if ($targetLanguage === null) {
-            $targetLanguage = $this->currentTargetLang($_POST['toggleLanguage'] ?? false);
+    public function translate(string $text): ?string {
+        if ($this->targetLanguage === null) {
+            $this->targetLanguage = 'en';
         }
         
         $url = "https://translation.googleapis.com/language/translate/v2?key=" 
                . $this->apiKey
                . "&q=" . urlencode($text) 
-               . "&target=" . $targetLanguage;
+               . "&target=" . $this->targetLanguage;
 
         $response = file_get_contents($url);
         $result = json_decode($response, true);
@@ -34,8 +33,7 @@ class GTranslate {
         return $result['data']['translations'][0]['translatedText'] ?? null;
     }
 
-    public function translateKeepOrg(string $text, string $targetLanguage = 'sv'): string {
-        $currentLanguage = $this->currentTargetLang($_POST('toggleLanguage') ?? false);
+    public function translateKeepOrg(string $text): string {
         $translated = $this->translate($text);
         if ($translated && $translated !== $text) {
             return $text . " (" . $translated . ")";

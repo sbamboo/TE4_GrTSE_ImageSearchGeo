@@ -17,7 +17,7 @@ require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GOOGLE_API_KEY']);
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
 
 
 // Instantiate Caches
@@ -208,7 +208,7 @@ if(!empty($queryStr)){
                 }
 
 
-                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator); //add true later
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator, true);
             ?>
         </div>
         <div class="hflex-center">

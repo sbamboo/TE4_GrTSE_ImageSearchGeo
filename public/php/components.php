@@ -139,7 +139,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
     $coords = $image->GetCoordinates();
     $identifiers = $image->GetIdentifiers();
     $userLink = $image->GetUserInfo();
-    $GMapsLink = $image->GetMostPreciseGMapsUrl($embed);
+    $GMapsLink = $image->GetMostPreciseGMapsUrl($embed, $translator->GetTargetLang());
 
     //$downloadUrl = $image->GetDownloadUrl();
     $downloadUrl = $image->GetRawUrl();
@@ -166,14 +166,14 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
     echo '</div>';
 }
 
-function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null): void {
+function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null, bool $embed = false): void {
     echo '<div class="images-page" data-page-nr="' . $pageNr . '">';
         echo '<div class="images-page-title hflex-space-out">';
             echo '<h3>' . localize('%search.page%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
         echo '</div>';
         echo '<div class="images-page-container">';
             foreach ($images as $image) {
-                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
+                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, $embed);
             }
         echo '</div>';
     echo '</div>';

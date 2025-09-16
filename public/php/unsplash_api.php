@@ -512,7 +512,7 @@ class UnsplashAPIImage {
         return $this->parent->googleKey !== null;
     }
 
-    public function GetMostPreciseGMapsUrl(bool $embed = false): ?string {
+    public function GetMostPreciseGMapsUrl(bool $embed = false, ?string $preferredLang = null): ?string {
         $coords = $this->GetCoordinates();
         $location = $this->GetLocation();
         // 1 if non of coords empty
@@ -522,19 +522,19 @@ class UnsplashAPIImage {
         if ($embed && $this->ParentHasGoogleKey()) {
             if (!empty($coords["latitude"]) && !empty($coords["longitude"])) {
                 //return 'https://maps.google.com/?q=' . $coords["latitude"]. ',' . $coords["longitude"];
-                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' .  $coords["latitude"] . ',' . $coords["longitude"];
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' .  $coords["latitude"] . ',' . $coords["longitude"] . (($preferredLang !== null) ? ('&language=' . $preferredLang) : "");
             }
             elseif (!empty($location["name"])) {
                 // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["name"]).'';
-                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["name"]);
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["name"]) . (($preferredLang !== null) ? ('&language=' . $preferredLang) : "");
             }
             elseif (!empty($location["city"]) && !empty($location["country"])) {
                 // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["country"]. ',' . $location["city"]);
-                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]. ',' . $location["city"]);
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]. ',' . $location["city"]) . (($preferredLang !== null) ? ('&language=' . $preferredLang) : "");
             }
             elseif (!empty($location["country"])) {
                 // return 'https://www.google.com/maps/search/?api=1&query='.urlencode($location["country"]);
-                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]);
+                return 'https://www.google.com/maps/embed/v1/place?key=' . $this->parent->googleKey . '&q=' . urlencode($location["country"]) . (($preferredLang !== null) ? ('&language=' . $preferredLang) : "");
             }
         }
         
