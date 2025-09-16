@@ -36,7 +36,7 @@ $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
 $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 echo '<div class="php-endpoint-response">';
 foreach ($images as $image) {
-    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
+    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, true);
 }
 echo '</div>';
 ?>

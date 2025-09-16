@@ -151,4 +151,15 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('.embed-gmap-link').forEach(el =>{
+        el.addEventListener('click', (e) => {
+            const iframe = document.getElementById('iframe-interactive-map');
+            iframe.src = el.dataset.url;
+            POPUPS.showAsOverlay('gmaps-popup', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+        })
+        document.getElementById("map-closer").addEventListener("click", (e) => {
+            POPUPS.hideAsOverlay('gmaps-popup')
+        });
+    })
 });

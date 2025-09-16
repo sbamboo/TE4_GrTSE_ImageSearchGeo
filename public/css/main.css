@@ -438,3 +438,39 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 .grid-item-download-badge:hover {
     color: var(--overlay-text-color-hover);
 }
+
+#gmaps-popup {
+    width: 40rem;
+    display: flex;
+    justify-content: end;
+    border: 0.5rem solid var(--border-dark);
+    border-radius: 0.5rem;
+}
+
+#map-closer {
+    display: flex;
+    align-self: start;
+    position: absolute;
+    
+    align-items: center;
+    justify-content: center;
+
+    width: 1.7rem;
+    height: 1.7rem;
+
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+
+    color: white;
+    background: red;
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+#map-closer:hover {
+    background: var(--toggle-bg-color-hover);
+}
+#iframe-interactive-map {
+    width: 40rem;
+    background-color: #ffffff;
+}
