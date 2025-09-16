@@ -35,7 +35,5 @@ $pageNr = isset($params['pageNr']) && is_numeric($params['pageNr']) ? (int)$para
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
 $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 //MARK: Wrap in div for "page"?
-foreach ($images as $image) {
-    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
-}
+echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator);
 ?>

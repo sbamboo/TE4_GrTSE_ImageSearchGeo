@@ -178,9 +178,7 @@ if(!empty($queryStr)){
                     return;
                 }
 
-                foreach ($images as $image) {
-                    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
-                }
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator);
             ?>
         </div>
         <div class="hflex-center">
