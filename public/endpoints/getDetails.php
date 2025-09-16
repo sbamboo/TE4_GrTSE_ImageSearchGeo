@@ -16,7 +16,7 @@ require_once('./../php/components.php');
 setupHeadersHTML();
 
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
 
 // Make unsplash instance
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);

@@ -32,8 +32,9 @@ function getPHPMetaEntries() {
     return metaEntries;
 }
 
-// When page is finished loading (PHP is done)
-window.addEventListener('DOMContentLoaded', () => {
+// When new images are loaded do the following
+function onNewImages() {
+    
     // Add "translated" hover tooltips
     document.querySelectorAll('.translated-geonames').forEach(el => {
         const id = el.dataset.id;
@@ -44,26 +45,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Get el position top center (at current scroll position)
                 const rect = el.getBoundingClientRect();
                 POPUPS.showAsPortal(`translated-geonames-${id}`, rect.left + (rect.width / 2), rect.top, "bottom", "center", true, true, true);
-            });
+            }, { once: true });
             el.addEventListener('mouseleave', (e) => {
                 //MARK: To allow mousing the popup we should not close if mousepos is inside the portal, the issue is portal may be clone to use POPUPS.getElementOfPortal(id)
                 POPUPS.hideAsPortal(`translated-geonames-${id}`);
-            });
-
+            }, { once: true });
         }
-  
-    
     });
-    
-    // doing smth   
-    document.getElementById("settings-button").addEventListener("click", () => {
-        POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        console.log("working");
-    });
-    document.getElementById("settings-closer").addEventListener("click", () => {
-        POPUPS.hideAsOverlay('settings')
-    });
-
 
     // Add onclick to all ".img-fetch-geonames" elements
     document.querySelectorAll('.img-fetch-geonames').forEach(el => {
@@ -143,20 +131,32 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        });
+        }, { once: true });
     });
 
-
+    // Add onclick to all ".embed-gmap-link" elements
     document.querySelectorAll('.embed-gmap-link').forEach(el =>{
         el.addEventListener('click', (e) => {
             const iframe = document.getElementById('iframe-interactive-map');
             iframe.src = el.dataset.url;
             POPUPS.showAsOverlay('gmaps-popup', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        })
+        }, { once: true })
         document.getElementById("map-closer").addEventListener("click", (e) => {
             POPUPS.hideAsOverlay('gmaps-popup')
-        });
+        }, { once: true });
     })
+}
+
+// When page is finished loading (PHP is done)
+window.addEventListener('DOMContentLoaded', () => {
+    // Add click listeners to settings buttons
+    document.getElementById("settings-button").addEventListener("click", () => {
+        POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+        console.log("working");
+    });
+    document.getElementById("settings-closer").addEventListener("click", () => {
+        POPUPS.hideAsOverlay('settings')
+    });
 
     // Add click handler to #get-more-images-button
     const moreImagesButton = document.getElementById('get-more-images-button');
@@ -230,6 +230,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 pageNrMeta.setAttribute('content', nextPageNr.toString());
             }
 
+            // Ensure event handlers
+            onNewImages();
+
             // Reset info text
             if (infoEl) {
                 infoEl.style.display = 'none';
@@ -248,4 +251,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Initial
+    onNewImages();
 });
