@@ -15,9 +15,9 @@ $translations = [
     "en" => [
         "search.image" => "Search image",
         "search.button" => "Search",
-        "autofetch" => "Search",
-        "filter.non.geo" => "Search",
-        "translate.non.latin" => "Search",
+        "autofetch" => "Get location data instantly",
+        "filter.non.geo" => "Filter without location data",
+        "translate.non.latin" => "Translate non latin characters",
         "country" => "Country",
         "city" => "City",
         "place" => "Place",
@@ -29,13 +29,15 @@ $translations = [
         "fetch.geo.data" => "Get location data",
         "relevance" => "Relevance",
         "latest" => "Latest",
+        "get.more.images" => "See more",
+        "settings" => "Settings"
     ],
     "sv" => [
         "search.image" => "Sök bild",
         "search.button" => "Sök",
-        "autofetch" => "Search",
-        "filter.non.geo" => "Search",
-        "translate.non.latin" => "Search",
+        "autofetch" => "Hamta platsdata direkt",
+        "filter.non.geo" => "Filtrera bort utan platsdata",
+        "translate.non.latin" => "Översätt icke latinska tecken",
         "country" => "Land",
         "city" => "Stad",
         "place" => "Plats",
@@ -44,9 +46,11 @@ $translations = [
         "img.credit.start" => "Bild tagen av ",
         "img.credit.end" => "från unsplash.",
         "translated.place" => "översatt",
-        "fetch.geo.data" => "Hämta geo data",
+        "fetch.geo.data" => "Hämta platsdata",
         "relevance" => "Relevans",
-        "latest" => "Senast"
+        "latest" => "Senast",
+        "get.more.images" => "Se mer",
+        "settings" => "Inställningar"
     ] 
 ];
 
