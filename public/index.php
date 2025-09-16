@@ -80,8 +80,18 @@ if(!empty($queryStr)){
         <div id="popup-container">
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
-                    <button id="settings-closer">X</button>
-                    <a id="settings-head-line"><?php echo localize("%settings%") ?></a>
+                    <div id="settings-top-box">
+                        <div><!--Empty div ;) --></div>
+                        <a id="settings-head-line"><?php echo localize("%settings%") ?></a>
+                        <button id="settings-closer">
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M10 8l4 8" />
+                                <path d="M10 16l4 -8" />
+                            </svg>
+                        </button>
+                    </div>
                     <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%autofetch%") ?></span><span class="checkmark"></span></label>
 
                     <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%filter.non.geo%") ?></span><span class="checkmark"></span></label>
@@ -183,7 +193,7 @@ if(!empty($queryStr)){
             </label>
         </div>
 
-        <div class="reoderable-image-container php-endpoint-response">
+        <div id="image-container" class="reoderable-image-container php-endpoint-response">
             <?php
                 if ($searchInfo) {
                     echo "<p id=\"search-info\">$searchInfo</p>";
@@ -193,15 +203,15 @@ if(!empty($queryStr)){
                     return;
                 }
 
-                foreach ($images as $image) {
-                    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, true);
-                }
+
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator); //add true later
             ?>
         </div>
         <div class="hflex-center">
-            <form id="see-more-form" class="hflex-vcenter" action="" method="post">
-                <input class="get-more-images-button" type="submit" value="<?php echo localize("%get.more.images%") ?>">
-            </form>
+            <div class="vflex">
+                <button id="get-more-images-button"><?php echo localize("%get.more.images%") ?></button>
+                <p id="get-more-images-info" style="display:none;"></p>
+            </div>
         </div>
     </main>
 </body>

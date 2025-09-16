@@ -25,18 +25,15 @@ $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
 $params = getUrlParameters();
 
 // Get the contextual search query and page number
-$queryStr = rawurldecode($params['queryStr']) ?? '';
-$orderBy = $params['orderBy'] ?? 'relevant'; // "relevant" or "latest"
-$autoFetchDetails = $params['autoFetchDetails'] === 'true' ? true : false;
-$filterNonGeo = $params['filterNonGeo'] === 'true' ? true : false;
-$translateNonLatin = $params['translateNonLatin'] === 'true' ? true : false;
+$queryStr = (isset($params["queryStr"]) && is_string($params["queryStr"])) ? rawurldecode($params["queryStr"]) : "";
+$orderBy = (isset($params["orderBy"]) && $params["orderBy"] === "relevant") ? "relevant" : "latest";
+$autoFetchDetails = (isset($params["autoFetchDetails"]) && ($params["autoFetchDetails"] === "true" || $params["autoFetchDetails"] === true))  ? true : false;
+$filterNonGeo = (isset($params["filterNonGeo"]) && ($params["filterNonGeo"] === "true" || $params["filterNonGeo"] === true))  ? true : false;
+$translateNonLatin = (isset($params["translateNonLatin"]) && ($params["translateNonLatin"] === "true" || $params["translateNonLatin"] === true))  ? true : false;
 $pageNr = isset($params['pageNr']) && is_numeric($params['pageNr']) ? (int)$params['pageNr'] : 1;
 
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
 $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
-echo '<div class="php-endpoint-response">';
-foreach ($images as $image) {
-    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, true);
-}
-echo '</div>';
+//MARK: Wrap in div for "page"?
+echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator); //add true later
 ?>
