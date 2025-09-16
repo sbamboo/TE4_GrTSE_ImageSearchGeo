@@ -15,7 +15,7 @@ class ReducedPhotoDetails {
         ];
     }
 
-    static public function Optimize(array $data) {
+    static public function Optimize(array $data): array {
         // Removes any null fields or empty non root arrays
         foreach ($data as $key => $value) {
             if (is_array($value)) {
@@ -27,10 +27,38 @@ class ReducedPhotoDetails {
                         unset($data[$key]);
                     }
                 }
+            } elseif (is_string($value) && $value === '') {
+                unset($data[$key]);
             } elseif ($value === null) {
                 unset($data[$key]);
             }
         }
+
+        // For each entry in tags if it type of AssocArray and first entry is key "type" and value "search" replace that first entry with "p":1
+        if (isset($data['tags']) && is_array($data['tags'])) {
+            foreach ($data['tags'] as $i => $tag) {
+                if (is_array($tag) && isset($tag['type']) && $tag['type'] === 'search') {
+                    unset($data['tags'][$i]['type']);
+                    $data['tags'][$i] = array_merge(['p' => 1], $data['tags'][$i]);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    static public function UnOptimize(array $data): array {
+        // For each entry in tags if it type of AssocArray and first entry is key "p" and value 1 replace that first entry with "type":"search
+        if (isset($data['tags']) && is_array($data['tags'])) {
+            foreach ($data['tags'] as $i => $tag) {
+                if (is_array($tag) && isset($tag['p']) && $tag['p'] === 1) {
+                    unset($data['tags'][$i]['p']);
+                    $data['tags'][$i] = array_merge(['type' => 'search'], $data['tags'][$i]);
+                }
+            }
+        }
+
+        return $data;
     }
 }
 
@@ -112,7 +140,8 @@ class UnsplashAPI {
             if ($isCached === true) {
                 $cachedData = $this->imgDetailsCache->GetImageDetails($photoId);
                 if ($cachedData !== null) {
-                    return ReducedPhotoDetails::Create($cachedData);
+                    $red = ReducedPhotoDetails::Create($cachedData);
+                    return ReducedPhotoDetails::UnOptimize($red);
                 }
             }
         }
@@ -120,7 +149,8 @@ class UnsplashAPI {
         $response = $this->getPhotoDetailsAsArray($photoId);
 
         if ($this->imgDetailsCache !== null) {
-            $this->imgDetailsCache->SetValueFromAssocArray($photoId, ReducedPhotoDetails::Create($response));
+            $red = ReducedPhotoDetails::Create($response);
+            $this->imgDetailsCache->SetValueFromAssocArray($photoId, ReducedPhotoDetails::Optimize($red));
         }
 
         return ReducedPhotoDetails::Create($response);
