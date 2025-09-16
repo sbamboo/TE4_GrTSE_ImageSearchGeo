@@ -16,7 +16,8 @@ require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GTRANSLATE_API_KEY']);
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY']);
+
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
 $queryStr = $_POST['queryStr'] ?? '';
@@ -33,7 +34,7 @@ $searchInfo = null;
 
 // Perform search
 if(!empty($queryStr)){
-    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
+    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY']);
     $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 
     // If length is 0 
@@ -97,6 +98,20 @@ if(!empty($queryStr)){
 
                     <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%translate.non.latin%") ?></span><span class="checkmark"></span></label>
                 </div>
+            </div>
+
+            <div id="gmaps-popup">
+                <iframe 
+                    id="iframe-interactive-map"
+                    width="600"
+                    height="450"
+                    style="border:0"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed/v1/place?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&q=35.6617773,139.7040506">
+                </iframe>
+                <button id="map-closer">X</button>
             </div>
         </div>
         <div id="portal-container"></div>
@@ -188,7 +203,8 @@ if(!empty($queryStr)){
                     return;
                 }
 
-                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator);
+
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator); //add true later
             ?>
         </div>
         <div class="hflex-center">
