@@ -72,6 +72,7 @@ class UnsplashAPI {
     public function __construct(string $accessKey, $autoGetDetails = false, ?string $googleKey = null, ?ImgDetailsCache $imgDetailsCache = null) {
         $this->accessKey = $accessKey;
         $this->autoGetDetails = $autoGetDetails;
+        $this->googleKey = $googleKey;
         $this->imgDetailsCache = $imgDetailsCache;
     }
 
