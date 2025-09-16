@@ -3,14 +3,47 @@
 // Uses Extension: GD
 // Requires: blurhash.php
 
+// Cachable struct
+class ReducedPhotoDetails {
+    static public function Create(array $data): array {
+        return [
+            'exif' => UnsplashAPIExif::Create($data['exif'] ?? []),
+            'location' => UnsplashAPILocation::Create($data['location'] ?? []),
+            'meta' => $data['meta'] ?? [],
+            'tags' => $data['tags'] ?? [],
+            'topics' => $data['topics'] ?? []
+        ];
+    }
+
+    static public function Optimize(array $data) {
+        // Removes any null fields or empty non root arrays
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                if (empty($value)) {
+                    unset($data[$key]);
+                } else {
+                    $data[$key] = self::Optimize($value);
+                    if (empty($data[$key])) {
+                        unset($data[$key]);
+                    }
+                }
+            } elseif ($value === null) {
+                unset($data[$key]);
+            }
+        }
+    }
+}
+
 class UnsplashAPI {
     private string $accessKey;
     private bool $autoGetDetails;
     private string $apiUrl = 'https://api.unsplash.com/';
+    private ?ImgDetailsCache $imgDetailsCache;
 
-    public function __construct(string $accessKey, $autoGetDetails = false) {
+    public function __construct(string $accessKey, $autoGetDetails = false, ?ImgDetailsCache $imgDetailsCache = null) {
         $this->accessKey = $accessKey;
         $this->autoGetDetails = $autoGetDetails;
+        $this->imgDetailsCache = $imgDetailsCache;
     }
 
     // lower level make GET request function without curl extension
@@ -61,12 +94,36 @@ class UnsplashAPI {
     }
 
     public function getPhotoDetailsAsArray(string $photoId): array {
+        if (empty($photoId)) {
+            throw new Exception("Photo ID is required to get photo details");
+        }
+
         return $this->makeGetRequest('photos/' . $photoId);
     }
 
-    public function GetPhotoDetails(string $photoId) {
+    public function GetPhotoWithDetails(string $photoId) {
         $response = $this->getPhotoDetailsAsArray($photoId);
         return new UnsplashAPIImage($this, $response);
+    }
+
+    public function GetReducedPhotoDetails(string $photoId): array {
+        if ($this->imgDetailsCache !== null) {
+            $isCached = $this->imgDetailsCache->ImageIdHasNonExpiredDetails($photoId);
+            if ($isCached === true) {
+                $cachedData = $this->imgDetailsCache->GetImageDetails($photoId);
+                if ($cachedData !== null) {
+                    return ReducedPhotoDetails::Create($cachedData);
+                }
+            }
+        }
+
+        $response = $this->getPhotoDetailsAsArray($photoId);
+
+        if ($this->imgDetailsCache !== null) {
+            $this->imgDetailsCache->SetValueFromAssocArray($photoId, ReducedPhotoDetails::Create($response));
+        }
+
+        return ReducedPhotoDetails::Create($response);
     }
 
     // Checks if an imageData is considered to have Geodata
@@ -203,12 +260,6 @@ class UnsplashAPIImage {
     public function __construct(UnsplashAPI $parent, array $imageData) {
         $this->parent = $parent;
 
-        // If parent has IsAutoFetchingDetails() enabled we fetch details now
-        if ($parent->IsAutoFetchingDetails() === true && $this->detailsAreFetched === false) {
-            $imageData = $parent->getPhotoDetailsAsArray($imageData['id'] ?? '');
-            $this->detailsAreFetched = true;
-        }
-
         $this->id = $imageData['id'] ?? '';
         $this->slug = $imageData['slug'] ?? '';
         $this->alternative_slugs = $imageData['alternative_slugs'] ?? [];
@@ -239,6 +290,12 @@ class UnsplashAPIImage {
         // $this->views = $imageData['views'] ?? 0;
         // $this->downloads = $imageData['downloads'] ?? 0;
         $this->topics = $imageData['topics'] ?? [];
+
+        // If parent has IsAutoFetchingDetails() enabled we fetch details now
+        if ($parent->IsAutoFetchingDetails() === true && $this->detailsAreFetched === false) {
+            $this->UpdateFromReducedPhotoDetails( $parent->GetReducedPhotoDetails($imageData['id'] ?? '') );
+            $this->detailsAreFetched = true;
+        }
     }
 
     // Function to return the entire image as keyedarray
@@ -265,6 +322,27 @@ class UnsplashAPIImage {
         ];
     }
 
+    public function GetReducedPhotoDetails(): array {
+        return ReducedPhotoDetails::Create([
+            "exif" => $this->exif,
+            "location" => $this->location,
+            "meta" => $this->meta,
+            "tags" => $this->tags,
+            "topics" => $this->topics
+        ]);
+    }
+
+    public function UpdateFromReducedPhotoDetails(array $details): void {
+        // debug echo entire $details["location"] as string with newline after
+        $this->exif = $details['exif'];
+        $this->location = $details['location'];
+        $this->meta = $details['meta'];
+        $this->tags = $details['tags'];
+        $this->topics = $details['topics'];
+
+        $this->detailsAreFetched = true;
+    }
+
     // Function to fetch the details for this image from the API
     public function FetchDetails() {
         // If details are already fetched do nothing
@@ -272,7 +350,7 @@ class UnsplashAPIImage {
             return;
         }
 
-        $imageData = $this->parent->getPhotoDetailsAsArray($this->id);
+        $this->UpdateFromReducedPhotoDetails( $this->parent->GetReducedPhotoDetails($this->id) );
         // Update all properties from the fetched data
         $this->__construct($this->parent, $imageData);
     }
