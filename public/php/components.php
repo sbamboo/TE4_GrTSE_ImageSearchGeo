@@ -115,12 +115,12 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             // Echo the location data HTML
             if (!empty($coords['latitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lat% </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %lat%: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
             if (!empty($coords['longitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lon% </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %lon%: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
 
@@ -157,6 +157,19 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
         echo '</div>';
 
         echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
+    echo '</div>';
+}
+
+function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null): void {
+    echo '<div class="images-page" data-page-nr="' . $pageNr . '">';
+        echo '<div class="images-page-title hflex-space-out">';
+            echo '<h3>' . localize('%search.page%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
+        echo '</div>';
+        echo '<div class="images-page-container">';
+            foreach ($images as $image) {
+                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
+            }
+        echo '</div>';
     echo '</div>';
 }
 

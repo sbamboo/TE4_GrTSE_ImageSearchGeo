@@ -168,7 +168,7 @@ if(!empty($queryStr)){
             </label>
         </div>
 
-        <div class="reoderable-image-container php-endpoint-response">
+        <div id="image-container" class="reoderable-image-container php-endpoint-response">
             <?php
                 if ($searchInfo) {
                     echo "<p id=\"search-info\">$searchInfo</p>";
@@ -178,15 +178,14 @@ if(!empty($queryStr)){
                     return;
                 }
 
-                foreach ($images as $image) {
-                    echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator);
-                }
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator);
             ?>
         </div>
         <div class="hflex-center">
-            <form id="see-more-form" class="hflex-vcenter" action="" method="post">
-                <input class="get-more-images-button" type="submit" value="<?php echo localize("%get.more.images%") ?>">
-            </form>
+            <div class="vflex">
+                <button id="get-more-images-button"><?php echo localize("%get.more.images%") ?></button>
+                <p id="get-more-images-info" style="display:none;"></p>
+            </div>
         </div>
     </main>
 </body>

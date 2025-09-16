@@ -126,7 +126,7 @@ html {
 }
 
 /* Main Content */
-.reoderable-image-container {
+.images-page-container {
     display: grid;
 
     gap: 1.5rem;
@@ -295,12 +295,12 @@ html {
     background: var(--toggle-bg-color-hover);
 }
 
-.reoderable-image-container {
+.images-page-container {
     /* Grid with all items in single centered column */
     grid-template-columns: 1fr;
 }
 
-body:has(#toggle-layout:checked) .reoderable-image-container {
+body:has(#toggle-layout:checked) .images-page-container {
     /* Grid with items split over two columns */
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
