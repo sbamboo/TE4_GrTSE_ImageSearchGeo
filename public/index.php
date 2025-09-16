@@ -9,6 +9,7 @@ $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TY
 session_start();
 
 // Imports
+require_once('./php/caching.php');
 require_once('./php/libs/blurhash.php');
 require_once('./php/unsplash_api.php');
 require_once('./php/translate.php');
@@ -18,6 +19,9 @@ require_once('./php/components.php');
 // Instantiate translator
 $translator = new GTranslate($SECRETS['GOOGLE_API_KEY']);
 
+
+// Instantiate Caches
+$imgDetailsCache = new ImgDetailsCache();
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
 $queryStr = $_POST['queryStr'] ?? '';
@@ -34,7 +38,7 @@ $searchInfo = null;
 
 // Perform search
 if(!empty($queryStr)){
-    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY']);
+    $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY'], $imgDetailsCache);
     $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
 
     // If length is 0 

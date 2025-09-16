@@ -35,7 +35,7 @@ $translateNonLatin = isset($params['translateNonLatin']) ? true : false;
 
 // Perform check
 try {
-    $photoDetails = $unsplash->GetPhotoDetails($params['id']);
+    $photoDetails = new UnsplashApiImage($unsplash, $unsplash->GetReducedPhotoDetails($params['id']));
 
     // If filtering
     if ($filterNonGeo && !$photoDetails->HasGeoData()) {
