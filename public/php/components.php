@@ -51,7 +51,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
 
             echo '<div class="image-geonames-wrapper image-geonames-notfetched">';
-                echo localize('<button class="img-fetch-geonames" data-id="' . $identifiers["id"] . '">%fetch.geo.data%</button>');
+                echo localize('<button class="img-fetch-geonames" data-id="' . $identifiers["id"] . '">%img.fetch-loc-btn.text%</button>');
                 echo '<p class="img-fetch-geonames-info text-info-smaller" data-id="' . $identifiers["id"] . '" style="display:none;"></p>';
             echo '</div>';
 
@@ -87,17 +87,17 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
                 foreach ($translated as $key => [$text, $translatedText]) {
                     echo '<div class="location-text'; if ($translatedText !== null) { echo ' location-text-translated'; } echo '">';
                     if ($translatedText !== null) {
-                        echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                        echo localize('<p> <span>' . ucfirst("%location.$key%") . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                     }
                     else {
-                        echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                        echo localize('<p> <span>' . ucfirst("%location.$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                     }
                     echo '</div>';
                 }
 
                 //// If any translation was done, show a note about it
                 if ($didTranslateAny) {
-                    echo localize('<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(%translated.place%)</p>');
+                    echo localize('<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(%img.translated%)</p>');
                     echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
                     // Echo the original texts here
                     foreach ($translated as $key => [$text, $translatedText]) {
@@ -115,12 +115,12 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             // Echo the location data HTML
             if (!empty($coords['latitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lat%: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %location.lat%: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
             if (!empty($coords['longitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %lon%: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %location.lon%: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
                 echo '</div>';
             }
 
@@ -169,7 +169,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
 function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null, bool $embed = false): void {
     echo '<div class="images-page" data-page-nr="' . $pageNr . '">';
         echo '<div class="images-page-title hflex-space-out">';
-            echo '<h3>' . localize('%search.page%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
+            echo '<h3>' . localize('%search.page-nr.title%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
         echo '</div>';
         echo '<div class="images-page-container">';
             foreach ($images as $image) {

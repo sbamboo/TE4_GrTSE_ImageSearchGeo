@@ -97,10 +97,13 @@ if(!empty($queryStr)){
                         </button>
                     </div>
                     <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%settings.autofetch%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.autofetch.desc%") ?></span><span class="checkmark"></span></p>
 
-                    <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%settings.filter.non.geo%") ?></span><span class="checkmark"></span></label>
+                    <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%settings.filter-non-geo%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.filter-non-geo.desc%") ?></span><span class="checkmark"></span></p>
 
-                    <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%settings.translate.non.latin%") ?></span><span class="checkmark"></span></label>
+                    <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%settings.translate-non-latin%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.translate-non-latin.desc%") ?></span><span class="checkmark"></span></p>
                 </div>
             </div>
 
@@ -124,7 +127,7 @@ if(!empty($queryStr)){
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
         <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar"> <?php echo localize("%search.image%") ?></label>
+            <label id="search-label" for="search-bar"> <?php echo localize("%search.title%") ?></label>
             <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
           
             <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
@@ -160,14 +163,14 @@ if(!empty($queryStr)){
             <?php
                 echoFilter(
                     [
-                        "relevant" => localize("%relevance%"),
-                        "latest" => localize("%latest%")
+                        "relevant" => localize("%search.sorting.relevance%"),
+                        "latest" => localize("%search.sorting.latest%")
                     ],
                     $orderBy
                 );
             ?>
 
-            <input id="search-button" type="submit" value="<?php echo localize("%search.button%")?>">
+            <input id="search-button" type="submit" value="<?php echo localize("%search.button-text%")?>">
             <div id="settings-button">  
                 <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -213,7 +216,7 @@ if(!empty($queryStr)){
         </div>
         <div class="hflex-center">
             <div class="vflex">
-                <button id="get-more-images-button"><?php echo localize("%get.more.images%") ?></button>
+                <button id="get-more-images-button"><?php echo localize("%search.next-page-btn.next%") ?></button>
                 <p id="get-more-images-info" style="display:none;"></p>
             </div>
         </div>

@@ -65,6 +65,8 @@ html {
 .text-info-smaller {
     font-size: 0.8rem;
     color: var(--text-color-grayed);
+    margin-left: 1rem;
+    margin-top: -1rem;
 }
 
 /* Container styles */

@@ -9,7 +9,7 @@
 
 // Also provides just a string->string function (used by the echo/buffer function).
 
-$toggleLanguage = isset($_POST['toggleLanguage']);
+$toggleLanguage = isset($_REQUEST['toggleLanguage']);
 
 $translations = [
     "en" => [
@@ -21,7 +21,6 @@ $translations = [
         "search.next-page-btn.next" => "See more",
 
         "settings.button" => "Settings",
-
                 
         "settings.autofetch" => "Don't auto fetch location",
         "settings.autofetch.desc" => "Disables automatically fetching location data for images, saves on requests to Unsplash",
@@ -39,40 +38,39 @@ $translations = [
         "img.credit.start" => "Photo taken by",
         "img.credit.end" => "from unsplash.",
         "img.translated" => "translated",
-        "img.fetch-loc-btn.text" => "Get location data"
-        // "autofetch" => "Get location data instantly",
-        // "filter.non.geo" => "Filter without location data",
-        // "translate.non.latin" => "Translate non latin characters",
-        // "country" => "Country",
-        // "city" => "City",
-        // "place" => "Place",
-        // "lat" => "Latitude",
-        // "lon" => "Longitude",
-        // "img.credit.start" => "Photo taken by",
-        // "img.credit.end" => "from unsplash.",
-        // "translated.place" => "translated",
-        // "fetch.geo.data" => "Get location data"
+        "img.fetch-loc-btn.text" => "Get location data",
+
+        "location.no-data" => "Photo has no geo data, filtered out"
     ],
     "sv" => [
-        "search.image" => "Sök bild",
-        "search.button" => "Sök",
-        "autofetch" => "Hamta platsdata direkt",
-        "filter.non.geo" => "Filtrera bort utan platsdata",
-        "translate.non.latin" => "Översätt icke latinska tecken",
-        "country" => "Land",
-        "city" => "Stad",
-        "place" => "Plats",
-        "lat" => "Latitud",
-        "lon" => "Longitud",
+        "search.title" => "Sök bild",
+        "search.button-text" => "Sök",
+        "search.sorting.relevance" => "Relevans",
+        "search.sorting.latest" => "Senast",
+        "search.page-nr.title" => "Sida",
+        "search.next-page-btn.next" => "Se mer",
+
+        "settings.button" => "Inställningar",
+                
+        "settings.autofetch" => "Hämta inte platsdata automatiskt",
+        "settings.autofetch.desc" => "Avaktiverar att automatiskt hämta platsdata för bilder, sparar på hämtningar från Unsplah",
+        "settings.filter-non-geo" => "Filtrera bort utan platsdata",
+        "settings.filter-non-geo.desc" => "Filtrerar bort bilder som inte har platsdata",
+        "settings.translate-non-latin" => "Översätt icke-latinskt",
+        "settings.translate-non-latin.desc" => "Översätter iccke-latinska tecken i platsnamn",
+        
+        "location.country" => "Land",
+        "location.city" => "Stad",
+        "location.place" => "Plats",
+        "location.lat" => "Latitud",
+        "location.lon" => "Longitud",
+        
         "img.credit.start" => "Bild tagen av",
         "img.credit.end" => "från unsplash.",
-        "translated.place" => "översatt",
-        "fetch.geo.data" => "Hämta platsdata",
-        "relevance" => "Relevans",
-        "latest" => "Senast",
-        "get.more.images" => "Se mer",
-        "settings" => "Inställningar",
-        "search.page" => "Sida"
+        "img.translated" => "översatt",
+        "img.fetch-loc-btn.text" => "Hämta platsdata",
+
+        "location.no-data" => "Bilden har ingen platsdata, utfiltrerad"
     ] 
 ];
 
