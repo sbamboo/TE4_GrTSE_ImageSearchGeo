@@ -13,25 +13,45 @@ $toggleLanguage = isset($_POST['toggleLanguage']);
 
 $translations = [
     "en" => [
-        "search.image" => "Search image",
-        "search.button" => "Search",
-        "autofetch" => "Get location data instantly",
-        "filter.non.geo" => "Filter without location data",
-        "translate.non.latin" => "Translate non latin characters",
-        "country" => "Country",
-        "city" => "City",
-        "place" => "Place",
-        "lat" => "Latitude",
-        "lon" => "Longitude",
+        "search.title" => "Search image",
+        "search.button-text" => "Search",
+        "search.sorting.relevance" => "Relevance",
+        "search.sorting.latest" => "Latest",
+        "search.page-nr.title" => "Page",
+        "search.next-page-btn.next" => "See more",
+
+        "settings.button" => "Settings",
+
+                
+        "settings.autofetch" => "Don't auto fetch location",
+        "settings.autofetch.desc" => "Disables automatically fetching location data for images, saves on requests to Unsplash",
+        "settings.filter-non-geo" => "Filter without location data",
+        "settings.filter-non-geo.desc" => "Filters out images that don't have location data",
+        "settings.translate-non-latin" => "Translate non latin",
+        "settings.translate-non-latin.desc" => "Translates non-latin characters in place names",
+        
+        "location.country" => "Country",
+        "location.city" => "City",
+        "location.place" => "Place",
+        "location.lat" => "Latitude",
+        "location.lon" => "Longitude",
+        
         "img.credit.start" => "Photo taken by",
         "img.credit.end" => "from unsplash.",
-        "translated.place" => "translated",
-        "fetch.geo.data" => "Get location data",
-        "relevance" => "Relevance",
-        "latest" => "Latest",
-        "get.more.images" => "See more",
-        "settings" => "Settings",
-        "search.page" => "Page"
+        "img.translated" => "translated",
+        "img.fetch-loc-btn.text" => "Get location data"
+        // "autofetch" => "Get location data instantly",
+        // "filter.non.geo" => "Filter without location data",
+        // "translate.non.latin" => "Translate non latin characters",
+        // "country" => "Country",
+        // "city" => "City",
+        // "place" => "Place",
+        // "lat" => "Latitude",
+        // "lon" => "Longitude",
+        // "img.credit.start" => "Photo taken by",
+        // "img.credit.end" => "from unsplash.",
+        // "translated.place" => "translated",
+        // "fetch.geo.data" => "Get location data"
     ],
     "sv" => [
         "search.image" => "Sök bild",

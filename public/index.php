@@ -86,7 +86,7 @@ if(!empty($queryStr)){
                 <div id="settings-container-box">
                     <div id="settings-top-box">
                         <div><!--Empty div ;) --></div>
-                        <a id="settings-head-line"><?php echo localize("%settings%") ?></a>
+                        <a id="settings-head-line"><?php echo localize("%settings.button%") ?></a>
                         <button id="settings-closer">
                             <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -96,15 +96,15 @@ if(!empty($queryStr)){
                             </svg>
                         </button>
                     </div>
-                    <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%autofetch%") ?></span><span class="checkmark"></span></label>
+                    <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%settings.autofetch%") ?></span><span class="checkmark"></span></label>
 
-                    <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%filter.non.geo%") ?></span><span class="checkmark"></span></label>
+                    <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%settings.filter.non.geo%") ?></span><span class="checkmark"></span></label>
 
-                    <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%translate.non.latin%") ?></span><span class="checkmark"></span></label>
+                    <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%settings.translate.non.latin%") ?></span><span class="checkmark"></span></label>
                 </div>
             </div>
 
-            <div id="gmaps-popup">
+            <div id="gmaps-popup" style="display:none;">
                 <iframe 
                     id="iframe-interactive-map"
                     width="600"

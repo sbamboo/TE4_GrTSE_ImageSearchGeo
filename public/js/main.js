@@ -139,11 +139,11 @@ function onNewImages() {
         el.addEventListener('click', (e) => {
             const iframe = document.getElementById('iframe-interactive-map');
             iframe.src = el.dataset.url;
-            POPUPS.showAsOverlay('gmaps-popup', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        }, { once: true })
+            POPUPS.showAsOverlay('gmaps-popup', closeOnClickOutside = true, closeOnMouseOut = false, darkenBackground = true);
+        }) //, { once: true })
         document.getElementById("map-closer").addEventListener("click", (e) => {
-            POPUPS.hideAsOverlay('gmaps-popup')
-        }, { once: true });
+            POPUPS.hideAsOverlay('gmaps-popup');
+        }) //, { once: true })
     })
 }
 
