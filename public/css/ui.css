@@ -22,7 +22,8 @@
 /* MARK: Maybe use checkmark symbol? */
 body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark::after,
 body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark::after,
-body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark::after {
+body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark::after,
+body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::after {
     content: "";
     position: absolute;
     left: 0.32rem;
@@ -43,7 +44,8 @@ body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"]
   
 [data-theme="light"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
 [data-theme="light"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
-[data-theme="light"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark {
+[data-theme="light"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark,
+[data-theme="light"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark {
     background-color: #2196F3;
 }
 
@@ -54,6 +56,7 @@ body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"]
   
 [data-theme="dark"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
 [data-theme="dark"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
-[data-theme="dark"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark {
+[data-theme="dark"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark,
+[data-theme="dark"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark {
     background-color: #2196F3;
 }

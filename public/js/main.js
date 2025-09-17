@@ -2,7 +2,7 @@ const POPUPS = new Popups();
 
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -80,7 +80,7 @@ function onNewImages() {
                 // Responds with {} or HTML
                 const metaEntries = getPHPMetaEntries();
 
-                const url = `endpoints/getDetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
+                const url = `endpoints/getDetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
                 try {
                     const response = await fetch(modifyUrl(window.location.href, url))
                     // Is response OK?
@@ -129,8 +129,27 @@ function onNewImages() {
 
                     // Get the closest .image-location-data of el and replace it with the response HTML
                     const locationDataEl = el.closest('.image-location-data');
+                    console.log("BOO")
                     if (locationDataEl) {
                         locationDataEl.outerHTML = text;
+                    }
+                    console.log(locationDataEl)
+                    // If locationDataEl now has data-gmaps get .embed-gmap-link inside locationDataEl's parent and set its data-url to it
+                    const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
+                    const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
+                    console.log(newLocationDataEl)
+                    if (newLocationDataEl && newLocationDataEl.dataset.gmaps) {
+                        const gmapEmbedLink = newLocationDataEl.parentElement.querySelector('.embed-gmap-link');
+                        console.log(gmapEmbedLink);
+                        if (gmapEmbedLink) {
+                            gmapEmbedLink.dataset.url = newLocationDataEl.dataset.gmaps;
+                        } else {
+                            const gmapLink = newLocationDataEl.parentElement.querySelector('.image-photo-gmaps-link');
+                            console.log(gmapLink);
+                            if (gmapLink) {
+                                gmapLink.href = newLocationDataEl.dataset.gmaps;
+                            }
+                        }
                     }
 
                     // Reset info text
@@ -183,7 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
         // Responds with {} or HTML
         const metaEntries = getPHPMetaEntries();
         const nextPageNr = (metaEntries.pageNr && !isNaN(metaEntries.pageNr)) ? (parseInt(metaEntries.pageNr, 10) + 1) : 2;
-        const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
+        const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
 
         const infoEl = document.getElementById('get-more-images-info');
         try {

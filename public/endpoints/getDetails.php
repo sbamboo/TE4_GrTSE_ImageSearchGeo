@@ -19,7 +19,7 @@ setupHeadersHTML();
 $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
 
 // Make unsplash instance
-$unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY']);
+$unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], false, $SECRETS['GOOGLE_API_KEY']);
 
 // Load url parameters
 $params = getUrlParameters();
@@ -36,16 +36,20 @@ $translateNonLatin = isset($params['translateNonLatin']) ? true : false;
 // Perform check
 try {
     $photoDetails = new UnsplashApiImage($unsplash, $unsplash->GetReducedPhotoDetails($params['id']));
+    $GMapsLink = $photoDetails->GetMostPreciseGMapsUrl(isset($_REQUEST["embedGMaps"]), $translator->GetTargetLang());
 
     // If filtering
     if ($filterNonGeo && !$photoDetails->HasGeoData()) {
-        respondOK(localize("%location.no-data%"));
+        //respondOK(localize("%location.no-data%"));
+        echo '<div class="image-location-data image-location-data-filted-out">';
+            echo '<p class="image-location-data-filted-out-info">' . localize("%location.no-data%") . '</p>';
+        echo '</div>';
     } else {
         // Respond with HTML
         $geoNames = $photoDetails->GetGeoNames();
         $coords = $photoDetails->GetCoordinates();
         $identifiers = $photoDetails->GetIdentifiers();
-        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
+        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, ["gmaps" => $GMapsLink]);
     }
 } catch (Throwable $e) {
     respondError($e);

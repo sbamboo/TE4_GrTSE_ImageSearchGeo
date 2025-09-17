@@ -44,8 +44,12 @@ EOF;
     echo $html;
 }
 
-function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null): void {
-    echo '<div class="image-location-data">';
+function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null, array $tagWith = []): void {
+    $dataAttributes = '';
+    foreach ($tagWith as $key => $value) {
+        $dataAttributes .= ' data-' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
+    }
+    echo '<div class="image-location-data"' . $dataAttributes . '>';
 
         // If not autoFetchDetails and $geoNames and $coords are empty we instead show button stub for JS to request with
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
@@ -156,7 +160,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
                     echo '<div class="image-photo-gmaps grid-item-badge"> <a class="embed-gmap-link no-link-style" data-url="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';   
                 }
                 else{
-                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
+                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="image-photo-gmaps-link no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
                 }
                 echo localize('<div class="image-photo-credit grid-item-text"> %img.credit.start% <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> %img.credit.end%</div>');
             echo '</div>';
