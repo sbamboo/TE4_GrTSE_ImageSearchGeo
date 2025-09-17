@@ -28,6 +28,8 @@ $translations = [
         "settings.filter-non-geo.desc" => "Filters out images that don't have location data",
         "settings.translate-non-latin" => "Translate non latin",
         "settings.translate-non-latin.desc" => "Translates non-latin characters in place names",
+        "settings.embed-gmaps" => "Embed Google Maps",
+        "settings.embed-gmaps.desc" => "Show google maps links in an embedded map instead of link",
         
         "location.country" => "Country",
         "location.city" => "City",
@@ -58,6 +60,8 @@ $translations = [
         "settings.filter-non-geo.desc" => "Filtrerar bort bilder som inte har platsdata",
         "settings.translate-non-latin" => "Översätt icke-latinskt",
         "settings.translate-non-latin.desc" => "Översätter iccke-latinska tecken i platsnamn",
+        "settings.embed-gmaps" => "Bädda in Google Maps",
+        "settings.embed-gmaps.desc" => "Visa google maps länkar i en inbäddad karta istället för länk",
         
         "location.country" => "Land",
         "location.city" => "Stad",

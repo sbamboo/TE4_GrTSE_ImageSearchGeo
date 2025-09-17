@@ -31,6 +31,7 @@ $filterNonGeo = isset($_POST['filterNonGeo']);
 $translateNonLatin = isset($_POST['translateNonLatin']);
 $toggleLayout = isset($_POST['toggleLayout']);
 $toggleLanguage = isset($_POST['toggleLanguage']) ? true : false;
+$embedGMaps = isset($_POST['embedGMaps']) ? true : false;
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -74,6 +75,7 @@ if(!empty($queryStr)){
     <meta name="translateNonLatin" content="<?php echo $translateNonLatin ? 'true' : 'false'; ?>">
     <meta name="toggleLayout" content="<?php echo $toggleLayout ? 'true' : 'false'; ?>">
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
+    <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
 
     <title>Image Search</title>
@@ -87,23 +89,24 @@ if(!empty($queryStr)){
                     <div id="settings-top-box">
                         <div><!--Empty div ;) --></div>
                         <a id="settings-head-line"><?php echo localize("%settings.button%") ?></a>
-                        <button id="settings-closer">
-                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <button id="settings-closer" class="popup-closer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                                <path d="M10 8l4 8" />
-                                <path d="M10 16l4 -8" />
+                                <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                     <label class="fake-checkbox" for="auto-fetch-details"><span><?php echo localize("%settings.autofetch%") ?></span><span class="checkmark"></span></label>
-                    <p class="text-info-smaller"><span><?php echo localize("%settings.autofetch.desc%") ?></span><span class="checkmark"></span></p>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.autofetch.desc%") ?>.</span><span class="checkmark"></span></p>
 
                     <label class="fake-checkbox" for="filter-non-geo"><span><?php echo localize("%settings.filter-non-geo%") ?></span><span class="checkmark"></span></label>
-                    <p class="text-info-smaller"><span><?php echo localize("%settings.filter-non-geo.desc%") ?></span><span class="checkmark"></span></p>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.filter-non-geo.desc%") ?>.</span><span class="checkmark"></span></p>
 
                     <label class="fake-checkbox" for="translate-non-latin"><span><?php echo localize("%settings.translate-non-latin%") ?></span><span class="checkmark"></span></label>
-                    <p class="text-info-smaller"><span><?php echo localize("%settings.translate-non-latin.desc%") ?></span><span class="checkmark"></span></p>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.translate-non-latin.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                    <label class="fake-checkbox" for="embed-gmaps"><span><?php echo localize("%settings.embed-gmaps%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.embed-gmaps.desc%") ?>.</span><span class="checkmark"></span></p>
                 </div>
             </div>
 
@@ -118,7 +121,12 @@ if(!empty($queryStr)){
                     referrerpolicy="no-referrer-when-downgrade"
                     src="https://www.google.com/maps/embed/v1/place?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&q=35.6617773,139.7040506">
                 </iframe>
-                <button id="map-closer">X</button>
+                <button id="map-closer" class="popup-closer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
         </div>
         <div id="portal-container"></div>
@@ -135,6 +143,8 @@ if(!empty($queryStr)){
             <input id="filter-non-geo" class="hidden-checkbox" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
   
             <input id="translate-non-latin" class="hidden-checkbox" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
+  
+            <input id="embed-gmaps" class="hidden-checkbox" type="checkbox" name="embedGMaps" <?php if (!$hasSearched || $embedGMaps) echo 'checked'; ?>>
             
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
@@ -200,7 +210,7 @@ if(!empty($queryStr)){
             </label>
         </div>
 
-        <div id="image-container" class="reoderable-image-container php-endpoint-response">
+        <div id="search-result-container" class="reoderable-image-container php-endpoint-response">
             <?php
                 if ($searchInfo) {
                     echo "<p id=\"search-info\">$searchInfo</p>";
@@ -211,7 +221,7 @@ if(!empty($queryStr)){
                 }
 
 
-                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator, true);
+                echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator, isset($_REQUEST["embedGMaps"]));
             ?>
         </div>
         <div class="hflex-center">
