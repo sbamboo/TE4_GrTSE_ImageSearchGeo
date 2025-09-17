@@ -39,7 +39,7 @@ try {
 
     // If filtering
     if ($filterNonGeo && !$photoDetails->HasGeoData()) {
-        respondOK("Photo has no geo data, filtered out");
+        respondOK(localize("%location.no-data%"));
     } else {
         // Respond with HTML
         $geoNames = $photoDetails->GetGeoNames();
