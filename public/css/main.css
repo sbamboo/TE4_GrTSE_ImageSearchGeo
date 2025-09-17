@@ -121,7 +121,7 @@ html {
     gap: 0.3rem;
 }
 
-#search-form input[type="submit"], #search-form select, #search-form input[type="search"] {
+#search-form input[type="submit"], #search-form select, #search-form input[type="search"], #get-more-images-button {
     padding: 0.25rem 0.4rem;
     border: 1px solid var(--border-light);
     border-radius: 0.5rem;
@@ -129,7 +129,7 @@ html {
     color: var(--text-color);
     background-color: var(--image-container-bg-color);
 }
-#search-form input[type="submit"]:hover, #search-form select:hover, #search-form input[type="search"]:hover {
+#search-form input[type="submit"]:hover, #search-form select:hover, #search-form input[type="search"]:hover, #get-more-images-button:hover {
     background-color: var(--toggle-bg-color-hover);
 }
 
@@ -262,7 +262,8 @@ html {
     width: auto;
     height: 25rem;
     background:  var(--image-container-bg-color);
-
+    
+    box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1);
 }
 
 #settings-container-box {
