@@ -32,6 +32,22 @@ function getPHPMetaEntries() {
     return metaEntries;
 }
 
+function modifyUrl(url, extension) {
+    const urlObj = new URL(url);
+    urlObj.search = "";
+    let pathname = urlObj.pathname;
+    if (!pathname.endsWith("/")) {
+      pathname += "/";
+    }
+  
+    urlObj.pathname = pathname;
+  
+    const baseUrlWithoutQuery = urlObj.origin + urlObj.pathname;
+    const finalUrl = new URL(baseUrlWithoutQuery + extension);
+  
+    return finalUrl.toString();
+}
+
 // When new images are loaded do the following
 function onNewImages() {
     
@@ -40,22 +56,22 @@ function onNewImages() {
         const id = el.dataset.id;
         if (id) {
             // Add hover event
-            el.addEventListener('mouseenter', (e) => {
+            el.onmouseenter = (e) => {
                 // showAsPortal(elementId, x, y, originY = "top", originX = "left", nudgeOnScreen = true, closeOnClickOutside = true, closeOnMouseOut = true)
                 // Get el position top center (at current scroll position)
                 const rect = el.getBoundingClientRect();
                 POPUPS.showAsPortal(`translated-geonames-${id}`, rect.left + (rect.width / 2), rect.top, "bottom", "center", true, true, true);
-            }, { once: true });
-            el.addEventListener('mouseleave', (e) => {
+            };
+            el.onmouseleave = (e) => {
                 //MARK: To allow mousing the popup we should not close if mousepos is inside the portal, the issue is portal may be clone to use POPUPS.getElementOfPortal(id)
                 POPUPS.hideAsPortal(`translated-geonames-${id}`);
-            }, { once: true });
+            };
         }
     });
 
     // Add onclick to all ".img-fetch-geonames" elements
     document.querySelectorAll('.img-fetch-geonames').forEach(el => {
-        el.addEventListener('click', async (e) => {
+        el.onclick = async (e) => {
             const id = el.dataset.id;
             if (id) {
                 const infoEl = document.querySelector(`.img-fetch-geonames-info[data-id="${id}"]`);
@@ -63,9 +79,10 @@ function onNewImages() {
                 // Ask /endpoints/getDetails.php?id=ID&filterNonGeo=<bool>&translateNonLatin=<bool>
                 // Responds with {} or HTML
                 const metaEntries = getPHPMetaEntries();
-                const url = `/endpoints/getDetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
+
+                const url = `endpoints/getDetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
                 try {
-                    const response = await fetch(url)
+                    const response = await fetch(modifyUrl(window.location.href, url))
                     // Is response OK?
                     if (!response.ok) {
                         // Get the .img-fetch-geonames-info under parent of el set its display to block and innerText to error
@@ -131,32 +148,32 @@ function onNewImages() {
                     }
                 }
             }
-        }, { once: true });
+        };
     });
 
     // Add onclick to all ".embed-gmap-link" elements
     document.querySelectorAll('.embed-gmap-link').forEach(el =>{
-        el.addEventListener('click', (e) => {
+        el.onclick = (e) => {
             const iframe = document.getElementById('iframe-interactive-map');
             iframe.src = el.dataset.url;
             POPUPS.showAsOverlay('gmaps-popup', closeOnClickOutside = true, closeOnMouseOut = false, darkenBackground = true);
-        }) //, { once: true })
-        document.getElementById("map-closer").addEventListener("click", (e) => {
+        };
+        document.getElementById("map-closer").onclick = (e) => {
             POPUPS.hideAsOverlay('gmaps-popup');
-        }) //, { once: true })
+        };
     })
 }
 
 // When page is finished loading (PHP is done)
 window.addEventListener('DOMContentLoaded', () => {
     // Add click listeners to settings buttons
-    document.getElementById("settings-button").addEventListener("click", () => {
+    document.getElementById("settings-button").onclick = () => {
         POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
         console.log("working");
-    });
-    document.getElementById("settings-closer").addEventListener("click", () => {
+    };
+    document.getElementById("settings-closer").onclick = () => {
         POPUPS.hideAsOverlay('settings')
-    });
+    };
 
     // Add click handler to #get-more-images-button
     const moreImagesButton = document.getElementById('get-more-images-button');
@@ -166,7 +183,8 @@ window.addEventListener('DOMContentLoaded', () => {
         // Responds with {} or HTML
         const metaEntries = getPHPMetaEntries();
         const nextPageNr = (metaEntries.pageNr && !isNaN(metaEntries.pageNr)) ? (parseInt(metaEntries.pageNr, 10) + 1) : 2;
-        const url = `/endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
+        const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}`;
+
         const infoEl = document.getElementById('get-more-images-info');
         try {
             moreImagesButton.disabled = true;
@@ -176,7 +194,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 infoEl.innerText = 'Loading...';
             }
             
-            const response = await fetch(url)
+            const response = await fetch(modifyUrl(window.location.href, url))
             
             // Is response OK?
             if (!response.ok) {
