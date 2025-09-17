@@ -6,6 +6,18 @@
 // Cachable struct
 class ReducedPhotoDetails {
     static public function Create(array $data): array {
+        // Ensures format that was assumed in UnsplashAPILocation::Create where lon/lat are under location.position field and not directly under location
+        // if (isset($data['location'])) {
+        //     if (!isset($data['location']['position'])) {
+        //         $data['location']['position'] = [
+        //             'latitude' => $data['location']['latitude'] ?? null,
+        //             'longitude' => $data['location']['longitude'] ?? null
+        //         ];
+        //         unset($data['location']['latitude']);
+        //         unset($data['location']['longitude']);
+        //     }
+        // }
+
         return [
             'exif' => UnsplashAPIExif::Create($data['exif'] ?? []),
             'location' => UnsplashAPILocation::Create($data['location'] ?? []),
@@ -149,13 +161,13 @@ class UnsplashAPI {
         }
 
         $response = $this->getPhotoDetailsAsArray($photoId);
+        $red = ReducedPhotoDetails::Create($response);
 
         if ($this->imgDetailsCache !== null) {
-            $red = ReducedPhotoDetails::Create($response);
             $this->imgDetailsCache->SetValueFromAssocArray($photoId, ReducedPhotoDetails::Optimize($red));
         }
 
-        return ReducedPhotoDetails::Create($response);
+        return $red;
     }
 
     // Checks if an imageData is considered to have Geodata
@@ -247,8 +259,8 @@ class UnsplashAPILocation {
             'name' => $locationData['name'] ?? '',
             'city' => $locationData['city'] ?? '',
             'country' => $locationData['country'] ?? '',
-            'latitude' => $locationData['position']['latitude'] ?? null,
-            'longitude' => $locationData['position']['longitude'] ?? null
+            'latitude' => $locationData['position']['latitude'] ?? ($locationData['latitude'] ?? null),
+            'longitude' => $locationData['position']['longitude'] ?? ($locationData['longitude'] ?? null)
         ];
     }
 }
