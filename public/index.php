@@ -21,6 +21,8 @@ $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLan
 
 
 // Instantiate Caches
+//$mysqli = new mysqli($SECRETS["SQL_URL"], $SECRETS["SQL_USERNAME"], $SECRETS["SQL_PASSWORD"], $SECRETS["SQL_DATABASE"]);
+//$imgDetailsCache = new ImgDetailsCacheSQL($mysqli);
 $imgDetailsCache = new ImgDetailsCache();
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)

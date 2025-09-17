@@ -179,23 +179,23 @@ function onNewImages() {
 
                     // Get the closest .image-location-data of el and replace it with the response HTML
                     const locationDataEl = el.closest('.image-location-data');
-                    console.log("BOO")
+                    //console.log("BOO")
                     if (locationDataEl) {
                         locationDataEl.outerHTML = text;
                     }
-                    console.log(locationDataEl)
+                    //console.log(locationDataEl)
                     // If locationDataEl now has data-gmaps get .embed-gmap-link inside locationDataEl's parent and set its data-url to it
                     const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
                     const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
-                    console.log(newLocationDataEl)
+                    //console.log(newLocationDataEl)
                     if (newLocationDataEl && newLocationDataEl.dataset.gmaps) {
                         const gmapEmbedLink = newLocationDataEl.parentElement.querySelector('.embed-gmap-link');
-                        console.log(gmapEmbedLink);
+                        //console.log(gmapEmbedLink);
                         if (gmapEmbedLink) {
                             gmapEmbedLink.dataset.url = newLocationDataEl.dataset.gmaps;
                         } else {
                             const gmapLink = newLocationDataEl.parentElement.querySelector('.image-photo-gmaps-link');
-                            console.log(gmapLink);
+                            //console.log(gmapLink);
                             if (gmapLink) {
                                 gmapLink.href = newLocationDataEl.dataset.gmaps;
                             }
