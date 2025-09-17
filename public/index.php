@@ -107,6 +107,17 @@ if(!empty($queryStr)){
 
                     <label class="fake-checkbox" for="embed-gmaps"><span><?php echo localize("%settings.embed-gmaps%") ?></span><span class="checkmark"></span></label>
                     <p class="text-info-smaller"><span><?php echo localize("%settings.embed-gmaps.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                
+                    <label for="theme">
+                        <span><?php echo localize("%settings.theme%") ?></span>
+                        <select id="theme" name="theme">
+                            <option value="light" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'light') echo 'selected'; ?>><?php echo localize("%settings.theme.light%") ?></option>
+                            <option value="dark" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'dark') echo 'selected'; ?>><?php echo localize("%settings.theme.dark%") ?></option>
+                            <option value="system" <?php if(!isset($_POST['theme']) || (isset($_POST['theme']) && $_POST['theme'] === 'system')) echo 'selected'; ?>><?php echo localize("%settings.theme.system%") ?></option>
+                        </select>
+                    </label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.theme.desc%") ?>.</span></p>
                 </div>
             </div>
 

@@ -48,8 +48,58 @@ function modifyUrl(url, extension) {
     return finalUrl.toString();
 }
 
+// Function to get the system prefered language between light and dark using media query
+function getSystemPreferredTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+    } else {
+        return 'light';
+    }
+}
+
+// Function to set the theme by changing the data-theme attribute on <html>
+function setTheme(theme) {
+    const htmlEl = document.documentElement;
+    if (theme === 'light' || theme === 'dark') {
+        htmlEl.setAttribute('data-theme', theme);
+    } else {
+        // system
+        const systemTheme = getSystemPreferredTheme();
+        htmlEl.setAttribute('data-theme', systemTheme);
+    }
+}
+
 // When new images are loaded do the following
 function onNewImages() {
+
+    // Add handlers for theme management
+    const themeToggle = document.getElementById('theme'); // Element of type select with option values "light", "dark" and "system"
+    if (themeToggle) {
+        // Set initial
+        const metaEntries = getPHPMetaEntries();
+        let initialTheme = 'system';
+        if (metaEntries.theme) {
+            initialTheme = metaEntries.theme;
+        }
+
+        themeToggle.value = initialTheme;
+
+        setTheme(initialTheme);
+
+        // Onchange
+        themeToggle.onchange = (e) => {
+            const selectedTheme = themeToggle.value;
+            setTheme(selectedTheme);
+        };
+
+        // Add listener for system theme changes, where we check if we are on system and in that case updates
+        window.matchMedia('(prefers-color-scheme: dark)').onchange = (e) => {
+            const newSystemTheme = e.matches ? 'dark' : 'light';
+            if (themeToggle.value === 'system') {
+                setTheme(newSystemTheme);
+            }
+        };
+    }
     
     // Add "translated" hover tooltips
     document.querySelectorAll('.translated-geonames').forEach(el => {
@@ -188,7 +238,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Add click listeners to settings buttons
     document.getElementById("settings-button").onclick = () => {
         POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        console.log("working");
     };
     document.getElementById("settings-closer").onclick = () => {
         POPUPS.hideAsOverlay('settings')
@@ -196,97 +245,99 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Add click handler to #get-more-images-button
     const moreImagesButton = document.getElementById('get-more-images-button');
-    moreImagesButton.onclick = async (e) => {
-        // Ask /endpoints/getPage.php?queryStr=<urlrawencoded-string>&pageNr=<int>&orderBy=<enum:orderBy>&autoFetchDetails=<bool>&filterNonGeo=<bool>&translateNonLatin=<bool>
-        //     enum:orderBy = relevant | latest
-        // Responds with {} or HTML
-        const metaEntries = getPHPMetaEntries();
-        const nextPageNr = (metaEntries.pageNr && !isNaN(metaEntries.pageNr)) ? (parseInt(metaEntries.pageNr, 10) + 1) : 2;
-        const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
+    if (moreImagesButton) {
+        moreImagesButton.onclick = async (e) => {
+            // Ask /endpoints/getPage.php?queryStr=<urlrawencoded-string>&pageNr=<int>&orderBy=<enum:orderBy>&autoFetchDetails=<bool>&filterNonGeo=<bool>&translateNonLatin=<bool>
+            //     enum:orderBy = relevant | latest
+            // Responds with {} or HTML
+            const metaEntries = getPHPMetaEntries();
+            const nextPageNr = (metaEntries.pageNr && !isNaN(metaEntries.pageNr)) ? (parseInt(metaEntries.pageNr, 10) + 1) : 2;
+            const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
 
-        const infoEl = document.getElementById('get-more-images-info');
-        try {
-            moreImagesButton.disabled = true;
-            if (infoEl) {
-                infoEl.style.display = 'block';
-                infoEl.style.color = '';
-                infoEl.innerText = 'Loading...';
-            }
-            
-            const response = await fetch(modifyUrl(window.location.href, url))
-            
-            // Is response OK?
-            if (!response.ok) {
-                // Set infoEl display to block and innerText to error
+            const infoEl = document.getElementById('get-more-images-info');
+            try {
+                moreImagesButton.disabled = true;
                 if (infoEl) {
                     infoEl.style.display = 'block';
-                    infoEl.style.color = 'red';
-                    infoEl.innerText = `Error: ${response.status} ${response.statusText}`;
+                    infoEl.style.color = '';
+                    infoEl.innerText = 'Loading...';
                 }
-                moreImagesButton.disabled = false;
-                return;
-            }
-
-            const text = await response.text();
-
-            // Is response JSON? If so parse and throw
-            // if first char is [ or { it is JSON
-            const firstChar = text.trim().charAt(0);
-            if (firstChar === '{' || firstChar === '[') {
-                todisp = `Error: ${text}`;
-
-                try {
-                    const json = JSON.parse(text);
-                    if (json.error) {
-                        todisp = `Error: ${json.error}`;
-                    } else if (json.message) {
-                        todisp = `Error: ${json.message}`;
+                
+                const response = await fetch(modifyUrl(window.location.href, url))
+                
+                // Is response OK?
+                if (!response.ok) {
+                    // Set infoEl display to block and innerText to error
+                    if (infoEl) {
+                        infoEl.style.display = 'block';
+                        infoEl.style.color = 'red';
+                        infoEl.innerText = `Error: ${response.status} ${response.statusText}`;
                     }
-                } catch (e) {
-                    // Ignore
+                    moreImagesButton.disabled = false;
+                    return;
                 }
 
-                // Set infoEl display to block and innerText to error
+                const text = await response.text();
+
+                // Is response JSON? If so parse and throw
+                // if first char is [ or { it is JSON
+                const firstChar = text.trim().charAt(0);
+                if (firstChar === '{' || firstChar === '[') {
+                    todisp = `Error: ${text}`;
+
+                    try {
+                        const json = JSON.parse(text);
+                        if (json.error) {
+                            todisp = `Error: ${json.error}`;
+                        } else if (json.message) {
+                            todisp = `Error: ${json.message}`;
+                        }
+                    } catch (e) {
+                        // Ignore
+                    }
+
+                    // Set infoEl display to block and innerText to error
+                    if (infoEl) {
+                        infoEl.style.display = 'block';
+                        infoEl.style.color = 'red';
+                        infoEl.innerText = todisp;
+                    }
+                    moreImagesButton.disabled = false;
+                    return;
+                }
+
+                // Endpoint resonds with HTML to be appended into #search-result-container
+                const imageContainer = document.getElementById('search-result-container');
+                if (imageContainer) {
+                    imageContainer.insertAdjacentHTML('beforeend', text);
+                }
+                // Update meta tag pageNr to nextPageNr
+                const pageNrMeta = document.querySelector('meta[name="pageNr"]');
+                if (pageNrMeta) {
+                    pageNrMeta.setAttribute('content', nextPageNr.toString());
+                }
+
+                // Ensure event handlers
+                onNewImages();
+
+                // Reset info text
+                if (infoEl) {
+                    infoEl.style.display = 'none';
+                    infoEl.style.color = '';
+                    infoEl.innerText = '';
+                }
+                moreImagesButton.disabled = false;
+
+            } catch(e) {
                 if (infoEl) {
                     infoEl.style.display = 'block';
                     infoEl.style.color = 'red';
-                    infoEl.innerText = todisp;
+                    infoEl.innerText = `Error: ${e.message}`;
                 }
-                moreImagesButton.disabled = false;
                 return;
             }
-
-            // Endpoint resonds with HTML to be appended into #image-container
-            const imageContainer = document.getElementById('image-container');
-            if (imageContainer) {
-                imageContainer.insertAdjacentHTML('beforeend', text);
-            }
-            // Update meta tag pageNr to nextPageNr
-            const pageNrMeta = document.querySelector('meta[name="pageNr"]');
-            if (pageNrMeta) {
-                pageNrMeta.setAttribute('content', nextPageNr.toString());
-            }
-
-            // Ensure event handlers
-            onNewImages();
-
-            // Reset info text
-            if (infoEl) {
-                infoEl.style.display = 'none';
-                infoEl.style.color = '';
-                infoEl.innerText = '';
-            }
-            moreImagesButton.disabled = false;
-
-        } catch(e) {
-            if (infoEl) {
-                infoEl.style.display = 'block';
-                infoEl.style.color = 'red';
-                infoEl.innerText = `Error: ${e.message}`;
-            }
-            return;
-        }
-    };
+        };
+    }
 
     // Initial
     onNewImages();

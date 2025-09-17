@@ -30,6 +30,11 @@ $translations = [
         "settings.translate-non-latin.desc" => "Translates non-latin characters in place names",
         "settings.embed-gmaps" => "Embed Google Maps",
         "settings.embed-gmaps.desc" => "Show google maps links in an embedded map instead of link",
+        "settings.theme" => "Theme",
+        "settings.theme.light" => "Light",
+        "settings.theme.dark" => "Dark",
+        "settings.theme.system" => "System",
+        "settings.theme.desc" => "Choose theme mode, or follow system preference",
         
         "location.country" => "Country",
         "location.city" => "City",
@@ -62,6 +67,11 @@ $translations = [
         "settings.translate-non-latin.desc" => "Översätter iccke-latinska tecken i platsnamn",
         "settings.embed-gmaps" => "Bädda in Google Maps",
         "settings.embed-gmaps.desc" => "Visa google maps länkar i en inbäddad karta istället för länk",
+        "settings.theme" => "Tema",
+        "settings.theme.light" => "Ljust",
+        "settings.theme.dark" => "Mörkt",
+        "settings.theme.system" => "System",
+        "settings.theme.desc" => "Välj temaläge, eller följ systeminställning",
         
         "location.country" => "Land",
         "location.city" => "Stad",
