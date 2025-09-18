@@ -55,7 +55,8 @@ try {
         $geoNames = $photoDetails->GetGeoNames();
         $coords = $photoDetails->GetCoordinates();
         $identifiers = $photoDetails->GetIdentifiers();
-        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, ["gmaps" => $GMapsLink]);
+        $tags = $photoDetails->GetTags();
+        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, ["gmaps" => $GMapsLink], $tags);
     }
 } catch (Throwable $e) {
     respondError($e);
