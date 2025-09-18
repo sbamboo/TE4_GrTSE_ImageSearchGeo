@@ -18,7 +18,7 @@ require_once('./php/components.php');
 
 
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_REQUEST['toggleLanguage']) ? 'sv' : 'en');
 
 
 // Instantiate Caches
@@ -27,14 +27,15 @@ $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLan
 $imgDetailsCache = new ImgDetailsCache();
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
-$queryStr = $_POST['queryStr'] ?? '';
-$orderBy = $_POST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
-$autoFetchDetails = isset($_POST['autoFetchDetails']);
-$filterNonGeo = isset($_POST['filterNonGeo']);
-$translateNonLatin = isset($_POST['translateNonLatin']);
-$toggleLayout = isset($_POST['toggleLayout']);
-$toggleLanguage = isset($_POST['toggleLanguage']) ? true : false;
-$embedGMaps = isset($_POST['embedGMaps']) ? true : false;
+$queryStr = $_REQUEST['queryStr'] ?? '';
+$orderBy = $_REQUEST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
+$autoFetchDetails = isset($_REQUEST['autoFetchDetails']);
+$filterNonGeo = isset($_REQUEST['filterNonGeo']);
+$translateNonLatin = isset($_REQUEST['translateNonLatin']);
+$toggleLayout = isset($_REQUEST['toggleLayout']);
+$toggleLanguage = isset($_REQUEST['toggleLanguage']) ? true : false;
+$embedGMaps = isset($_REQUEST['embedGMaps']) ? true : false;
+$highlightTags = isset($_REQUEST['highlightTags']) ? true : false;
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -80,6 +81,7 @@ if(!empty($queryStr)){
     <meta name="toggleLayout" content="<?php echo $toggleLayout ? 'true' : 'false'; ?>">
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
+    <meta name="highlightTags" content="<?php echo $highlightTags ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
     <?php
     // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined
@@ -132,6 +134,9 @@ if(!empty($queryStr)){
 
                     <label class="fake-checkbox" for="embed-gmaps"><span><?php echo localize("%settings.embed-gmaps%") ?></span><span class="checkmark"></span></label>
                     <p class="text-info-smaller"><span><?php echo localize("%settings.embed-gmaps.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                    <label class="fake-checkbox" for="highlight-tags"><span><?php echo localize("%settings.highlight-tags%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.highlight-tags.desc%") ?>.</span><span class="checkmark"></span></p>
 
                 
                     <label for="theme">
@@ -186,6 +191,8 @@ if(!empty($queryStr)){
             <input id="translate-non-latin" class="hidden-checkbox" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
   
             <input id="embed-gmaps" class="hidden-checkbox" type="checkbox" name="embedGMaps" <?php if (!$hasSearched || $embedGMaps) echo 'checked'; ?>>
+
+            <input id="highlight-tags" class="hidden-checkbox" type="checkbox" name="highlightTags" <?php if (!$hasSearched || $highlightTags) echo 'checked'; ?>>
             
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">

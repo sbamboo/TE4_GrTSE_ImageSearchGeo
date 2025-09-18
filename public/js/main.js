@@ -3,7 +3,7 @@ const STORAGE = new LocalStorageHandler();
 
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'highlightTags'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
