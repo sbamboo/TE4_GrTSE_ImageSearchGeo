@@ -373,11 +373,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reduce the right side slightly (e.g., 1rem smaller than input)
     mirror.style.height = `calc(${inputStyle.getPropertyValue("height")} - 0.01rem)`;
     mirror.style.width = `calc(${inputStyle.getPropertyValue("width")} - 1rem)`;
+    mirror.style.border = "none"; // No border on mirror
 
     // Ensure it stays aligned
     mirror.style.position = "absolute";
     mirror.style.top = "0";
-    mirror.style.left = "0";
+    mirror.style.left = "0.02rem"; // Slightly right to avoid input border
 
     function updateMirror() {
         const words = input.value.split(/(\s+)/); // keep spaces

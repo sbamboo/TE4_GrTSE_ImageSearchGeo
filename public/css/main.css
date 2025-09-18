@@ -168,9 +168,9 @@ html {
     border-radius: 0.5rem;
     left: 0;
     color: var(--text-color);
-    /*background-color: var(--image-container-bg-color);*/
     pointer-events: none;
     z-index: 2;
+    border: transparent;
     white-space: pre;
     overflow: hidden;
 }
