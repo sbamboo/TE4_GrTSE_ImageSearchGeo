@@ -1,8 +1,10 @@
 const POPUPS = new Popups();
 
+const TAGS = [];
+
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -231,6 +233,36 @@ function onNewImages() {
             POPUPS.hideAsOverlay('gmaps-popup');
         };
     })
+
+    // here
+    const metaEntries = getPHPMetaEntries();
+    if (metaEntries.cachedTags) {
+        // cachedTags is a comma separated list of tags ', '
+        const tags = metaEntries.cachedTags.split(',');
+        tags.forEach(tag => {
+            const trimmed = tag.trim();
+            if (trimmed && !TAGS.includes(trimmed)) {
+                TAGS.push(trimmed);
+            }
+        });
+
+        
+    }
+    const imageLocationDatas = document.querySelectorAll('.image-location-data');
+    imageLocationDatas.forEach(el => {
+        const tagsData = el.dataset.tags;
+        if (tagsData) {
+            // tagsData is a comma separated list of tags ', '
+            const tags = tagsData.split(',');
+            tags.forEach(tag => {
+                const trimmed = tag.trim();
+                if (trimmed && !TAGS.includes(trimmed)) {
+                    TAGS.push(trimmed);
+                }
+            });
+        }
+    });
+    console.log("TAGS", TAGS);
 }
 
 // When page is finished loading (PHP is done)
@@ -349,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!input || !mirror) return;
 
-    const customWords = ["landscape", "portrait", "squarish", "black_and_white"];
+    //const customWords = ["landscape", "portrait", "squarish", "black_and_white"];
 
     // check if string is a valid CSS color
     function isColor(str) {
@@ -386,12 +418,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const clean = word.trim();
             if (!clean) return word;
     
-            if (customWords.includes(clean.toLowerCase())) {
-                return `<mark>${word}</mark>`;
-            }
-    
             if (isColor(clean)) {
                 return `<span class="color-word">${word}</span>`;
+            }
+    
+            if (TAGS.includes(clean.toLowerCase())) {
+                return `<mark>${word}</mark>`;
             }
     
             // Keep the word but make it invisible
