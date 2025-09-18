@@ -12,6 +12,7 @@ html {
 [data-theme="light"] {
     --main-bg-color: #ffffff;
     --text-color: #000000;
+    --text-color-opposite: #ffffff;
     --text-color-grayed: #606060;
 
     --border-light: #e0e0e0;
@@ -42,11 +43,17 @@ html {
 
     --pref-border: var(--border-light);
     --pref-border-secondary: var(--border-dark);
+
+    --decline-button-bg-color: #ce3232;
+    --decline-button-bg-color-hover: #bb2e2e;
+    --accept-button-bg-color: #1ca13f;
+    --accept-button-bg-color-hover: #188a36;
 }
 
 [data-theme="dark"] {
     --main-bg-color: #121212;
     --text-color: #ffffff;
+    --text-color-opposite: #000000;
     --text-color-grayed: #a0a0a0;
 
     --border-light: #2c2c2c;
@@ -77,6 +84,11 @@ html {
 
     --pref-border: var(--border-dark);
     --pref-border-secondary: var(--border-light);
+
+    --decline-button-bg-color: #ad1f1f;
+    --decline-button-bg-color-hover: #922121;
+    --accept-button-bg-color: #0b6623;
+    --accept-button-bg-color-hover: #0a581e;
 }
 
 html {
@@ -567,6 +579,8 @@ body:has(#toggle-language:not(:checked)) #english-flag {
     color: var(--overlay-text-color-hover);
 }
 
+/* GMAPS Popups */
+
 #gmaps-popup {
     width: 40rem;
     display: flex;
@@ -599,4 +613,22 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 #iframe-interactive-map {
     width: 40rem;
     background-color: var(--main-bg-color);
+}
+
+/* LocalStorage Consent Popup */
+#localstorage-decline {
+    background-color: var(--decline-button-bg-color);
+}
+#localstorage-decline:hover {
+    background-color: var(--decline-button-bg-color-hover);
+}
+#localstorage-accept {
+    background-color: var(--accept-button-bg-color);
+}
+#localstorage-accept:hover {
+    background-color: var(--accept-button-bg-color-hover);
+}
+[data-theme="light"] #localstorage-decline,
+[data-theme="light"] #localstorage-accept {
+    color: var(--text-color-opposite);
 }
