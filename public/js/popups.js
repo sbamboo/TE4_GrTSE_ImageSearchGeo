@@ -145,7 +145,6 @@ class Popups {
 
         // If no children want to clickThroughBackground anymore remove class from container
         const anyDontClickThroughAndVisible = this.shownPopups.some(popup => popup.dataset.dontClickThroughBackground === "true" && popup.style.display !== "none");
-        console.log(anyDontClickThroughAndVisible);
         if (!anyDontClickThroughAndVisible) {
             this.popupContainer.classList.remove("popup-container-dont-click-through-background");
         }

@@ -147,6 +147,32 @@ html {
 }
 
 
+.popup-closer {
+    display: flex;
+    align-self: end;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    padding: 0.25rem;
+
+    color: var(--popup-closer-color);
+    background-color: var(--popup-closer-bg-color);
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+.popup-closer:hover {
+    color: var(--popup-closer-color-hover);
+    background-color: var(--popup-closer-bg-color-hover);
+}
+
+.images-page-container {
+    /* Grid with all items in single centered column */
+    grid-template-columns: 1fr;
+}
+
 /* LocalStorage Consent */
 #localstorage-prompt-box {
     background-color: var(--main-bg-color);
@@ -343,6 +369,27 @@ mark {
     background: var(--toggle-bg-color-hover);
 }
 
+body:has(#toggle-layout:checked) .images-page-container {
+    /* Grid with items split over two columns */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body:has(#toggle-layout:checked) #list-icon {
+    display: inline;
+}
+body:has(#toggle-layout:checked) #grid-icon {
+    display: none;
+}
+
+body:has(#toggle-layout:not(:checked)) #list-icon {
+    display: none;
+}
+body:has(#toggle-layout:not(:checked)) #grid-icon {
+    display: inline;
+}
+
+/* Settings Popup */
+
 #settings {
     display: flex;
     align-items: center;
@@ -352,7 +399,7 @@ mark {
     
     padding: 0.5rem;
     width: auto;
-    height: 25rem;
+    height: clamp(25rem, 32rem, 80vh);
     background:  var(--image-container-bg-color);
     
     box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1);
@@ -368,7 +415,8 @@ mark {
     scrollbar-width: thin;
 }
 
-#settings-container-box label {
+#settings-container-box label,
+#settings-container-box div {
     display: flex;
     justify-content: space-between;
     margin: 1rem;
@@ -417,49 +465,13 @@ mark {
     height: 1.4rem;
 }
 
-.popup-closer {
-    display: flex;
-    align-self: end;
-
-    align-items: center;
-    justify-content: center;
-
-    border: none;
-    padding: 0.25rem;
-
-    color: var(--popup-closer-color);
-    background-color: var(--popup-closer-bg-color);
-    font-size: 2rem;
-    cursor: pointer;
-    border-radius: 1rem;
-}
-.popup-closer:hover {
-    color: var(--popup-closer-color-hover);
-    background-color: var(--popup-closer-bg-color-hover);
+#revoke-localstorage-consent-container > * {
+    margin-top: 1.5rem;
 }
 
-.images-page-container {
-    /* Grid with all items in single centered column */
-    grid-template-columns: 1fr;
-}
-
-body:has(#toggle-layout:checked) .images-page-container {
-    /* Grid with items split over two columns */
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-body:has(#toggle-layout:checked) #list-icon {
-    display: inline;
-}
-body:has(#toggle-layout:checked) #grid-icon {
-    display: none;
-}
-
-body:has(#toggle-layout:not(:checked)) #list-icon {
-    display: none;
-}
-body:has(#toggle-layout:not(:checked)) #grid-icon {
-    display: inline;
+#revoke-localstorage-consent {
+    border-color: var(--decline-button-bg-color);
+    color: var(--decline-button-bg-color);
 }
 
 /* Main Content - ToggleLanguage */

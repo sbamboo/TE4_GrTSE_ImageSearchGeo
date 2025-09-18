@@ -136,8 +136,6 @@ function onNewImages() {
         }
     });
 
-
-
     // Add handlers for theme management
     const themeToggle = document.getElementById('theme'); // Element of type select with option values "light", "dark" and "system"
     if (themeToggle) {
@@ -240,8 +238,6 @@ function onNewImages() {
 
                         return;
                     }
-                    
-
 
                     // Get the closest .image-location-data of el and replace it with the response HTML
                     const locationDataEl = el.closest('.image-location-data');
@@ -293,7 +289,7 @@ function onNewImages() {
                             _tags.forEach(tag => {
                                 const trimmed = tag.trim();
                                 if (trimmed && !TAGS.includes(trimmed)) {
-                                    console.log("Non auto fetch Adding tag", trimmed);
+                                    //console.log("Non auto fetch Adding tag", trimmed);
                                     TAGS.push(trimmed);
                                 }
                             });
@@ -347,7 +343,7 @@ function onNewImages() {
             const imageEl = imageContainer.querySelector('.image img');
             const imageUrl = imageEl ? imageEl.dataset.fullsrc : '';
 
-            console.log(place);
+            //console.log(place);
             if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
                 addImageMarker(imageUrl, lat, lon, place);
             }
@@ -362,7 +358,7 @@ function onNewImages() {
         _tags.forEach(tag => {
             const trimmed = tag.trim();
             if (trimmed && !TAGS.includes(trimmed)) {
-                console.log("meta Adding tag", trimmed);
+                //console.log("meta Adding tag", trimmed);
                 TAGS.push(trimmed);
             }
         });
@@ -378,7 +374,7 @@ function onNewImages() {
             _tags.forEach(tag => {
                 const trimmed = tag.trim();
                 if (trimmed && !TAGS.includes(trimmed)) {
-                    console.log("Initial Adding tag", trimmed);
+                    //console.log("Initial Adding tag", trimmed);
                     TAGS.push(trimmed);
                 }
             });
@@ -401,6 +397,13 @@ window.addEventListener('DOMContentLoaded', () => {
             POPUPS.hideAsOverlay('localstorage-prompt');
         };
     }
+
+    // Set revoke lister
+    document.getElementById("revoke-localstorage-consent").onclick = () => {
+        POPUPS.hideAsOverlay('settings');
+        STORAGE.Revoke();
+        POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+    };
 
     // Add click listeners to settings buttons
     document.getElementById("settings-button").onclick = () => {
@@ -586,16 +589,8 @@ document.addEventListener("DOMContentLoaded", () => {
         mirror.innerHTML = result || "&nbsp;";
         mirror.scrollLeft = input.scrollLeft;
     }
-    // get highlight-tags meta id and if is true, enable highlighting
-    // const highlightMeta = document.querySelector('meta[name="highlightTags"]');
-    // const doHighlight = highlightMeta && highlightMeta.getAttribute('content') === 'true';
-    // let $updateMirror = doHighlight;
-    // updateMirror($updateMirror);
 
     updateMirror();
-    const metaEntries = getPHPMetaEntries();
-    const doHighlight = metaEntries.highlightTags === true;
-    console.log("doHighlight", doHighlight);
 
     input.addEventListener("input", updateMirror);
     input.addEventListener("scroll", () => {
