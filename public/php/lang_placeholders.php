@@ -41,6 +41,9 @@ $translations = [
         "settings.theme.desc" => "Choose theme mode, or follow system preference",
         "settings.highlight-tags" => "Highlight tags",
         "settings.highlight-tags.desc" => "Highlights tags found in previus searches from unsplash",
+        "settings.revoke-localstorage" => "Revoke local storage permission",
+        "settings.revoke-localstorage-btn" => "Revoke",
+        "settings.revoke-localstorage.desc" => "Revokes local storage permission and clears all saved settings, you will be asked again on next visit",
 
         "location.country" => "Country",
         "location.city" => "City",
@@ -84,6 +87,9 @@ $translations = [
         "settings.theme.desc" => "Välj temaläge, eller följ systeminställning",
         "settings.highlight-tags" => "Markera taggar",
         "settings.highlight-tags.desc" => "Markerar taggar som hittats i tidigare sökningar från unsplash",
+        "settings.revoke-localstorage" => "Återkalla tillåtelse för lokal lagring",
+        "settings.revoke-localstorage-btn" => "Återkalla",
+        "settings.revoke-localstorage.desc" => "Återkallar tillåtelse för lokal lagring och rensar alla sparade inställningar, du kommer att bli tillfrågad igen vid nästa besök",
 
         "location.country" => "Land",
         "location.city" => "Stad",
