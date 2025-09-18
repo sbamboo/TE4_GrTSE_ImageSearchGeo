@@ -1,5 +1,42 @@
 const POPUPS = new Popups();
 
+let markers = [];
+let openInfoWindow = null;
+
+function addImageMarker(imageUrl, lat, lng, placeName = "") {
+    const icon = {
+        url: imageUrl,
+        scaledSize: new google.maps.Size(50, 50),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(25, 50),
+    };
+
+    const marker = new google.maps.Marker({
+        "position": { lat: parseFloat(lat), lng: parseFloat(lng) },
+        "map": window.map,
+        "icon": icon,
+    });
+
+    const infowindow = new google.maps.InfoWindow({
+        content: `<img src="${imageUrl}" width="200"><br><b>${placeName}</b>`,
+    });
+
+    marker.addListener("click", () => {
+        if (openInfoWindow) openInfoWindow.close();
+        infowindow.open(window.map, marker);   
+        openInfoWindow = infowindow;
+    });
+
+    markers.push(marker);
+}
+function refreshMap() {
+    if (typeof initMap === 'function') {
+        initMap();
+    }
+}
+
+
+
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
     const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps'];
@@ -50,7 +87,29 @@ function modifyUrl(url, extension) {
 
 // When new images are loaded do the following
 function onNewImages() {
-    
+    // Add listeners for progressive images
+    document.querySelectorAll('.progressive-image').forEach((el) => {
+        el.onload = (e)=>{
+            // Because of the double call (ensuring call) bellow make sure we are not doing this twice
+            const isSwapped = el.dataset.swapped;
+            if (isSwapped === true) return;
+
+            const fullsrc = el.dataset.fullsrc;
+            const full = new Image();
+            full.src = fullsrc;
+            full.decode().then(() => { 
+                el.src = full.src; 
+                el.dataset.swapped = true;
+                // swap here
+                addImageMarker(el.src);
+            });
+        }
+        // Incase image has loaded before this segment of code just run it again to ensure its swapped.
+        if (el.complete) {
+            el.onload();
+        }
+    });
+
     // Add "translated" hover tooltips
     document.querySelectorAll('.translated-geonames').forEach(el => {
         const id = el.dataset.id;
@@ -101,7 +160,6 @@ function onNewImages() {
                     // if first char is [ or { it is JSON
                     const firstChar = text.trim().charAt(0);
                     if (firstChar === '{' || firstChar === '[') {
-                        
                         todisp = `Error: ${text}`;
 
                         try {
@@ -126,12 +184,29 @@ function onNewImages() {
 
                         return;
                     }
+                    
+
 
                     // Get the closest .image-location-data of el and replace it with the response HTML
                     const locationDataEl = el.closest('.image-location-data');
                     console.log("BOO")
                     if (locationDataEl) {
                         locationDataEl.outerHTML = text;
+                        const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
+                        const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
+
+                        if (newLocationDataEl) {
+                            const lat = parseFloat(newLocationDataEl.dataset.lat);
+                            const lon = parseFloat(newLocationDataEl.dataset.lon);
+                            const place = newLocationDataEl.dataset.place;
+
+                            const imageEl = imageContainer.querySelector('.image img');
+                            const imageUrl = imageEl ? imageEl.dataset.fullsrc || imageEl.src : '';
+
+                            if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
+                                addImageMarker(imageUrl, lat, lon, place);
+                            }
+                        }
                     }
                     console.log(locationDataEl)
                     // If locationDataEl now has data-gmaps get .embed-gmap-link inside locationDataEl's parent and set its data-url to it
@@ -181,6 +256,29 @@ function onNewImages() {
             POPUPS.hideAsOverlay('gmaps-popup');
         };
     })
+
+    const imageContainers = document.querySelectorAll('.image-container');
+    if(imageContainers){
+        imageContainers.forEach(imageContainer => {
+            const imageLocationData = imageContainer.querySelector('.image-location-data');
+            const imagePlaceData = imageContainer.querySelector('.location-text');
+            if (!imageLocationData) return;
+
+            const lat = parseFloat(imageLocationData.dataset.lat);
+            const lon = parseFloat(imageLocationData.dataset.lon);
+            const place = imageLocationData.dataset.place;
+            const city = imagePlaceData.dataset.city;
+            const country = imagePlaceData.dataset.country;
+
+            const imageEl = imageContainer.querySelector('.image img');
+            const imageUrl = imageEl ? imageEl.dataset.fullsrc : '';
+
+            console.log(place);
+            if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
+                addImageMarker(imageUrl, lat, lon, place);
+            }
+        });
+    }
 }
 
 // When page is finished loading (PHP is done)
