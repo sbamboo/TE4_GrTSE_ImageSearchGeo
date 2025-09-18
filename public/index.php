@@ -79,6 +79,16 @@ if(!empty($queryStr)){
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
+    <?php
+    // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined
+    if ($imgDetailsCache) {
+        $allKnownTags = $imgDetailsCache->GetAllKnownTags();
+        if ($allKnownTags && count($allKnownTags) > 0) {
+            $tagsStr = implode(", ", $allKnownTags);
+            echo '<meta name="cachedTags" content="' . htmlspecialchars($tagsStr, ENT_QUOTES) . '">';
+        }
+    }
+    ?>
 
     <title>Image Search</title>
 </head>

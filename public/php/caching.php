@@ -158,6 +158,19 @@ class SingleDataCacheHandler {
         unset($data[$key]);
         return $this->writeCache($data);
     }
+
+    // Function to get all key-value pairs where value contains a field, also value should be just the field
+    // Returns KEY => [FIELD => FIELD_VALUE] for any entries that has the field in value
+    public function GetAllFieldOfEntries($fieldName): array {
+        $data = $this->readCache();
+        $result = [];
+        foreach ($data as $key => $entry) {
+            if (is_array($entry[1]) && array_key_exists($fieldName, $entry[1])) {
+                $result[$key] = [$fieldName => $entry[1][$fieldName]];
+            }
+        }
+        return $result;
+    }
 }
 
 /*
@@ -564,6 +577,7 @@ class SingleSQLCacheHandler {
 }
 
 // Handler for image detail cache
+// Extends either ImgDetailsCacheGeneric or ImgDetailsCacheSQL
 class ImgDetailsCache extends SingleDataCacheHandler {
     // Stores into ../cache/img_details.json by default with 1 days TTL
     public function __construct(string $cacheFile = "img_details.json", int $cacheTTL = 86400) {
@@ -580,6 +594,26 @@ class ImgDetailsCache extends SingleDataCacheHandler {
 
     public function StoreImageDetails(string $imageId, array $details): bool {
         return $this->SetValueFromAssocArray($imageId, $details);
+    }
+
+    public function GetAllKnownTags(): array {
+        $allEntriesWithTags = $this->GetAllFieldOfEntries('tags'); // KEY => ['tags' => []VALUE]
+        $allTags = [];
+        // Iterate $allEntriesWithTags and iterate their "tags" field, for each get the "title" field and add to $allTags if not already present
+        foreach ($allEntriesWithTags as $entry) {
+            if (isset($entry['tags']) && is_array($entry['tags'])) {
+                foreach ($entry['tags'] as $tag) {
+                    if (isset($tag['title']) && is_string($tag['title'])) {
+                        // If $tag['title'] not already in $allTags array add it
+                        if (!in_array($tag['title'], $allTags)) {
+                            $allTags[] = $tag['title'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $allTags;
     }
 }
 
@@ -619,6 +653,26 @@ class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
 
     public function StoreImageDetails(string $imageId, array $details): bool {
         return $this->SetValueFromAssocArray($imageId, $details);
+    }
+
+    public function GetAllKnownTags(): array {
+        $allEntriesWithTags = $this->GetAllFieldOfEntries('tags'); // KEY => ['tags' => []VALUE]
+        $allTags = [];
+        // Iterate $allEntriesWithTags and iterate their "tags" field, for each get the "title" field and add to $allTags if not already present
+        foreach ($allEntriesWithTags as $entry) {
+            if (isset($entry['tags']) && is_array($entry['tags'])) {
+                foreach ($entry['tags'] as $tag) {
+                    if (isset($tag['title']) && is_string($tag['title'])) {
+                        // If $tag['title'] not already in $allTags array add it
+                        if (!in_array($tag['title'], $allTags)) {
+                            $allTags[] = $tag['title'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $allTags;
     }
 }
 
