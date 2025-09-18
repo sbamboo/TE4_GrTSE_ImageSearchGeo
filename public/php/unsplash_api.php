@@ -593,5 +593,8 @@ class UnsplashAPIImage {
     public function GetRawUrl(): string {
         return $this->urls['raw'] ?? '';
     }
+    public function GetTags(): array {
+        return $this->tags;
+    }
 }
 ?>

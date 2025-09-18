@@ -23,7 +23,8 @@
 body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark::after,
 body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark::after,
 body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark::after,
-body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::after {
+body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::after,
+body:has(#highlight-tags:checked) .fake-checkbox[for="highlight-tags"] .checkmark::after {
     content: "";
     position: absolute;
     left: 0.32rem;
@@ -45,7 +46,8 @@ body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::aft
 [data-theme="light"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
 [data-theme="light"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
 [data-theme="light"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark,
-[data-theme="light"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark {
+[data-theme="light"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark,
+[data-theme="light"] body:has(#highlight-tags:checked) .fake-checkbox[for="highlight-tags"] .checkmark {
     background-color: #2196F3;
 }
 
@@ -57,6 +59,20 @@ body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::aft
 [data-theme="dark"] body:has(#auto-fetch-details:checked) .fake-checkbox[for="auto-fetch-details"] .checkmark,
 [data-theme="dark"] body:has(#filter-non-geo:checked) .fake-checkbox[for="filter-non-geo"] .checkmark,
 [data-theme="dark"] body:has(#translate-non-latin:checked) .fake-checkbox[for="translate-non-latin"] .checkmark,
-[data-theme="dark"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark {
+[data-theme="dark"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark,
+[data-theme="dark"] body:has(#highlight-tags:checked) .fake-checkbox[for="highlight-tags"] .checkmark {
     background-color: #2196F3;
+}
+
+
+input, select, .button {
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+
+    color: var(--text-color);
+    background-color: var(--image-container-bg-color);
+}
+input:hover, select:hover, .button:hover {
+    background-color: var(--toggle-bg-color-hover);
 }

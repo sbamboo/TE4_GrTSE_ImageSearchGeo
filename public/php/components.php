@@ -41,14 +41,31 @@ EOF;
     echo $html;
 }
 
-function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null, array $tagWith = []): void {
+function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null, array $tagWith = [], array $tags = []): void {
     $dataAttributes = '';
     foreach ($tagWith as $key => $value) {
         $dataAttributes .= ' data-' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
     }
-    $translatedPlace = $geoNames['name'] ?? 'unknown place';
+
+    if ($autoFetchDetails) {
+        // Get all tags returned by our search and output as meta comma joined
+        $imageTags = [];
+        if ($tags && count($tags) > 0) {
+            foreach ($tags as $tag) {
+                // Tags are {"type":"search","title":"tagname"} check if has title field and that is string if so append to array
+                if (isset($tag['title']) && is_string($tag['title'])) {
+                    $imageTags[] = $tag['title'];
+                }
+            }
+        }
+        if (count($imageTags) > 0) {
+            $imgTagsStr = implode(',', $imageTags);
+            $dataAttributes .= ' data-tags="' . htmlspecialchars($imgTagsStr, ENT_QUOTES, 'UTF-8') . '"';
+        }
+    }
 
     // If translation is needed, translate
+    $translatedPlace = $geoNames['name'] ?? 'unknown place';
     if ($translateNonLatin && $translator && containsNonLatinLetters($geoNames['name'])) {
         $translatedPlace = $translator->translate($geoNames['name']);
     }
@@ -151,6 +168,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
     $identifiers = $image->GetIdentifiers();
     $userLink = $image->GetUserInfo();
     $GMapsLink = $image->GetMostPreciseGMapsUrl($embed, $translator->GetTargetLang());
+    $tags = $image->GetTags();
 
     //$downloadUrl = $image->GetDownloadUrl();
     $downloadUrl = $image->GetRawUrl();
@@ -171,7 +189,10 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
                 echo localize('<div class="image-photo-credit grid-item-text"> %img.credit.start% <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> %img.credit.end%</div>');
             echo '</div>';
         echo '</div>';
-        echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator);
+
+
+        echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, [], $tags);
+
     echo '</div>';
 }
 

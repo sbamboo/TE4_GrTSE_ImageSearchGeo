@@ -16,22 +16,26 @@ require_once('./php/translate.php');
 require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
+
 // Instantiate translator
-$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
+$translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_REQUEST['toggleLanguage']) ? 'sv' : 'en');
 
 
 // Instantiate Caches
+//$mysqli = new mysqli($SECRETS["SQL_URL"], $SECRETS["SQL_USERNAME"], $SECRETS["SQL_PASSWORD"], $SECRETS["SQL_DATABASE"]);
+//$imgDetailsCache = new ImgDetailsCacheSQL($mysqli);
 $imgDetailsCache = new ImgDetailsCache();
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
-$queryStr = $_POST['queryStr'] ?? '';
-$orderBy = $_POST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
-$autoFetchDetails = isset($_POST['autoFetchDetails']);
-$filterNonGeo = isset($_POST['filterNonGeo']);
-$translateNonLatin = isset($_POST['translateNonLatin']);
-$toggleLayout = isset($_POST['toggleLayout']);
-$toggleLanguage = isset($_POST['toggleLanguage']) ? true : false;
-$embedGMaps = isset($_POST['embedGMaps']) ? true : false;
+$queryStr = $_REQUEST['queryStr'] ?? '';
+$orderBy = $_REQUEST['orderBy'] ?? 'relevant'; // "relevant" or "latest"
+$autoFetchDetails = isset($_REQUEST['autoFetchDetails']);
+$filterNonGeo = isset($_REQUEST['filterNonGeo']);
+$translateNonLatin = isset($_REQUEST['translateNonLatin']);
+$toggleLayout = isset($_REQUEST['toggleLayout']);
+$toggleLanguage = isset($_REQUEST['toggleLanguage']) ? true : false;
+$embedGMaps = isset($_REQUEST['embedGMaps']) ? true : false;
+$highlightTags = isset($_REQUEST['highlightTags']) ? true : false;
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -81,6 +85,7 @@ if(!empty($queryStr)){
     ?>
     
     <script src="./js/popups.js"></script>
+    <script src="./js/localstorage.js"></script>
     <script src="./js/main.js"></script>
 
     <!-- Context Meta (Use already validated values) -->
@@ -92,7 +97,18 @@ if(!empty($queryStr)){
     <meta name="toggleLayout" content="<?php echo $toggleLayout ? 'true' : 'false'; ?>">
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
+    <meta name="highlightTags" content="<?php echo $highlightTags ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
+    <?php
+    // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined
+    if ($imgDetailsCache) {
+        $allKnownTags = $imgDetailsCache->GetAllKnownTags();
+        if ($allKnownTags && count($allKnownTags) > 0) {
+            $tagsStr = implode(", ", $allKnownTags);
+            echo '<meta name="cachedTags" content="' . htmlspecialchars($tagsStr, ENT_QUOTES) . '">';
+        }
+    }
+    ?>
 
     <title>Image Search</title>
 </head>
@@ -100,6 +116,17 @@ if(!empty($queryStr)){
     <!-- Wrapper for overlays -->
     <div id="overlay-container">
         <div id="popup-container">
+
+            <div id="localstorage-prompt" style="display:none;">
+                <div id="localstorage-prompt-box">
+                    <p><?php echo localize("%localstorage.prompt%") ?></p>
+                    <div class="hflex-center">
+                        <button id="localstorage-decline" class="button"><?php echo localize("%localstorage.decline%") ?></button>
+                        <button id="localstorage-accept" class="button"><?php echo localize("%localstorage.accept%") ?></button>
+                    </div>
+                </div>
+            </div>
+
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
                     <div id="settings-top-box">
@@ -123,6 +150,20 @@ if(!empty($queryStr)){
 
                     <label class="fake-checkbox" for="embed-gmaps"><span><?php echo localize("%settings.embed-gmaps%") ?></span><span class="checkmark"></span></label>
                     <p class="text-info-smaller"><span><?php echo localize("%settings.embed-gmaps.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                    <label class="fake-checkbox" for="highlight-tags"><span><?php echo localize("%settings.highlight-tags%") ?></span><span class="checkmark"></span></label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.highlight-tags.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                
+                    <label for="theme">
+                        <span><?php echo localize("%settings.theme%") ?></span>
+                        <select id="theme" name="theme">
+                            <option value="light" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'light') echo 'selected'; ?>><?php echo localize("%settings.theme.light%") ?></option>
+                            <option value="dark" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'dark') echo 'selected'; ?>><?php echo localize("%settings.theme.dark%") ?></option>
+                            <option value="system" <?php if(!isset($_POST['theme']) || (isset($_POST['theme']) && $_POST['theme'] === 'system')) echo 'selected'; ?>><?php echo localize("%settings.theme.system%") ?></option>
+                        </select>
+                    </label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.theme.desc%") ?>.</span></p>
                 </div>
             </div>
 
@@ -144,16 +185,21 @@ if(!empty($queryStr)){
                     </svg>
                 </button>
             </div>
+
         </div>
         <div id="portal-container"></div>
     </div>
 
+
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
-        <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar"> <?php echo localize("%search.title%") ?></label>
-            <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
-          
+    <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
+        <label id="search-label" for="search-bar"><?php echo localize("%search.title%") ?></label>
+        <div id="higlight-container">
+            <div id="higlight" class="highlight-layer"></div>  
+            <input id="search-bar" class="highlight-layer" type="search" 
+                   name="queryStr" value="<?php echo htmlspecialchars($queryStr); ?>">  
+        </div>    
             <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
            
             <input id="filter-non-geo" class="hidden-checkbox" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
@@ -161,6 +207,8 @@ if(!empty($queryStr)){
             <input id="translate-non-latin" class="hidden-checkbox" type="checkbox" name="translateNonLatin" <?php if (!$hasSearched || $translateNonLatin) echo 'checked'; ?>>
   
             <input id="embed-gmaps" class="hidden-checkbox" type="checkbox" name="embedGMaps" <?php if (!$hasSearched || $embedGMaps) echo 'checked'; ?>>
+
+            <input id="highlight-tags" class="hidden-checkbox" type="checkbox" name="highlightTags" <?php if (!$hasSearched || $highlightTags) echo 'checked'; ?>>
             
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">

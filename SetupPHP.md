@@ -10,6 +10,7 @@ Install XAMPP
     2. Uncomment `extension=openssl` and `extension=curl`
     3. Uncomment `extension=gd`
     4. If you get errors needing TLS: Install `openssl` with `winget install ShiningLight.OpenSSL.Light`
+    5. For SQL-backend caching uncomment `extension=mysqli`
 
 # FiveServer
 For five server follow Manuall or XAMPP and then:
