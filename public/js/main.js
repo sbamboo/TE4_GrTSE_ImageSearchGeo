@@ -412,30 +412,38 @@ document.addEventListener("DOMContentLoaded", () => {
     mirror.style.top = "0";
     mirror.style.left = "0.02rem"; // Slightly right to avoid input border
 
-    function updateMirror() {
+    function updateMirror($updateMirror = true) {
         const words = input.value.split(/(\s+)/); // keep spaces
         const result = words.map(word => {
             const clean = word.trim();
             if (!clean) return word;
-    
-            if (isColor(clean)) {
-                return `<span class="color-word">${word}</span>`;
-            }
-    
-            if (TAGS.includes(clean.toLowerCase())) {
-                return `<mark>${word}</mark>`;
-            }
+            if ($updateMirror == true)
+                if (isColor(clean)) {
+                    return `<span class="color-word">${word}</span>`;
+                }
+                if (TAGS.includes(clean.toLowerCase())) {
+                    return `<mark>${word}</mark>`;
+                }
     
             // Keep the word but make it invisible
             return `<span class="hidden-word">${word}</span>`;
         }).join("");
     
+
         mirror.innerHTML = result || "&nbsp;";
         mirror.scrollLeft = input.scrollLeft;
     }
     
-
-    updateMirror();
+    function ifHighlightOn($doUpdate = true) {
+        if ($doUpdate == true){
+            updateMirror($updateMirror = true);
+        };
+        if ($doUpdate == false) {
+            updateMirror($updateMirror = false);
+        };
+        return $updateMirror;    
+    } 
+    ifHighlightOn();
     input.addEventListener("input", updateMirror);
     input.addEventListener("scroll", () => {
         mirror.scrollLeft = input.scrollLeft;
