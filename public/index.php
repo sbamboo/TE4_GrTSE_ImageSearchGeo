@@ -165,11 +165,17 @@ if(!empty($queryStr)){
                     </label>
                     <p class="text-info-smaller"><span><?php echo localize("%settings.theme.desc%") ?>.</span></p>
 
+                    <div id="accept-localstorage-consent-container">  
+                        <span><?php echo localize("%settings.accept-localstorage%") ?></span>
+                        <button id="accept-localstorage-consent" class="button"><?php echo localize("%settings.accept-localstorage-btn%") ?></button>
+                    </div>
+                    <p id="accept-localstorage-consent-info" class="text-info-smaller"><span><?php echo localize("%settings.accept-localstorage.desc%") ?>.</span></p>
+
                     <div id="revoke-localstorage-consent-container">
                         <span><?php echo localize("%settings.revoke-localstorage%") ?></span>
                         <button id="revoke-localstorage-consent" class="button"><?php echo localize("%settings.revoke-localstorage-btn%") ?></button>
                     </div>
-                    <p class="text-info-smaller"><span><?php echo localize("%settings.revoke-localstorage.desc%") ?>.</span></p>
+                    <p id="revoke-localstorage-consent-info" class="text-info-smaller"><span><?php echo localize("%settings.revoke-localstorage.desc%") ?>.</span></p>
                 </div>
             </div>
 

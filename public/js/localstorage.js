@@ -1,22 +1,31 @@
 class LocalStorageHandler {
-    constructor() {
+    constructor(onAccept = null, onRevoke = null) {
         this.accepted = false;
         if (localStorage.getItem('accepted') === 'true') {
             this.accepted = true;
         }
         this.local = new Object();
+
+        this.onAccept = onAccept;
+        this.onRevoke = onRevoke;
     }
 
     Accept() {
         this.accepted = true;
         localStorage.setItem('accepted', 'true');
         this.MigrateAllFromLocalToLocalStorage();
+        if (this.onAccept) {
+            this.onAccept();
+        }
     }
 
     Revoke() {
         this.accepted = false;
         localStorage.removeItem('accepted');
         this.RevertAllFromLocalStorageToLocal();
+        if (this.onRevoke) {
+            this.onRevoke();
+        }
     }
 
     IsAccepted() {

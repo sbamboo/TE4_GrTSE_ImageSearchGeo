@@ -465,11 +465,31 @@ body:has(#toggle-layout:not(:checked)) #grid-icon {
     height: 1.4rem;
 }
 
-#revoke-localstorage-consent-container > * {
+[data-localstorage-consent="true"] #revoke-localstorage-consent-container,
+[data-localstorage-consent="true"] #revoke-localstorage-consent-info {
+    display: flex;
+}
+[data-localstorage-consent="true"] #accept-localstorage-consent-container,
+[data-localstorage-consent="true"] #accept-localstorage-consent-info {
+    display: none;
+}
+
+html:not([data-localstorage-consent="true"]) #accept-localstorage-consent-container,
+html:not([data-localstorage-consent="true"]) #accept-localstorage-consent-info {
+    display: flex;
+}
+html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-container,
+html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-info {
+    display: none;
+}
+
+#revoke-localstorage-consent-container > *,
+#accept-localstorage-consent-container > * {
     margin-top: 1.5rem;
 }
 
-#revoke-localstorage-consent {
+#revoke-localstorage-consent,
+#accept-localstorage-consent {
     border-color: var(--decline-button-bg-color);
     color: var(--decline-button-bg-color);
 }

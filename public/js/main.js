@@ -1,5 +1,12 @@
 const POPUPS = new Popups();
-const STORAGE = new LocalStorageHandler();
+const STORAGE = new LocalStorageHandler(
+    onAccept = ()=>{
+        document.documentElement.setAttribute('data-localstorage-consent', 'true');
+    },
+    onRevoke = ()=>{
+        document.documentElement.setAttribute('data-localstorage-consent', 'false');
+    }
+);
 
 const TAGS = [];
 
@@ -386,23 +393,32 @@ function onNewImages() {
 // When page is finished loading (PHP is done)
 window.addEventListener('DOMContentLoaded', () => {
     // Conditionally show localstorage consent popup
-    if (!STORAGE.IsAccepted()) {
+    if (!STORAGE.IsAccepted() && (getPHPMetaEntries().queryStr === null || getPHPMetaEntries().queryStr.trim().length === 0)) {
         POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        document.getElementById("localstorage-accept").onclick = () => {
-            STORAGE.Accept();
-            POPUPS.hideAsOverlay('localstorage-prompt');
-        };
-        document.getElementById("localstorage-decline").onclick = () => {
-            STORAGE.Revoke();
-            POPUPS.hideAsOverlay('localstorage-prompt');
-        };
     }
+    if (STORAGE.IsAccepted()) {
+        document.documentElement.setAttribute('data-localstorage-consent', 'true');
+    } else {
+        document.documentElement.setAttribute('data-localstorage-consent', 'false');
+    }
+    document.getElementById("localstorage-accept").onclick = () => {
+        STORAGE.Accept();
+        POPUPS.hideAsOverlay('localstorage-prompt');
+    };
+    document.getElementById("localstorage-decline").onclick = () => {
+        STORAGE.Revoke();
+        POPUPS.hideAsOverlay('localstorage-prompt');
+    };
 
-    // Set revoke lister
+    // Set settings listers for consent
+    document.getElementById("accept-localstorage-consent").onclick = () => {
+        STORAGE.Accept();
+    };
     document.getElementById("revoke-localstorage-consent").onclick = () => {
         POPUPS.hideAsOverlay('settings');
         STORAGE.Revoke();
-        POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+        //MARK: Should we show the prompt again?
+        //POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
     };
 
     // Add click listeners to settings buttons

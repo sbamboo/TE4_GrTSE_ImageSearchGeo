@@ -41,9 +41,13 @@ $translations = [
         "settings.theme.desc" => "Choose theme mode, or follow system preference",
         "settings.highlight-tags" => "Highlight tags",
         "settings.highlight-tags.desc" => "Highlights tags found in previus searches from unsplash",
+
+        "settings.accept-localstorage" => "Accept local storage permission",
+        "settings.accept-localstorage-btn" => "Accept",
+        "settings.accept-localstorage.desc" => "Gives permission to store settings in local storage, your settings would be saved across visits and you won't be asked again until you revoke permission",
         "settings.revoke-localstorage" => "Revoke local storage permission",
         "settings.revoke-localstorage-btn" => "Revoke",
-        "settings.revoke-localstorage.desc" => "Revokes local storage permission and clears all saved settings, you will be asked again on next visit",
+        "settings.revoke-localstorage.desc" => "Revokes local storage permission, your settings would not be saved across site visits. You will be asked again on next visit",
 
         "location.country" => "Country",
         "location.city" => "City",
@@ -87,9 +91,13 @@ $translations = [
         "settings.theme.desc" => "Välj temaläge, eller följ systeminställning",
         "settings.highlight-tags" => "Markera taggar",
         "settings.highlight-tags.desc" => "Markerar taggar som hittats i tidigare sökningar från unsplash",
-        "settings.revoke-localstorage" => "Återkalla tillåtelse för lokal lagring",
+
+        "settings.accept-localstorage" => "Tillåt lokal lagring",
+        "settings.accept-localstorage-btn" => "Tillåt",
+        "settings.accept-localstorage.desc" => "Ger tillåtelse att lagra inställningar i lokal lagring, dina inställningar kommer sparas över besök och du kommer inte bli tillfrågad igen förrän du återkallar tillåtelsen",
+        "settings.revoke-localstorage" => "Återkalla lokal lagringstillåtelse",
         "settings.revoke-localstorage-btn" => "Återkalla",
-        "settings.revoke-localstorage.desc" => "Återkallar tillåtelse för lokal lagring och rensar alla sparade inställningar, du kommer att bli tillfrågad igen vid nästa besök",
+        "settings.revoke-localstorage.desc" => "Återkallar tillåtelse för lokal lagring, dina inställningar kommer inte sparas över besök. Du kommer bli tillfrågad igen vid nästa besök",
 
         "location.country" => "Land",
         "location.city" => "Stad",
