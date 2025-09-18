@@ -13,12 +13,9 @@ function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array
         class="progressive-image ' . implode(' ', $classes) . '"
         src="' . $blurrySrc . '" 
         alt="' . $alt . '"
+        data-swapped="false"
         ' . $idStr . '
-        onload="{
-            const full = new Image();
-            full.src = \'' . $fullSrc . '\';
-            full.decode().then(() => { this.src = full.src; });
-        }"
+        data-fullsrc="' . $fullSrc . '" 
     />
     ';
 
@@ -67,8 +64,18 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
         }
     }
 
-    echo '<div class="image-location-data"' . $dataAttributes . '>';
+    // If translation is needed, translate
+    $translatedPlace = $geoNames['name'] ?? 'unknown place';
+    if ($translateNonLatin && $translator && containsNonLatinLetters($geoNames['name'])) {
+        $translatedPlace = $translator->translate($geoNames['name']);
+    }
+    //echo '<div class="image-location-data"' . $dataAttributes . " " . ' data-place="' . htmlspecialchars($translatedPlace, ENT_QUOTES, 'UTF-8') . '"' . ($autoFetchDetails ? ('data-lat="' .  $coords['latitude'] . '" data-lon="' . $coords['longitude']) : "") . '">';
 
+    echo '<div class="image-location-data"'
+    . $dataAttributes
+    . ' data-place="' . $translatedPlace . '"'
+    . ($autoFetchDetails ? ' data-lat="' . $coords['latitude'] . '" data-lon="' . $coords['longitude'] . '"' : '')
+    . '>';
         // If not autoFetchDetails and $geoNames and $coords are empty we instead show button stub for JS to request with
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
 
@@ -107,7 +114,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
 
                 //// Echo all the geonames using the translated text if any
                 foreach ($translated as $key => [$text, $translatedText]) {
-                    echo '<div class="location-text'; if ($translatedText !== null) { echo ' location-text-translated'; } echo '">';
+                    echo '<div class="location-text' . ($translatedText !== null ? ' location-text-translated' : "") . '">';
                     if ($translatedText !== null) {
                         echo localize('<p> <span>' . ucfirst("%location.$key%") . ': </span> <span>' . htmlspecialchars($translatedText, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                     }
@@ -147,7 +154,6 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             }
 
         }
-
     echo '</div>';
 }
 
@@ -166,7 +172,6 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
 
     //$downloadUrl = $image->GetDownloadUrl();
     $downloadUrl = $image->GetRawUrl();
-    
     echo '<div class="image-container" data-id="' . $identifiers["id"] . '">';
         echo '<div class="position-grid-container">';
             echo '<div class="image-layer-container">';
@@ -185,7 +190,9 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
             echo '</div>';
         echo '</div>';
 
+
         echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, [], $tags);
+
     echo '</div>';
 }
 
@@ -197,6 +204,18 @@ function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails
         echo '<div class="images-page-container">';
             foreach ($images as $image) {
                 echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, $embed);
+                // if (!empty($images) && $autoFetchDetails) { ?>
+                    <script>
+                //         const searchResults = <?php //echo json_encode(array_map(function($image) { 
+                //             return [ 
+                //                 'lat' => $image->GetCoordinates()['latitude'] ?? null, 
+                //                 'lng' => $image->GetCoordinates()['longitude'] ?? null, 
+                //                 'img' => $image->GetImageDisplayUrl(), 
+                //                 'place' => $image->GetLocation()['name'] ?? 'unknown place', 
+                //             ];
+                //         }, $images), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+                //     </script>
+                 <?php //}              
             }
         echo '</div>';
     echo '</div>';

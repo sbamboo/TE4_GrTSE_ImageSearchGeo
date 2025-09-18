@@ -67,11 +67,27 @@ if(!empty($queryStr)){
     <link rel="stylesheet" href="./css/helpers.css">
     <link rel="stylesheet" href="./css/ui.css">
     <link rel="stylesheet" href="./css/main.css">
+
+    <script>
+        function initMap() {
+            window.map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 2,
+                center: { lat: 20, lng: 0 },
+            });
+        }
+    </script>
+    <?php if($toggleLanguage){
+        ?><script src="https://maps.googleapis.com/maps/api/js?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&callback=initMap&v=weekly&language=sv" async defer></script><?php
+    } 
+    else{
+        ?><script src="https://maps.googleapis.com/maps/api/js?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&callback=initMap&v=weekly&language=en" async defer></script><?php
+    }
+    ?>
     
     <script src="./js/popups.js"></script>
     <script src="./js/localstorage.js"></script>
     <script src="./js/main.js"></script>
-    
+
     <!-- Context Meta (Use already validated values) -->
     <meta name="queryStr" content="<?php echo htmlspecialchars($queryStr, ENT_QUOTES); ?>">
     <meta name="orderBy" content="<?php echo htmlspecialchars($orderBy, ENT_QUOTES); ?>">
@@ -256,6 +272,10 @@ if(!empty($queryStr)){
                     <path d="M4 18h16" />
                 </svg>
             </label>
+        </div>
+        <div id="gmaps-result-popup" style="width:100%; height:400px; display:block;">
+            <!-- This is the container where the map will load -->
+            <div id="map" style="width:100%; height:100%;"></div>
         </div>
 
         <div id="search-result-container" class="reoderable-image-container php-endpoint-response">
