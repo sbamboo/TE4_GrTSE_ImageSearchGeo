@@ -273,7 +273,7 @@ if(!empty($queryStr)){
                 </svg>
             </label>
         </div>
-        <div id="gmaps-result-popup" style="width:100%; height:400px; display:block;">
+        <div id="gmaps-result-popup" style="width:100%; height:400px; display:none;">
             <!-- This is the container where the map will load -->
             <div id="map" style="width:100%; height:100%;"></div>
         </div>
