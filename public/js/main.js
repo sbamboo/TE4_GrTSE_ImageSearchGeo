@@ -1,5 +1,5 @@
 const POPUPS = new Popups();
-STORAGE = new LocalStorageHandler();
+const STORAGE = new LocalStorageHandler();
 
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
