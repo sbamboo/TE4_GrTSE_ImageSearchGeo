@@ -60,3 +60,16 @@ body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark::aft
 [data-theme="dark"] body:has(#embed-gmaps:checked) .fake-checkbox[for="embed-gmaps"] .checkmark {
     background-color: #2196F3;
 }
+
+
+input, select, .button {
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+
+    color: var(--text-color);
+    background-color: var(--image-container-bg-color);
+}
+input:hover, select:hover, .button:hover {
+    background-color: var(--toggle-bg-color-hover);
+}

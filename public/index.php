@@ -22,6 +22,8 @@ $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLan
 
 
 // Instantiate Caches
+//$mysqli = new mysqli($SECRETS["SQL_URL"], $SECRETS["SQL_USERNAME"], $SECRETS["SQL_PASSWORD"], $SECRETS["SQL_DATABASE"]);
+//$imgDetailsCache = new ImgDetailsCacheSQL($mysqli);
 $imgDetailsCache = new ImgDetailsCache();
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
@@ -78,6 +80,16 @@ if(!empty($queryStr)){
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
+    <?php
+    // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined
+    if ($imgDetailsCache) {
+        $allKnownTags = $imgDetailsCache->GetAllKnownTags();
+        if ($allKnownTags && count($allKnownTags) > 0) {
+            $tagsStr = implode(", ", $allKnownTags);
+            echo '<meta name="cachedTags" content="' . htmlspecialchars($tagsStr, ENT_QUOTES) . '">';
+        }
+    }
+    ?>
 
     <title>Image Search</title>
 </head>
@@ -108,6 +120,17 @@ if(!empty($queryStr)){
 
                     <label class="fake-checkbox" for="embed-gmaps"><span><?php echo localize("%settings.embed-gmaps%") ?></span><span class="checkmark"></span></label>
                     <p class="text-info-smaller"><span><?php echo localize("%settings.embed-gmaps.desc%") ?>.</span><span class="checkmark"></span></p>
+
+                
+                    <label for="theme">
+                        <span><?php echo localize("%settings.theme%") ?></span>
+                        <select id="theme" name="theme">
+                            <option value="light" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'light') echo 'selected'; ?>><?php echo localize("%settings.theme.light%") ?></option>
+                            <option value="dark" <?php if(isset($_POST['theme']) && $_POST['theme'] === 'dark') echo 'selected'; ?>><?php echo localize("%settings.theme.dark%") ?></option>
+                            <option value="system" <?php if(!isset($_POST['theme']) || (isset($_POST['theme']) && $_POST['theme'] === 'system')) echo 'selected'; ?>><?php echo localize("%settings.theme.system%") ?></option>
+                        </select>
+                    </label>
+                    <p class="text-info-smaller"><span><?php echo localize("%settings.theme.desc%") ?>.</span></p>
                 </div>
             </div>
 
