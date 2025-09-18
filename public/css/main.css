@@ -32,6 +32,9 @@ html {
     --overlay-bg-color-hover: rgba(0, 0, 0, 0.4);
     --overlay-bg-color-ligher-hover: rgba(137, 136, 136, 0.4);
 
+    --highlight-color-color: rgba(126, 208, 235, 0.623);
+    --highlight-mark-color: rgba(206, 6, 6, 0.507);
+
     --popup-closer-color: #353535;
     --popup-closer-color-hover: #574646;
     --popup-closer-bg-color: #e6e6e6;
@@ -60,6 +63,9 @@ html {
     --overlay-text-color-hover: rgb(55, 55, 55);
     --overlay-bg-color-hover: rgba(255, 255, 255, 0.4);
     --overlay-bg-color-ligher-hover: rgba(255, 255, 255, 0.2);
+
+    --highlight-color-color: rgba(0, 177, 236, 0.623);
+    --highlight-mark-color: rgba(125, 5, 5, 0.507);
 
     --popup-closer-color: #b5b5b5;
     --popup-closer-color-hover: #e6e6e6;
@@ -121,13 +127,16 @@ html {
     gap: 0.3rem;
 }
 
-#search-form input[type="submit"], #search-form select, #search-form input[type="search"], #get-more-images-button {
+#search-form input[type="submit"], #search-form select, #search-form input[type="search"], #get-more-images-button, #highlight {
     padding: 0.25rem 0.4rem;
     border: 1px solid var(--border-light);
     border-radius: 0.5rem;
 
     color: var(--text-color);
     background-color: var(--image-container-bg-color);
+    z-index: 1;
+    border: transparent;
+    
 }
 #search-form input[type="submit"]:hover, #search-form select:hover, #search-form input[type="search"]:hover, #get-more-images-button:hover {
     background-color: var(--toggle-bg-color-hover);
@@ -135,19 +144,53 @@ html {
 
 #search-bar {
     max-width: 30rem;
+    height: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+#higlight-container {
+    position: relative;
+    width: max-content; 
+    display: flex;
+    align-items: center;
+}
+
+#higlight {
+    position: absolute;
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
+    left: 0;
+    color: var(--text-color);
+    /*background-color: var(--image-container-bg-color);*/
+    pointer-events: none;
+    z-index: 2;
+    white-space: pre;
+    overflow: hidden;
 }
 
 #search-label {
     font-size: 1.5rem;
 }
 
-#search-bar {
-    height: 1.5rem;
-    border-radius: 0.5rem;
-}
-
 #search-button, #order-by {
     height: fit-content;
+}
+
+.color-word {
+    background-color: var(--highlight-color-color);
+    border-radius: 3px;
+}
+
+.hidden-word {
+    color: transparent;
+}
+
+mark {
+    color: var(--text-color);
+    background: var(--highlight-mark-color);
+    padding: 0;
+    border: none;
 }
 
 /* Main Content */
