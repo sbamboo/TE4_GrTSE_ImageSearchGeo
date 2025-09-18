@@ -68,6 +68,7 @@ if(!empty($queryStr)){
     <link rel="stylesheet" href="./css/main.css">
     
     <script src="./js/popups.js"></script>
+    <script src="./js/localstorage.js"></script>
     <script src="./js/main.js"></script>
     
     <!-- Context Meta (Use already validated values) -->
@@ -97,6 +98,17 @@ if(!empty($queryStr)){
     <!-- Wrapper for overlays -->
     <div id="overlay-container">
         <div id="popup-container">
+
+            <div id="localstorage-prompt" style="display:none;">
+                <div id="localstorage-prompt-box">
+                    <p><?php echo localize("%localstorage.prompt%") ?></p>
+                    <div class="hflex-center">
+                        <button id="localstorage-decline" class="button"><?php echo localize("%localstorage.decline%") ?></button>
+                        <button id="localstorage-accept" class="button"><?php echo localize("%localstorage.accept%") ?></button>
+                    </div>
+                </div>
+            </div>
+
             <div id="settings" style="display:none;">
                 <div id="settings-container-box">
                     <div id="settings-top-box">
@@ -152,6 +164,7 @@ if(!empty($queryStr)){
                     </svg>
                 </button>
             </div>
+
         </div>
         <div id="portal-container"></div>
     </div>

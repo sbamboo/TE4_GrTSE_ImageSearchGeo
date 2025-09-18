@@ -13,6 +13,10 @@ $toggleLanguage = isset($_REQUEST['toggleLanguage']);
 
 $translations = [
     "en" => [
+        "localstorage.prompt" => "Do you allow this website to store your settings in your browser's local storage?",
+        "localstorage.accept" => "Accept",
+        "localstorage.decline" => "Decline",
+
         "search.title" => "Search image",
         "search.button-text" => "Search",
         "search.sorting.relevance" => "Relevance",
@@ -50,6 +54,10 @@ $translations = [
         "location.no-data" => "Photo has no geo data, filtered out"
     ],
     "sv" => [
+        "localstorage.prompt" => "Tillåter du att denna webbplats lagrar dina inställningar i din webbläsares lokala lagring?",
+        "localstorage.accept" => "Tillåt",
+        "localstorage.decline" => "Neka",
+
         "search.title" => "Sök bild",
         "search.button-text" => "Sök",
         "search.sorting.relevance" => "Relevans",

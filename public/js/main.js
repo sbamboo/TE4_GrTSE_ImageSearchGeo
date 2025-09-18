@@ -1,4 +1,5 @@
 const POPUPS = new Popups();
+STORAGE = new LocalStorageHandler();
 
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
@@ -235,6 +236,19 @@ function onNewImages() {
 
 // When page is finished loading (PHP is done)
 window.addEventListener('DOMContentLoaded', () => {
+    // Conditionally show localstorage consent popup
+    if (!STORAGE.IsAccepted()) {
+        POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+        document.getElementById("localstorage-accept").onclick = () => {
+            STORAGE.Accept();
+            POPUPS.hideAsOverlay('localstorage-prompt');
+        };
+        document.getElementById("localstorage-decline").onclick = () => {
+            STORAGE.Revoke();
+            POPUPS.hideAsOverlay('localstorage-prompt');
+        };
+    }
+
     // Add click listeners to settings buttons
     document.getElementById("settings-button").onclick = () => {
         POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
