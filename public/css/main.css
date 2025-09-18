@@ -123,6 +123,22 @@ html {
     z-index: 1002;
 }
 
+
+/* LocalStorage Consent */
+#localstorage-prompt-box {
+    background-color: var(--main-bg-color);
+    border: 0.1rem solid var(--pref-border-secondary);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1);
+}
+#localstorage-prompt-box > p {
+    margin-bottom: 1rem;
+}
+#localstorage-prompt-box > div {
+    gap: 1rem;
+}
+
 /* Topbar */
 #search-container {
     width: 100%;
