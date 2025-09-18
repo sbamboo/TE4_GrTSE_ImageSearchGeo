@@ -16,6 +16,7 @@ require_once('./php/translate.php');
 require_once('./php/lang_placeholders.php');
 require_once('./php/components.php');
 
+
 // Instantiate translator
 $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLanguage']) ? 'sv' : 'en');
 
@@ -155,12 +156,16 @@ if(!empty($queryStr)){
         <div id="portal-container"></div>
     </div>
 
+
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
-        <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-            <label id="search-label" for="search-bar"> <?php echo localize("%search.title%") ?></label>
-            <input id="search-bar" type="search" name="queryStr" value="<?php echo $queryStr; ?>">
-          
+    <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
+        <label id="search-label" for="search-bar"><?php echo localize("%search.title%") ?></label>
+        <div id="higlight-container">
+            <div id="higlight" class="highlight-layer"></div>  
+            <input id="search-bar" class="highlight-layer" type="search" 
+                   name="queryStr" value="<?php echo htmlspecialchars($queryStr); ?>">  
+        </div>    
             <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
            
             <input id="filter-non-geo" class="hidden-checkbox" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>

@@ -342,3 +342,70 @@ window.addEventListener('DOMContentLoaded', () => {
     // Initial
     onNewImages();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("search-bar");
+    const mirror = document.getElementById("higlight");
+
+    if (!input || !mirror) return;
+
+    const customWords = ["landscape", "portrait", "squarish", "black_and_white"];
+
+    // check if string is a valid CSS color
+    function isColor(str) {
+        if (!str) return false;
+        const s = new Option().style;
+        s.color = str.toLowerCase();
+        return s.color !== "";
+    }
+
+    // Copy input styles to mirror
+    const inputStyle = window.getComputedStyle(input);
+    const styleProps = [
+        "font-family", "font-size", "font-weight", "line-height",
+        "padding", "border", "border-radius", "box-sizing",
+        "width", "height"
+    ];
+    styleProps.forEach(prop => {
+        mirror.style[prop] = inputStyle.getPropertyValue(prop);
+    });
+
+    // Reduce the right side slightly (e.g., 1rem smaller than input)
+    mirror.style.height = `calc(${inputStyle.getPropertyValue("height")} - 0.01rem)`;
+    mirror.style.width = `calc(${inputStyle.getPropertyValue("width")} - 1rem)`;
+
+    // Ensure it stays aligned
+    mirror.style.position = "absolute";
+    mirror.style.top = "0";
+    mirror.style.left = "0";
+
+    function updateMirror() {
+        const words = input.value.split(/(\s+)/); // keep spaces
+        const result = words.map(word => {
+            const clean = word.trim();
+            if (!clean) return word;
+    
+            if (customWords.includes(clean.toLowerCase())) {
+                return `<mark>${word}</mark>`;
+            }
+    
+            if (isColor(clean)) {
+                return `<span class="color-word">${word}</span>`;
+            }
+    
+            // Keep the word but make it invisible
+            return `<span class="hidden-word">${word}</span>`;
+        }).join("");
+    
+        mirror.innerHTML = result || "&nbsp;";
+        mirror.scrollLeft = input.scrollLeft;
+    }
+    
+
+    updateMirror();
+    input.addEventListener("input", updateMirror);
+    input.addEventListener("scroll", () => {
+        mirror.scrollLeft = input.scrollLeft;
+    });
+});
+
