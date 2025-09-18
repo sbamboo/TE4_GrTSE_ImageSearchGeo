@@ -39,7 +39,9 @@ $translations = [
         "settings.theme.dark" => "Dark",
         "settings.theme.system" => "System",
         "settings.theme.desc" => "Choose theme mode, or follow system preference",
-        
+        "settings.highlight-tags" => "Highlight tags",
+        "settings.highlight-tags.desc" => "Highlights tags found in previus searches from unsplash",
+
         "location.country" => "Country",
         "location.city" => "City",
         "location.place" => "Place",
@@ -80,7 +82,9 @@ $translations = [
         "settings.theme.dark" => "Mörkt",
         "settings.theme.system" => "System",
         "settings.theme.desc" => "Välj temaläge, eller följ systeminställning",
-        
+        "settings.highlight-tags" => "Markera taggar",
+        "settings.highlight-tags.desc" => "Markerar taggar som hittats i tidigare sökningar från unsplash",
+
         "location.country" => "Land",
         "location.city" => "Stad",
         "location.place" => "Plats",

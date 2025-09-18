@@ -214,6 +214,11 @@ html {
     overflow: hidden;
 }
 
+#disabled-marking {
+    color: transparent;
+    background-color: transparent;
+}
+
 #search-label {
     font-size: 1.5rem;
 }

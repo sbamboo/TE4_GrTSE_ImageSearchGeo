@@ -43,7 +43,7 @@ function refreshMap() {
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
 
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'highlightTags'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags', 'highlightTags'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -231,8 +231,6 @@ function onNewImages() {
                             // Ignore
                         }
 
-                        
-
                         // Get the .img-fetch-geonames-info under parent of el set its display to block and innerText to error
                         if (infoEl) {
                             infoEl.style.display = 'block';
@@ -267,6 +265,7 @@ function onNewImages() {
                         }
                     }
                     //console.log(locationDataEl)
+
                     // If locationDataEl now has data-gmaps get .embed-gmap-link inside locationDataEl's parent and set its data-url to it
                     const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
                     const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
@@ -282,6 +281,22 @@ function onNewImages() {
                             if (gmapLink) {
                                 gmapLink.href = newLocationDataEl.dataset.gmaps;
                             }
+                        }
+                    }
+
+                    // Update TAGS with the tags from the new location data
+                    if (newLocationDataEl) {
+                        const tagsData = newLocationDataEl.dataset.tags;
+                        if (tagsData) {
+                            // tagsData is a comma separated list of tags ', '
+                            const _tags = tagsData.split(',');
+                            _tags.forEach(tag => {
+                                const trimmed = tag.trim();
+                                if (trimmed && !TAGS.includes(trimmed)) {
+                                    console.log("Non auto fetch Adding tag", trimmed);
+                                    TAGS.push(trimmed);
+                                }
+                            });
                         }
                     }
 
@@ -343,10 +358,11 @@ function onNewImages() {
     const metaEntries = getPHPMetaEntries();
     if (metaEntries.cachedTags) {
         // cachedTags is a comma separated list of tags ', '
-        const tags = metaEntries.cachedTags.split(',');
-        tags.forEach(tag => {
+        const _tags = metaEntries.cachedTags.split(',');
+        _tags.forEach(tag => {
             const trimmed = tag.trim();
             if (trimmed && !TAGS.includes(trimmed)) {
+                console.log("meta Adding tag", trimmed);
                 TAGS.push(trimmed);
             }
         });
@@ -358,10 +374,11 @@ function onNewImages() {
         const tagsData = el.dataset.tags;
         if (tagsData) {
             // tagsData is a comma separated list of tags ', '
-            const tags = tagsData.split(',');
-            tags.forEach(tag => {
+            const _tags = tagsData.split(',');
+            _tags.forEach(tag => {
                 const trimmed = tag.trim();
                 if (trimmed && !TAGS.includes(trimmed)) {
+                    console.log("Initial Adding tag", trimmed);
                     TAGS.push(trimmed);
                 }
             });
@@ -530,19 +547,37 @@ document.addEventListener("DOMContentLoaded", () => {
     mirror.style.top = "0";
     mirror.style.left = "0.02rem"; // Slightly right to avoid input border
 
-    function updateMirror($updateMirror = true) {
+    function updateMirror() {
         const words = input.value.split(/(\s+)/); // keep spaces
         const result = words.map(word => {
             const clean = word.trim();
             if (!clean) return word;
-            if ($updateMirror == true)
-                if (isColor(clean)) {
-                    return `<span class="color-word">${word}</span>`;
-                }
-                if (TAGS.includes(clean.toLowerCase())) {
-                    return `<mark>${word}</mark>`;
-                }
-    
+            const metaEntries = getPHPMetaEntries();
+            const doHighlight = metaEntries.highlightTags === true;
+            
+            if (doHighlight == true) {
+               var $backgroundVis = "var(--highlight-color-color)";
+               var $backgroundMarkVis = "var(--highlight-mark-color)";
+               var $colorVis = "color: var(--text-color)";
+                //console.log("highlighting");
+            }
+            else {
+                var $backgroundVis = "transparent";
+                var $backgroundMarkVis = "transparent";
+                var $colorVis = "transparent";
+                //console.log("no highlight");
+            }
+            if (isColor(clean)) {
+                // returns <span class="color-word" style="background-color: in $backgroundVis; color: in $colorVis">${word}</span>
+
+                return '<span class="color-word" style="background-color: ' + $backgroundVis + '; color: ' + $colorVis + '">'+ word +'</span>';
+            }
+            if (TAGS.includes(clean.toLowerCase())) {
+                return '<mark style="color: '+ $colorVis +'; background-color:'+ $backgroundMarkVis +'">'+ word +'</mark>';
+            }
+
+
+            
             // Keep the word but make it invisible
             return `<span class="hidden-word">${word}</span>`;
         }).join("");
@@ -551,17 +586,17 @@ document.addEventListener("DOMContentLoaded", () => {
         mirror.innerHTML = result || "&nbsp;";
         mirror.scrollLeft = input.scrollLeft;
     }
-    
-    function ifHighlightOn($doUpdate = true) {
-        if ($doUpdate == true){
-            updateMirror($updateMirror = true);
-        };
-        if ($doUpdate == false) {
-            updateMirror($updateMirror = false);
-        };
-        return $updateMirror;    
-    } 
-    ifHighlightOn();
+    // get highlight-tags meta id and if is true, enable highlighting
+    // const highlightMeta = document.querySelector('meta[name="highlightTags"]');
+    // const doHighlight = highlightMeta && highlightMeta.getAttribute('content') === 'true';
+    // let $updateMirror = doHighlight;
+    // updateMirror($updateMirror);
+
+    updateMirror();
+    const metaEntries = getPHPMetaEntries();
+    const doHighlight = metaEntries.highlightTags === true;
+    console.log("doHighlight", doHighlight);
+
     input.addEventListener("input", updateMirror);
     input.addEventListener("scroll", () => {
         mirror.scrollLeft = input.scrollLeft;
