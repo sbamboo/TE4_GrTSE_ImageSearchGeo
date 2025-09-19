@@ -12,19 +12,38 @@ const TAGS = [];
 
 let markers = [];
 let openInfoWindow = null;
+let map = null;
+let markerQueue = [];
+let infoWindow = null;
+
 
 function addImageMarker(imageUrl, lat, lng, placeName = "") {
-    const icon = {
-        url: imageUrl,
-        scaledSize: new google.maps.Size(50, 50),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(25, 50),
-    };
+    if (!window.google || !google.maps || !google.maps.marker) {
+        // Queue until Maps API is ready
+        window._pendingMarkers = window._pendingMarkers || [];
+        window._pendingMarkers.push([imageUrl, lat, lng, placeName]);
+        return;
+      }
 
-    const marker = new google.maps.Marker({
-        "position": { lat: parseFloat(lat), lng: parseFloat(lng) },
-        "map": window.map,
-        "icon": icon,
+    const latNum = parseFloat(lat);
+    const lngNum = parseFloat(lng);
+
+    if (isNaN(latNum) || isNaN(lngNum)) {
+        return;
+    }
+
+    const img = document.createElement("img");
+    img.src = imageUrl;
+    img.style.width = "50px";
+    img.style.height = "50px";
+    img.style.objectFit = "cover";
+    img.style.borderRadius = "50%";
+    img.style.boxShadow = "0 0 5px rgba(0,0,0,0.4)";
+
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+        position: { lat: latNum, lng: lngNum },
+        map: window.map,
+        content: img,
     });
 
     const infowindow = new google.maps.InfoWindow({
@@ -33,16 +52,21 @@ function addImageMarker(imageUrl, lat, lng, placeName = "") {
 
     marker.addListener("click", () => {
         if (openInfoWindow) openInfoWindow.close();
-        infowindow.open(window.map, marker);   
+        infowindow.open({ anchor: marker, map: window.map });
         openInfoWindow = infowindow;
     });
 
     markers.push(marker);
 }
+
 function refreshMap() {
     if (typeof initMap === 'function') {
         initMap();
     }
+}
+function clearMarkers() {
+    markers.forEach(m => m.setMap(null));
+    markers = [];
 }
 
 
@@ -125,16 +149,17 @@ function onNewImages() {
         el.onload = (e)=>{
             // Because of the double call (ensuring call) bellow make sure we are not doing this twice
             const isSwapped = el.dataset.swapped;
-            if (isSwapped === true) return;
+            if (isSwapped === "true") return;
 
             const fullsrc = el.dataset.fullsrc;
             const full = new Image();
             full.src = fullsrc;
             full.decode().then(() => { 
                 el.src = full.src; 
-                el.dataset.swapped = true;
+                el.dataset.swapped = "true";
                 // swap here
                 addImageMarker(el.src);
+                
             });
         }
         // Incase image has loaded before this segment of code just run it again to ensure its swapped.
@@ -251,20 +276,28 @@ function onNewImages() {
                     //console.log("BOO")
                     if (locationDataEl) {
                         locationDataEl.outerHTML = text;
-                        const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
-                        const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
+                        const imageContainers = document.querySelectorAll('.image-container');
+                        if(imageContainers){
+                            imageContainers.forEach(imageContainer => {
+                                const imageLocationData = imageContainer.querySelector('.image-location-data');
+                                const imagePlaceData = imageContainer.querySelector('.location-text');
+                                if (!imageLocationData) return;
 
-                        if (newLocationDataEl) {
-                            const lat = parseFloat(newLocationDataEl.dataset.lat);
-                            const lon = parseFloat(newLocationDataEl.dataset.lon);
-                            const place = newLocationDataEl.dataset.place;
+                                const lat = parseFloat(imageLocationData.dataset.lat);
+                                const lon = parseFloat(imageLocationData.dataset.lon);
+                                const place = imageLocationData.dataset.place;
+                                // const city = imagePlaceData.dataset.city;
+                                // const country = imagePlaceData.dataset.country;
 
-                            const imageEl = imageContainer.querySelector('.image img');
-                            const imageUrl = imageEl ? imageEl.dataset.fullsrc || imageEl.src : '';
+                                const imageEl = imageContainer.querySelector('.image img');
+                                const imageUrl = imageEl ? imageEl.dataset.fullsrc : '';
 
-                            if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
-                                addImageMarker(imageUrl, lat, lon, place);
-                            }
+                                //console.log(place);
+                                if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
+                                    console.log("2");
+                                    addImageMarker(imageUrl, lat, lon, place);
+                                }
+                            });
                         }
                     }
                     //console.log(locationDataEl)
@@ -344,8 +377,8 @@ function onNewImages() {
             const lat = parseFloat(imageLocationData.dataset.lat);
             const lon = parseFloat(imageLocationData.dataset.lon);
             const place = imageLocationData.dataset.place;
-            const city = imagePlaceData.dataset.city;
-            const country = imagePlaceData.dataset.country;
+            // const city = imagePlaceData.dataset.city;
+            // const country = imagePlaceData.dataset.country;
 
             const imageEl = imageContainer.querySelector('.image img');
             const imageUrl = imageEl ? imageEl.dataset.fullsrc : '';

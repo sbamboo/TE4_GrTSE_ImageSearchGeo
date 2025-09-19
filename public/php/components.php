@@ -71,11 +71,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
     }
     //echo '<div class="image-location-data"' . $dataAttributes . " " . ' data-place="' . htmlspecialchars($translatedPlace, ENT_QUOTES, 'UTF-8') . '"' . ($autoFetchDetails ? ('data-lat="' .  $coords['latitude'] . '" data-lon="' . $coords['longitude']) : "") . '">';
 
-    echo '<div class="image-location-data"'
-    . $dataAttributes
-    . ' data-place="' . $translatedPlace . '"'
-    . ($autoFetchDetails ? ' data-lat="' . $coords['latitude'] . '" data-lon="' . $coords['longitude'] . '"' : '')
-    . '>';
+    echo '<div class="image-location-data"' . $dataAttributes . ' data-place="' . $translatedPlace . '"' . ($autoFetchDetails ? ' data-lat="' . $coords['latitude'] . '" data-lon="' . $coords['longitude'] . '"' : '') . '>';
         // If not autoFetchDetails and $geoNames and $coords are empty we instead show button stub for JS to request with
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
 
