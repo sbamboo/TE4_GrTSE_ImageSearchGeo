@@ -66,6 +66,7 @@ if(!empty($queryStr)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="./css/helpers.css">
+    <link rel="stylesheet" href="./css/lowwidth.css">
     <link rel="stylesheet" href="./css/ui.css">
     <link rel="stylesheet" href="./css/main.css">
 

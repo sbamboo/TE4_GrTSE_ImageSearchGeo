@@ -1,0 +1,16 @@
+/* Generic Rules */
+@media (max-width: 591px) {
+    .hide-on-lowwidth {
+        display: none;
+    }
+
+    .show-on-lowwidth {
+        display: flex;
+    }
+}
+
+@media (min-width: 592px) {
+    .show-on-lowwidth {
+        display: none;
+    }
+}
