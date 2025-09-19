@@ -79,9 +79,9 @@ class UnsplashAPI {
     public ?string $googleKey;
     private bool $autoGetDetails;
     private string $apiUrl = 'https://api.unsplash.com/';
-    private ?ImgDetailsCache $imgDetailsCache;
+    private ?ImgDetailsCacheInterface $imgDetailsCache;
 
-    public function __construct(string $accessKey, $autoGetDetails = false, ?string $googleKey = null, ?ImgDetailsCache $imgDetailsCache = null) {
+    public function __construct(string $accessKey, $autoGetDetails = false, ?string $googleKey = null, ?ImgDetailsCacheInterface $imgDetailsCache = null) {
         $this->accessKey = $accessKey;
         $this->autoGetDetails = $autoGetDetails;
         $this->googleKey = $googleKey;

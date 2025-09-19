@@ -74,7 +74,7 @@ function clearMarkers() {
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
 
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags', 'highlightTags', 'toggleMapMode'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'imagesPerPage', 'embedGMaps', 'cachedTags', 'highlightTags', 'toggleMapMode'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -223,11 +223,11 @@ function onNewImages() {
             if (id) {
                 const infoEl = document.querySelector(`.img-fetch-geonames-info[data-id="${id}"]`);
 
-                // Ask /endpoints/getDetails.php?id=ID&filterNonGeo=<bool>&translateNonLatin=<bool>
+                // Ask /endpoints/getdetails.php?id=ID&filterNonGeo=<bool>&translateNonLatin=<bool>
                 // Responds with {} or HTML
                 const metaEntries = getPHPMetaEntries();
 
-                const url = `endpoints/getDetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
+                const url = `endpoints/getdetails.php?id=${id}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
                 try {
                     const response = await fetch(modifyUrl(window.location.href, url))
                     // Is response OK?
@@ -465,12 +465,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const moreImagesButton = document.getElementById('get-more-images-button');
     if (moreImagesButton) {
         moreImagesButton.onclick = async (e) => {
-            // Ask /endpoints/getPage.php?queryStr=<urlrawencoded-string>&pageNr=<int>&orderBy=<enum:orderBy>&autoFetchDetails=<bool>&filterNonGeo=<bool>&translateNonLatin=<bool>
+            // Ask /endpoints/getpage.php?queryStr=<urlrawencoded-string>&pageNr=<int>&orderBy=<enum:orderBy>&autoFetchDetails=<bool>&filterNonGeo=<bool>&translateNonLatin=<bool>
             //     enum:orderBy = relevant | latest
             // Responds with {} or HTML
             const metaEntries = getPHPMetaEntries();
             const nextPageNr = (metaEntries.pageNr && !isNaN(metaEntries.pageNr)) ? (parseInt(metaEntries.pageNr, 10) + 1) : 2;
-            const url = `endpoints/getPage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}`;
+            const url = `endpoints/getpage.php?queryStr=${encodeURIComponent(metaEntries.queryStr || '')}&pageNr=${nextPageNr}&orderBy=${metaEntries.orderBy || 'relevant'}&autoFetchDetails=${metaEntries.autoFetchDetails ? 'true' : 'false'}&filterNonGeo=${metaEntries.filterNonGeo ? 'true' : 'false'}&translateNonLatin=${metaEntries.translateNonLatin ? 'true' : 'false'}${metaEntries.toggleLanguage ? "&toggleLanguage" : ""}${metaEntries.embedGMaps ? "&embedGMaps" : ""}${metaEntries.imagesPerPage ? `&imagesPerPage=${metaEntries.imagesPerPage}` : ""}`;
 
             const infoEl = document.getElementById('get-more-images-info');
             try {

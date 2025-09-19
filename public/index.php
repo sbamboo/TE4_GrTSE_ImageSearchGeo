@@ -6,7 +6,7 @@
 
 // Get all the secrets from php.ini file
 $SECRETS = parse_ini_file(__DIR__ . '/../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
-session_start();
+$CONFIG = parse_ini_file(__DIR__ . '/../config.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
 require_once('./php/caching.php');
@@ -20,11 +20,42 @@ require_once('./php/components.php');
 // Instantiate translator
 $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_REQUEST['toggleLanguage']) ? 'sv' : 'en');
 
-
 // Instantiate Caches
-//$mysqli = new mysqli($SECRETS["SQL_URL"], $SECRETS["SQL_USERNAME"], $SECRETS["SQL_PASSWORD"], $SECRETS["SQL_DATABASE"]);
-//$imgDetailsCache = new ImgDetailsCacheSQL($mysqli);
-$imgDetailsCache = new ImgDetailsCache();
+$useFileCache = true;
+if (isset($CONFIG["USE_SQL_CACHE"]) && ($CONFIG["USE_SQL_CACHE"] === true || $CONFIG["USE_SQL_CACHE"] === "true" || $CONFIG["USE_SQL_CACHE"] === "True")) {
+    $useFileCache = false;
+
+    $mysqli = new mysqli($CONFIG["MYSQL_ADDRESS"], $CONFIG["MYSQL_USERNAME"], $CONFIG["MYSQL_PASSWORD"], $CONFIG["MYSQL_DATABASE"]);
+    
+    if (!$mysqli || $mysqli->connect_errno) {
+        error_log("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
+        $useFileCache = true;
+    }
+
+    if ($useFileCache === false) {
+        if (isset($CONFIG["SQL_CACHE_TABLE"]) && isset($CONFIG["SQL_CACHE_TTL"]) && is_int($CONFIG["SQL_CACHE_TTL"])) {
+            $imgDetailsCache = new ImgDetailsCacheSQL($mysqli, $CONFIG["SQL_CACHE_TABLE"], $CONFIG["SQL_CACHE_TTL"]);
+        } else if (isset($CONFIG["SQL_CACHE_TABLE"])) {
+            $imgDetailsCache = new ImgDetailsCacheSQL($mysqli, $CONFIG["SQL_CACHE_TABLE"]);
+        } else if (isset($CONFIG["SQL_CACHE_TTL"]) && is_int($CONFIG["SQL_CACHE_TTL"])) {
+            $imgDetailsCache = new ImgDetailsCacheSQL($mysqli, null, $CONFIG["SQL_CACHE_TTL"]);
+        } else {
+            $imgDetailsCache = new ImgDetailsCacheSQL($mysqli);
+        }
+    }
+}
+
+if ($useFileCache === true) {
+    if (isset($CONFIG["JSON_CACHE_FILE"]) && (isset($CONFIG["JSON_CACHE_TTL"]) && is_int($CONFIG["JSON_CACHE_TTL"]))) {
+        $imgDetailsCache = new ImgDetailsCache($CONFIG["JSON_CACHE_FILE"], $CONFIG["JSON_CACHE_TTL"]);
+    } else if (isset($CONFIG["JSON_CACHE_FILE"])) {
+        $imgDetailsCache = new ImgDetailsCache($CONFIG["JSON_CACHE_FILE"]);
+    } else if (isset($CONFIG["JSON_CACHE_TTL"]) && is_int($CONFIG["JSON_CACHE_TTL"])) {
+        $imgDetailsCache = new ImgDetailsCache(null, $CONFIG["JSON_CACHE_TTL"]);
+    } else {
+        $imgDetailsCache = new ImgDetailsCache();
+    }
+}
 
 // Handle incomming search form POST, parsing out "queryStr" (string), "orderBy" (string:enum), "autoFetchDetails" (bool)
 $queryStr = $_REQUEST['queryStr'] ?? '';
@@ -39,13 +70,14 @@ $highlightTags = isset($_REQUEST['highlightTags']) ? true : false;
 $toggleMapMode = isset($_REQUEST['toggleMapMode']) ? true : false;
 
 $hasSearched = !empty($queryStr);
-$pageNr = 1;
+$imagesPerPage = isset($_REQUEST['imagesPerPage']) ? intval($_REQUEST['imagesPerPage']) : intval($CONFIG['IMAGES_PER_PAGE']);
+$pageNr = isset($_REQUEST['pageNr']) ? intval($_REQUEST['pageNr']) : 1;
 $searchInfo = null;
 
 // Perform search
 if(!empty($queryStr)){
     $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY'], $imgDetailsCache);
-    $images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
+    $images = $unsplash->SearchPhotos($queryStr, $imagesPerPage, $pageNr, $filterNonGeo, $orderBy);
 
     // If length is 0 
     if (count($images) === 0) {
@@ -102,6 +134,7 @@ if(!empty($queryStr)){
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
     <meta name="highlightTags" content="<?php echo $highlightTags ? 'true' : 'false'; ?>">
     <meta name="toggleMapMode" content="<?php echo $toggleMapMode ? 'true' : 'false'; ?>">
+    <meta name="imagesPerPage" content="<?php echo $imagesPerPage ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
     <?php
     // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined

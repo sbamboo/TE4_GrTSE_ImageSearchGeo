@@ -3,6 +3,7 @@
 
 // Load secrets
 $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
+$CONFIG = parse_ini_file(__DIR__ . '/../../config.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
 require_once('./../php/endpoint_helpers.php');
