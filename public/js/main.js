@@ -8,14 +8,21 @@ let map = null;
 let markerQueue = [];
 let infoWindow = null;
 
+const markerDataMap = {};
+const addedImages = [];
 
 function addImageMarker(imageUrl, lat, lng, placeName = "") {
     if (!window.google || !google.maps || !google.maps.marker) {
-        // Queue until Maps API is ready
+        // queue until Maps API is ready
         window._pendingMarkers = window._pendingMarkers || [];
         window._pendingMarkers.push([imageUrl, lat, lng, placeName]);
         return;
-      }
+    }
+
+    if(addedImages.includes(imageUrl)){
+        return;
+    }
+
 
     const latNum = parseFloat(lat);
     const lngNum = parseFloat(lng);
@@ -23,32 +30,45 @@ function addImageMarker(imageUrl, lat, lng, placeName = "") {
     if (isNaN(latNum) || isNaN(lngNum)) {
         return;
     }
+    addedImages.push(imageUrl);
+    const key = `${latNum},${lngNum}`;
+    if (!markerDataMap[key]) {
+        markerDataMap[key] = [];
+    }
 
-    const img = document.createElement("img");
-    img.src = imageUrl;
-    img.style.width = "50px";
-    img.style.height = "50px";
-    img.style.objectFit = "cover";
-    img.style.borderRadius = "50%";
-    img.style.boxShadow = "0 0 5px rgba(0,0,0,0.4)";
+    markerDataMap[key].push({ imageUrl, placeName });
+    if (markerDataMap[key].length === 1) {
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.style.width = "50px";
+        img.style.height = "50px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "50%";
+        img.style.boxShadow = "0 0 5px rgba(0,0,0,0.4)";
 
-    const marker = new google.maps.marker.AdvancedMarkerElement({
+        const marker = new google.maps.marker.AdvancedMarkerElement({
         position: { lat: latNum, lng: lngNum },
         map: window.map,
         content: img,
-    });
+        });
 
-    const infowindow = new google.maps.InfoWindow({
-        content: `<img src="${imageUrl}" width="200"><br><b>${placeName}</b>`,
-    });
+        marker.addListener("click", () => {
+        const entries = markerDataMap[key];
+        const html = entries.map(e => `
+            <div class="custom-infowindow">
+            <img src="${e.imageUrl}" class="infowindow-img">
+            <div class="place-name">${e.placeName}</div>
+            </div>
+        `).join("<hr>");
 
-    marker.addListener("click", () => {
+        const infowindow = new google.maps.InfoWindow({ content: html });
+
         if (openInfoWindow) openInfoWindow.close();
         infowindow.open({ anchor: marker, map: window.map });
         openInfoWindow = infowindow;
-    });
-
-    markers.push(marker);
+        });
+        markers.push(marker);
+    }
 }
 
 function refreshMap() {
