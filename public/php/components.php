@@ -149,7 +149,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
                     foreach ($translated as $key => [$text, $translatedText]) {
                         if ($translatedText !== null) {
                             echo '<div class="location-text-original">';
-                                echo localize('<p> <span>' . ucfirst("%$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                                echo localize('<p> <span>' . ucfirst("%location.translated.$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
                             echo '</div>';
                         }
                     }
