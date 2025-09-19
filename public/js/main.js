@@ -112,6 +112,104 @@ function modifyUrl(url, extension) {
     return finalUrl.toString();
 }
 
+function imgMetadataCollector(el, id) {
+    // Collect information
+    const metadata = {};
+
+    //// Tags from parentElement .dataset.tags split by "," and trimmed
+    metadata.tags = [];
+    // Get closest parent/grandparent that is .image-location-data
+    const locationDataEl = el.closest('.image-location-data');
+    if (locationDataEl && locationDataEl.dataset.tags) {
+        const tags = locationDataEl.dataset.tags.split(',');
+        tags.forEach(tag => {
+            const trimmed = tag.trim();
+            if (trimmed) {
+                metadata.tags.push(trimmed);
+            }
+        });
+    }
+
+    // locationDataEl also might contains
+    // data-exif-make="NIKON CORPORATION"
+    // data-exif-model="NIKON D7200"
+    // data-exif-name="NIKON CORPORATION, NIKON D7200"
+    // data-exif-exposuretime="1/60"
+    // data-exif-aperture="5.6"
+    // data-exif-focallength="100.0"
+    // data-exif-iso="2800"
+    if (locationDataEl) {
+        if (locationDataEl.dataset.exifMake) metadata.exifMake = locationDataEl.dataset.exifMake;
+        if (locationDataEl.dataset.exifModel) metadata.exifModel = locationDataEl.dataset.exifModel;
+        if (locationDataEl.dataset.exifName) metadata.exifName = locationDataEl.dataset.exifName;
+        if (locationDataEl.dataset.exifExposuretime) metadata.exifExposuretime = locationDataEl.dataset.exifExposuretime;
+        if (locationDataEl.dataset.exifAperture) metadata.exifAperture = locationDataEl.dataset.exifAperture;
+        if (locationDataEl.dataset.exifFocallength) metadata.exifFocallength = locationDataEl.dataset.exifFocallength;
+        if (locationDataEl.dataset.exifIso) metadata.exifIso = locationDataEl.dataset.exifIso;
+    }
+
+    // Append info to popup
+    // <div id="img-metadata-container-box">
+    //     <div id="img-metadata-top-box">
+    //         <div><!--Empty div ;) --></div>
+    //         <a id="img-metadata-head-line">Image Metadata</a>
+    //         <button id="img-metadata-closer" class="popup-closer">
+    //             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    //                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    //                 <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+    //             </svg>
+    //         </button>
+    //     </div>
+    //     <div id="img-metadata-content">
+    //         <p id="img-metadata-tags"><strong>Tags:</strong> <span></span></p>
+    //         <p id="img-metadata-camera-make"><strong>Camera Make:</strong> <span></span></p>
+    //         <p id="img-metadata-camera-model"><strong>Camera Model:</strong> <span></span></p>
+    //         <p id="img-metadata-exposure-time"><strong>Exposure Time:</strong> <span></span></p>
+    //         <p id="img-metadata-aperture"><strong>Aperture:</strong> <span></span></p>
+    //         <p id="img-metadata-focal-length"><strong>Focal Length:</strong> <span></span></p>
+    //         <p id="img-metadata-iso"><strong>ISO:</strong> <span></span></p>
+    //     </div>
+    // </div>
+    // Html looks like above lets set the information
+    document.getElementById('img-metadata-tags').style.display = metadata.tags && metadata.tags.length > 0 ? 'flex' : 'none';
+    document.getElementById('img-metadata-tags').querySelector('span').innerText = metadata.tags ? metadata.tags.join(', ') : '';
+    
+    // document.getElementById('img-metadata-camera-make').style.display = metadata.exifMake ? 'block' : 'none';
+    // document.getElementById('img-metadata-camera-make').querySelector('span').innerText = metadata.exifMake || '';
+    // document.getElementById('img-metadata-camera-model').style.display = metadata.exifModel ? 'block' : 'none';
+    // document.getElementById('img-metadata-camera-model').querySelector('span').innerText = metadata.exifModel || '';
+    // document.getElementById('img-metadata-camera-name').style.display = metadata.exifName ? 'block' : 'none';
+    // document.getElementById('img-metadata-camera-name').querySelector('span').innerText = metadata.exifName || '';
+
+    // If camera name is available show that instead of make and model
+    if (metadata.exifName) {
+        document.getElementById('img-metadata-camera-name').style.display = 'flex';
+        document.getElementById('img-metadata-camera-name').querySelector('span').innerText = metadata.exifName || '';
+        document.getElementById('img-metadata-camera-make').style.display = 'none';
+        document.getElementById('img-metadata-camera-model').style.display = 'none';
+    } else {
+        document.getElementById('img-metadata-camera-name').style.display = 'none';
+        document.getElementById('img-metadata-camera-make').style.display = metadata.exifMake ? 'flex' : 'none';
+        document.getElementById('img-metadata-camera-make').querySelector('span').innerText = metadata.exifMake || '';
+        document.getElementById('img-metadata-camera-model').style.display = metadata.exifModel ? 'flex' : 'none';
+        document.getElementById('img-metadata-camera-model').querySelector('span').innerText = metadata.exifModel || '';
+    }
+
+    document.getElementById('img-metadata-exposure-time').style.display = metadata.exifExposuretime ? 'flex' : 'none';
+    document.getElementById('img-metadata-exposure-time').querySelector('span').innerText = metadata.exifExposuretime || '';
+    document.getElementById('img-metadata-aperture').style.display = metadata.exifAperture ? 'flex' : 'none';
+    document.getElementById('img-metadata-aperture').querySelector('span').innerText = metadata.exifAperture || '';
+    document.getElementById('img-metadata-focal-length').style.display = metadata.exifFocallength ? 'flex' : 'none';
+    document.getElementById('img-metadata-focal-length').querySelector('span').innerText = metadata.exifFocallength || '';
+    document.getElementById('img-metadata-iso').style.display = metadata.exifIso ? 'flex' : 'none';
+    document.getElementById('img-metadata-iso').querySelector('span').innerText = metadata.exifIso || '';
+
+    POPUPS.showAsOverlay('img-metadata-popup', closeOnClickOutside = true, closeOnMouseOut = false, darkenBackground = true);
+    document.getElementById('img-metadata-closer').onclick = (e) => {
+        POPUPS.hideAsOverlay('img-metadata-popup');
+    };
+}
+
 // When new images are loaded do the following
 function onNewImages() {
 
@@ -276,6 +374,13 @@ function onNewImages() {
                         }
                     }
 
+                    // Set listeners for view metadata
+                    newLocationDataEl.querySelectorAll('.img-more-metadata').forEach(el => {
+                        el.onclick = (e) => {
+                            imgMetadataCollector(el, el.dataset.id || null);
+                        };
+                    });
+
                     // Reset info text
                     if (infoEl) {
                         infoEl.style.display = 'none';
@@ -342,9 +447,8 @@ function onNewImages() {
                 TAGS.push(trimmed);
             }
         });
-
-        
     }
+
     const imageLocationDatas = document.querySelectorAll('.image-location-data');
     imageLocationDatas.forEach(el => {
         const tagsData = el.dataset.tags;
@@ -359,6 +463,13 @@ function onNewImages() {
                 }
             });
         }
+    });
+
+    // Add listener for view metadata .img-more-metadata buttons
+    document.querySelectorAll('.img-more-metadata').forEach(el => {
+        el.onclick = (e) => {
+            imgMetadataCollector(el, el.dataset.id || null);
+        };
     });
 
 }

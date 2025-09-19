@@ -240,6 +240,94 @@ $imagesCount = count($images);
                 </button>
             </div>
 
+            <div id="img-metadata-popup" style="display:none;">
+                <div id="img-metadata-container-box">
+                    <div id="img-metadata-top-box">
+                        <div><!--Empty div ;) --></div>
+                        <a id="img-metadata-head-line">Image Metadata</a>
+                        <button id="img-metadata-closer" class="popup-closer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="img-metadata-content">
+                        <p id="img-metadata-tags">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                                <path d="M3 6v5.172a2 2 0 0 0 .586 1.414l7.71 7.71a2.41 2.41 0 0 0 3.408 0l5.592 -5.592a2.41 2.41 0 0 0 0 -3.408l-7.71 -7.71a2 2 0 0 0 -1.414 -.586h-5.172a3 3 0 0 0 -3 3z" />
+                            </svg>
+                            <strong>Tags:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-camera-name">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            </svg>
+                            <strong>Camera Name:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-camera-make">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            </svg>
+                            <strong>Camera Make:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-camera-model">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                <path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                            </svg>
+                            <strong>Camera Model:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-exposure-time">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M3.6 20.4l16.8 -16.8" />
+                                <path d="M6 8h4m-2 -2v4" />
+                                <path d="M14 16h4" />
+                                <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+                            </svg>
+                            <strong>Exposure Time:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-aperture">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                                <path d="M3.6 15h10.55"/>
+                                <path d="M6.551 4.938l3.26 10.034"/>
+                                <path d="M17.032 4.636l-8.535 6.201"/>
+                                <path d="M20.559 14.51l-8.535 -6.201"/>
+                                <path d="M12.257 20.916l3.261 -10.034"/>
+                            </svg>
+                            <strong>Aperture:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-focal-length">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+                                <path d="M4 8v-2a2 2 0 0 1 2 -2h2"/>
+                                <path d="M4 16v2a2 2 0 0 0 2 2h2"/>
+                                <path d="M16 4h2a2 2 0 0 1 2 2v2"/>
+                                <path d="M16 20h2a2 2 0 0 0 2 -2v-2"/>
+                            </svg>
+                            <strong>Focal Length:</strong> <span></span>
+                        </p>
+                        <p id="img-metadata-iso">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" fill="currentColor">
+                                <path d="m 10.006823,5.68736 c -0.5360739,0 -0.8659762,0.46734 -0.8659762,1.27832 0,0.81098 0.3299023,1.31956 0.8659642,1.31956 0.536061,0 0.865963,-0.50858 0.865963,-1.31956 0,-0.81098 -0.329877,-1.27832 -0.865951,-1.27832 z m 2.742329,-2.26398 -11.4983043,0 C 1.112317,3.42337 1,3.53568 1,3.67422 l 0,6.65156 c 0,0.13855 0.112317,0.25085 0.2508477,0.25085 l 11.4983043,0 C 12.887696,10.57663 13,10.46433 13,10.32578 L 13,3.67422 C 13,3.53567 12.887696,3.42337 12.749152,3.42337 Z m -9.4912848,5.79655 -1.182107,0 0,-4.46726 1.182107,0 0,4.46726 z m 2.4054158,0.0825 c -0.5635669,0 -1.2095874,-0.20618 -1.6906756,-0.63916 L 4.6461209,7.8523 c 0.3161433,0.25427 0.7147653,0.43298 1.044655,0.43298 0.3573827,0 0.5085811,-0.11684 0.5085811,-0.31615 0,-0.21304 -0.2268039,-0.28177 -0.6048062,-0.43297 L 5.0378445,7.30242 C 4.5567689,7.10998 4.1375272,6.7045 4.1375272,6.05846 c 0,-0.76286 0.6872724,-1.38829 1.6631952,-1.38829 0.5085811,0 1.0721355,0.19245 1.4844914,0.59793 L 6.6941665,6.01036 C 6.3917697,5.79732 6.1305871,5.68735 5.8007224,5.68735 c -0.2886629,0 -0.4673542,0.10308 -0.4673542,0.30239 0,0.21303 0.2542842,0.28864 0.6597795,0.44671 L 6.5360823,6.6495 c 0.5567062,0.21992 0.8728495,0.60479 0.8728495,1.22334 2.51e-5,0.75603 -0.632274,1.42954 -1.7456488,1.42954 z m 4.34354,0 c -1.2371053,0 -2.0755511,-0.86595 -2.0755511,-2.33672 0,-1.47076 0.8384709,-2.29549 2.0755511,-2.29549 1.23708,0 2.075539,0.8316 2.075539,2.29549 2.5e-5,1.47077 -0.838446,2.33672 -2.075539,2.33672 z"/>
+                            </svg>
+                            <strong>ISO:</strong> <span></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div id="portal-container"></div>
     </div>

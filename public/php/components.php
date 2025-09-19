@@ -41,6 +41,24 @@ EOF;
     echo $html;
 }
 
+function formatCoordinate($value, $type) {
+    // Determine direction
+    if ($type === 'lat') {
+        $direction = ($value >= 0) ? 'N' : 'S';
+    } elseif ($type === 'lon') {
+        $direction = ($value >= 0) ? 'E' : 'W';
+    } else {
+        return "Invalid type. Use 'lat' or 'lon'.";
+    }
+
+    // Make value positive for display
+    $absValue = abs($value);
+
+    $absValue = round($absValue, 4);
+
+    return $absValue . "° " . $direction;
+}
+
 function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null, array $tagWith = [], array $tags = []): void {
     $dataAttributes = '';
     foreach ($tagWith as $key => $value) {
@@ -143,14 +161,27 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
             // Echo the location data HTML
             if (!empty($coords['latitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %location.lat%: </span> <span>' . htmlspecialchars($coords['latitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %location.lat%: </span> <span>' . htmlspecialchars(formatCoordinate($coords['latitude'], 'lat'), ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                echo '</div>';
+            } else {
+                echo '<div class="location-text">';
+                    echo localize('<p> <span> %location.lat%: </span> <span class="latlon-unknown">%location.unknown%</span> </p>');
                 echo '</div>';
             }
             if (!empty($coords['longitude'])) {
                 echo '<div class="location-text">';
-                    echo localize('<p> <span> %location.lon%: </span> <span>' . htmlspecialchars($coords['longitude'], ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo localize('<p> <span> %location.lon%: </span> <span>' . htmlspecialchars(formatCoordinate($coords['longitude'], 'lon'), ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                echo '</div>';
+            } else {
+                echo '<div class="location-text">';
+                    echo localize('<p> <span> %location.lon%: </span> <span class="latlon-unknown">%location.unknown%</span> </p>');
                 echo '</div>';
             }
+
+            // Echo more metadata button
+            echo '<div class="img-more-metadata-wrapper">';
+                echo '<button class="img-more-metadata button" data-id="' . $identifiers["id"] . '">View Metadata</button>';
+            echo '</div>';
 
         }
     echo '</div>';
@@ -168,6 +199,21 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
     $userLink = $image->GetUserInfo();
     $GMapsLink = $image->GetMostPreciseGMapsUrl($embed, $translator->GetTargetLang());
     $tags = $image->GetTags();
+    $exif = $image->GetExif();
+    // $exif = [
+    //     'make' => $exifData['make'] ?? '',
+    //     'model' => $exifData['model'] ?? '',
+    //     'name' => $exifData['name'] ?? '',
+    //     'exposure_time' => $exifData['exposure_time'] ?? '',
+    //     'aperture' => $exifData['aperture'] ?? '',
+    //     'focal_length' => $exifData['focal_length'] ?? '',
+    //     'iso' => $exifData['iso'] ?? 0,
+    //     'location' => [
+    //         'latitude' => $exifData['location']['latitude'] ?? null,
+    //         'longitude' => $exifData['location']['longitude'] ?? null,
+    //         'altitude' => $exifData['location']['altitude'] ?? null
+    //     ]
+    // ]
 
     //$downloadUrl = $image->GetDownloadUrl();
     $downloadUrl = $image->GetRawUrl();
@@ -190,7 +236,15 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
         echo '</div>';
 
 
-        echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, [], $tags);
+        echoLocationData($autoFetchDetails, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, [
+            "exif-make" => $exif['make'] ?? null,
+            "exif-model" => $exif['model'] ?? null,
+            "exif-name" => $exif['name'] ?? null,
+            "exif-exposuretime" => $exif['exposure_time'] ?? null,
+            "exif-aperture" => $exif['aperture'] ?? null,
+            "exif-focallength" => $exif['focal_length'] ?? null,
+            "exif-iso" => $exif['iso'] ?? null
+        ], $tags);
 
     echo '</div>';
 }

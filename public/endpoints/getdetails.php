@@ -58,7 +58,18 @@ try {
         $coords = $photoDetails->GetCoordinates();
         $identifiers = $photoDetails->GetIdentifiers();
         $tags = $photoDetails->GetTags();
-        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, ["gmaps" => $GMapsLink], $tags);
+        $exif = $photoDetails->GetExif();
+        echoLocationData(true, $geoNames, $coords, $identifiers, $translateNonLatin, $translator, [
+            "gmaps" => $GMapsLink,
+            
+            "exif-make" => $exif['make'] ?? null,
+            "exif-model" => $exif['model'] ?? null,
+            "exif-name" => $exif['name'] ?? null,
+            "exif-exposuretime" => $exif['exposure_time'] ?? null,
+            "exif-aperture" => $exif['aperture'] ?? null,
+            "exif-focallength" => $exif['focal_length'] ?? null,
+            "exif-iso" => $exif['iso'] ?? null
+        ], $tags);
     }
 } catch (Throwable $e) {
     respondError($e);

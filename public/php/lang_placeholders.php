@@ -55,6 +55,7 @@ $translations = [
         "location.place" => "Place",
         "location.lat" => "Latitude",
         "location.lon" => "Longitude",
+        "location.unknown" => "Unknown",
         
         "img.credit.start" => "Photo taken by",
         "img.credit.end" => "from unsplash.",
@@ -106,6 +107,7 @@ $translations = [
         "location.place" => "Plats",
         "location.lat" => "Latitud",
         "location.lon" => "Longitud",
+        "location.unknown" => "Okänd",
         
         "img.credit.start" => "Bild tagen av",
         "img.credit.end" => "från unsplash.",

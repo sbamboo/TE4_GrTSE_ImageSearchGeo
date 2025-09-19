@@ -41,3 +41,10 @@
 
 ## Thoughts / Reminders
 - ClickOnOutside true on the localstorage-consent popup needs to clicks rest dont, DONT KNOW WHY
+
+## LICENSEs
+Icons are from https://tabler.io/icons except:
+- iso       : https://www.svgrepo.com/svg/443606/camera-iso
+- list      : Made by us
+- grid      : Made by us
+- The flags : Made by us
