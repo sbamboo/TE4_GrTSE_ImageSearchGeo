@@ -62,7 +62,7 @@ class Popups {
     }
 
     // Show a overlay popup (A popup that is above all content and centered on the screen)
-    showAsOverlay(elementId, closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true) {
+    showAsOverlay(elementId, closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true, clickThroughBackground = false) {
         const element = document.getElementById(elementId);
         if (!element) {
             console.error(`Element with id "${elementId}" not found`);
@@ -89,10 +89,16 @@ class Popups {
         popupElement.dataset.closeOnClickOutside = closeOnClickOutside.toString();
         popupElement.dataset.closeOnMouseOut = closeOnMouseOut.toString();
         popupElement.dataset.darkenBackground = darkenBackground.toString();
+        popupElement.dataset.dontClickThroughBackground = (!clickThroughBackground).toString();
 
         // If this child should darken background, add class to container
         if (darkenBackground) {
             this.popupContainer.classList.add("popup-container-darken-background");
+        }
+
+        // If this child should allow click through background, add class to container
+        if (!clickThroughBackground) {
+            this.popupContainer.classList.add("popup-container-dont-click-through-background");
         }
 
         // Show the popup
@@ -135,6 +141,12 @@ class Popups {
         const anyDarken = this.shownPopups.some(popup => popup.dataset.darkenBackground === "true");
         if (!anyDarken) {
             this.popupContainer.classList.remove("popup-container-darken-background");
+        }
+
+        // If no children want to clickThroughBackground anymore remove class from container
+        const anyDontClickThroughAndVisible = this.shownPopups.some(popup => popup.dataset.dontClickThroughBackground === "true" && popup.style.display !== "none");
+        if (!anyDontClickThroughAndVisible) {
+            this.popupContainer.classList.remove("popup-container-dont-click-through-background");
         }
 
         // If no more popups are shown, hide the overlay container

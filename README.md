@@ -38,3 +38,6 @@
 - CSS use `var(--)` for colors so they can be styled with light/dark mode.
 - CSS/HTML use reusable classes `helpers.css` to make styling easier and more consistent.
 - CSS responsive, use `rem` units.
+
+## Thoughts / Reminders
+- ClickOnOutside true on the localstorage-consent popup needs to clicks rest dont, DONT KNOW WHY

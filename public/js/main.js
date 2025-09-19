@@ -1,5 +1,12 @@
 const POPUPS = new Popups();
-const STORAGE = new LocalStorageHandler();
+const STORAGE = new LocalStorageHandler(
+    onAccept = ()=>{
+        document.documentElement.setAttribute('data-localstorage-consent', 'true');
+    },
+    onRevoke = ()=>{
+        document.documentElement.setAttribute('data-localstorage-consent', 'false');
+    }
+);
 
 const TAGS = [];
 
@@ -67,7 +74,7 @@ function clearMarkers() {
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
 
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'highlightTags'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags', 'highlightTags'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -160,8 +167,6 @@ function onNewImages() {
             el.onload();
         }
     });
-
-
 
     // Add handlers for theme management
     const themeToggle = document.getElementById('theme'); // Element of type select with option values "light", "dark" and "system"
@@ -256,8 +261,6 @@ function onNewImages() {
                             // Ignore
                         }
 
-                        
-
                         // Get the .img-fetch-geonames-info under parent of el set its display to block and innerText to error
                         if (infoEl) {
                             infoEl.style.display = 'block';
@@ -267,8 +270,6 @@ function onNewImages() {
 
                         return;
                     }
-                    
-
 
                     // Get the closest .image-location-data of el and replace it with the response HTML
                     const locationDataEl = el.closest('.image-location-data');
@@ -300,6 +301,7 @@ function onNewImages() {
                         }
                     }
                     //console.log(locationDataEl)
+
                     // If locationDataEl now has data-gmaps get .embed-gmap-link inside locationDataEl's parent and set its data-url to it
                     const imageContainer = document.querySelector(`.image-container[data-id="${id}"]`);
                     const newLocationDataEl = imageContainer ? imageContainer.querySelector('.image-location-data') : null;
@@ -315,6 +317,22 @@ function onNewImages() {
                             if (gmapLink) {
                                 gmapLink.href = newLocationDataEl.dataset.gmaps;
                             }
+                        }
+                    }
+
+                    // Update TAGS with the tags from the new location data
+                    if (newLocationDataEl) {
+                        const tagsData = newLocationDataEl.dataset.tags;
+                        if (tagsData) {
+                            // tagsData is a comma separated list of tags ', '
+                            const _tags = tagsData.split(',');
+                            _tags.forEach(tag => {
+                                const trimmed = tag.trim();
+                                if (trimmed && !TAGS.includes(trimmed)) {
+                                    //console.log("Non auto fetch Adding tag", trimmed);
+                                    TAGS.push(trimmed);
+                                }
+                            });
                         }
                     }
 
@@ -376,10 +394,11 @@ function onNewImages() {
     const metaEntries = getPHPMetaEntries();
     if (metaEntries.cachedTags) {
         // cachedTags is a comma separated list of tags ', '
-        const tags = metaEntries.cachedTags.split(',');
-        tags.forEach(tag => {
+        const _tags = metaEntries.cachedTags.split(',');
+        _tags.forEach(tag => {
             const trimmed = tag.trim();
             if (trimmed && !TAGS.includes(trimmed)) {
+                //console.log("meta Adding tag", trimmed);
                 TAGS.push(trimmed);
             }
         });
@@ -391,10 +410,11 @@ function onNewImages() {
         const tagsData = el.dataset.tags;
         if (tagsData) {
             // tagsData is a comma separated list of tags ', '
-            const tags = tagsData.split(',');
-            tags.forEach(tag => {
+            const _tags = tagsData.split(',');
+            _tags.forEach(tag => {
                 const trimmed = tag.trim();
                 if (trimmed && !TAGS.includes(trimmed)) {
+                    //console.log("Initial Adding tag", trimmed);
                     TAGS.push(trimmed);
                 }
             });
@@ -406,17 +426,33 @@ function onNewImages() {
 // When page is finished loading (PHP is done)
 window.addEventListener('DOMContentLoaded', () => {
     // Conditionally show localstorage consent popup
-    if (!STORAGE.IsAccepted()) {
+    if (!STORAGE.IsAccepted() && (getPHPMetaEntries().queryStr === null || getPHPMetaEntries().queryStr.trim().length === 0)) {
         POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
-        document.getElementById("localstorage-accept").onclick = () => {
-            STORAGE.Accept();
-            POPUPS.hideAsOverlay('localstorage-prompt');
-        };
-        document.getElementById("localstorage-decline").onclick = () => {
-            STORAGE.Revoke();
-            POPUPS.hideAsOverlay('localstorage-prompt');
-        };
     }
+    if (STORAGE.IsAccepted()) {
+        document.documentElement.setAttribute('data-localstorage-consent', 'true');
+    } else {
+        document.documentElement.setAttribute('data-localstorage-consent', 'false');
+    }
+    document.getElementById("localstorage-accept").onclick = () => {
+        STORAGE.Accept();
+        POPUPS.hideAsOverlay('localstorage-prompt');
+    };
+    document.getElementById("localstorage-decline").onclick = () => {
+        STORAGE.Revoke();
+        POPUPS.hideAsOverlay('localstorage-prompt');
+    };
+
+    // Set settings listers for consent
+    document.getElementById("accept-localstorage-consent").onclick = () => {
+        STORAGE.Accept();
+    };
+    document.getElementById("revoke-localstorage-consent").onclick = () => {
+        POPUPS.hideAsOverlay('settings');
+        STORAGE.Revoke();
+        //MARK: Should we show the prompt again?
+        //POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
+    };
 
     // Add click listeners to settings buttons
     document.getElementById("settings-button").onclick = () => {
@@ -563,19 +599,37 @@ document.addEventListener("DOMContentLoaded", () => {
     mirror.style.top = "0";
     mirror.style.left = "0.02rem"; // Slightly right to avoid input border
 
-    function updateMirror($updateMirror = true) {
+    function updateMirror() {
         const words = input.value.split(/(\s+)/); // keep spaces
         const result = words.map(word => {
             const clean = word.trim();
             if (!clean) return word;
-            if ($updateMirror == true)
-                if (isColor(clean)) {
-                    return `<span class="color-word">${word}</span>`;
-                }
-                if (TAGS.includes(clean.toLowerCase())) {
-                    return `<mark>${word}</mark>`;
-                }
-    
+            const metaEntries = getPHPMetaEntries();
+            const doHighlight = metaEntries.highlightTags === true;
+            
+            if (doHighlight == true) {
+               var $backgroundVis = "var(--highlight-color-color)";
+               var $backgroundMarkVis = "var(--highlight-mark-color)";
+               var $colorVis = "color: var(--text-color)";
+                //console.log("highlighting");
+            }
+            else {
+                var $backgroundVis = "transparent";
+                var $backgroundMarkVis = "transparent";
+                var $colorVis = "transparent";
+                //console.log("no highlight");
+            }
+            if (isColor(clean)) {
+                // returns <span class="color-word" style="background-color: in $backgroundVis; color: in $colorVis">${word}</span>
+
+                return '<span class="color-word" style="background-color: ' + $backgroundVis + '; color: ' + $colorVis + '">'+ word +'</span>';
+            }
+            if (TAGS.includes(clean.toLowerCase())) {
+                return '<mark style="color: '+ $colorVis +'; background-color:'+ $backgroundMarkVis +'">'+ word +'</mark>';
+            }
+
+
+            
             // Keep the word but make it invisible
             return `<span class="hidden-word">${word}</span>`;
         }).join("");
@@ -584,17 +638,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mirror.innerHTML = result || "&nbsp;";
         mirror.scrollLeft = input.scrollLeft;
     }
-    
-    function ifHighlightOn($doUpdate = true) {
-        if ($doUpdate == true){
-            updateMirror($updateMirror = true);
-        };
-        if ($doUpdate == false) {
-            updateMirror($updateMirror = false);
-        };
-        return $updateMirror;    
-    } 
-    ifHighlightOn();
+
+    updateMirror();
+
     input.addEventListener("input", updateMirror);
     input.addEventListener("scroll", () => {
         mirror.scrollLeft = input.scrollLeft;

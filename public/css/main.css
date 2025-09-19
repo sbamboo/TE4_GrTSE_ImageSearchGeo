@@ -12,6 +12,7 @@ html {
 [data-theme="light"] {
     --main-bg-color: #ffffff;
     --text-color: #000000;
+    --text-color-opposite: #ffffff;
     --text-color-grayed: #606060;
 
     --border-light: #e0e0e0;
@@ -42,11 +43,17 @@ html {
 
     --pref-border: var(--border-light);
     --pref-border-secondary: var(--border-dark);
+
+    --decline-button-bg-color: #ce3232;
+    --decline-button-bg-color-hover: #bb2e2e;
+    --accept-button-bg-color: #1ca13f;
+    --accept-button-bg-color-hover: #188a36;
 }
 
 [data-theme="dark"] {
     --main-bg-color: #121212;
     --text-color: #ffffff;
+    --text-color-opposite: #000000;
     --text-color-grayed: #a0a0a0;
 
     --border-light: #2c2c2c;
@@ -77,6 +84,11 @@ html {
 
     --pref-border: var(--border-dark);
     --pref-border-secondary: var(--border-light);
+
+    --decline-button-bg-color: #ad1f1f;
+    --decline-button-bg-color-hover: #922121;
+    --accept-button-bg-color: #0b6623;
+    --accept-button-bg-color-hover: #0a581e;
 }
 
 html {
@@ -99,8 +111,19 @@ html {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none;
     z-index: 1000;
+}
+
+#portal-container {
+    pointer-events: none;
+}
+
+#popup-container {
+    pointer-events: all;
+}
+
+#popup-container:not(.popup-container-dont-click-through-background) {
+    pointer-events: none;
 }
 
 #popup-container > *,
@@ -123,6 +146,32 @@ html {
     z-index: 1002;
 }
 
+
+.popup-closer {
+    display: flex;
+    align-self: end;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    padding: 0.25rem;
+
+    color: var(--popup-closer-color);
+    background-color: var(--popup-closer-bg-color);
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+.popup-closer:hover {
+    color: var(--popup-closer-color-hover);
+    background-color: var(--popup-closer-bg-color-hover);
+}
+
+.images-page-container {
+    /* Grid with all items in single centered column */
+    grid-template-columns: 1fr;
+}
 
 /* LocalStorage Consent */
 #localstorage-prompt-box {
@@ -189,6 +238,11 @@ html {
     border: transparent;
     white-space: pre;
     overflow: hidden;
+}
+
+#disabled-marking {
+    color: transparent;
+    background-color: transparent;
 }
 
 #search-label {
@@ -315,6 +369,7 @@ mark {
     background: var(--toggle-bg-color-hover);
 }
 
+
 #toggle-map {
     display: none;
 }
@@ -340,6 +395,28 @@ mark {
 }
 
 
+body:has(#toggle-layout:checked) .images-page-container {
+    /* Grid with items split over two columns */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body:has(#toggle-layout:checked) #list-icon {
+    display: inline;
+}
+body:has(#toggle-layout:checked) #grid-icon {
+    display: none;
+}
+
+body:has(#toggle-layout:not(:checked)) #list-icon {
+    display: none;
+}
+body:has(#toggle-layout:not(:checked)) #grid-icon {
+    display: inline;
+}
+
+/* Settings Popup */
+
+
 #settings {
     display: flex;
     align-items: center;
@@ -349,7 +426,7 @@ mark {
     
     padding: 0.5rem;
     width: auto;
-    height: 25rem;
+    height: clamp(25rem, 32rem, 80vh);
     background:  var(--image-container-bg-color);
     
     box-shadow: 0 0 10px 8px rgba(0, 0, 0, 0.1);
@@ -365,7 +442,8 @@ mark {
     scrollbar-width: thin;
 }
 
-#settings-container-box label {
+#settings-container-box label,
+#settings-container-box div {
     display: flex;
     justify-content: space-between;
     margin: 1rem;
@@ -414,49 +492,33 @@ mark {
     height: 1.4rem;
 }
 
-.popup-closer {
+[data-localstorage-consent="true"] #revoke-localstorage-consent-container,
+[data-localstorage-consent="true"] #revoke-localstorage-consent-info {
     display: flex;
-    align-self: end;
-
-    align-items: center;
-    justify-content: center;
-
-    border: none;
-    padding: 0.25rem;
-
-    color: var(--popup-closer-color);
-    background-color: var(--popup-closer-bg-color);
-    font-size: 2rem;
-    cursor: pointer;
-    border-radius: 1rem;
 }
-.popup-closer:hover {
-    color: var(--popup-closer-color-hover);
-    background-color: var(--popup-closer-bg-color-hover);
-}
-
-.images-page-container {
-    /* Grid with all items in single centered column */
-    grid-template-columns: 1fr;
-}
-
-body:has(#toggle-layout:checked) .images-page-container {
-    /* Grid with items split over two columns */
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-body:has(#toggle-layout:checked) #list-icon {
-    display: inline;
-}
-body:has(#toggle-layout:checked) #grid-icon {
+[data-localstorage-consent="true"] #accept-localstorage-consent-container,
+[data-localstorage-consent="true"] #accept-localstorage-consent-info {
     display: none;
 }
 
-body:has(#toggle-layout:not(:checked)) #list-icon {
+html:not([data-localstorage-consent="true"]) #accept-localstorage-consent-container,
+html:not([data-localstorage-consent="true"]) #accept-localstorage-consent-info {
+    display: flex;
+}
+html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-container,
+html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-info {
     display: none;
 }
-body:has(#toggle-layout:not(:checked)) #grid-icon {
-    display: inline;
+
+#revoke-localstorage-consent-container > *,
+#accept-localstorage-consent-container > * {
+    margin-top: 1.5rem;
+}
+
+#revoke-localstorage-consent,
+#accept-localstorage-consent {
+    border-color: var(--decline-button-bg-color);
+    color: var(--decline-button-bg-color);
 }
 
 body:has(#toggle-map:checked) .image-container, .images-page-title {
@@ -593,6 +655,8 @@ body:has(#toggle-language:not(:checked)) #english-flag {
     color: var(--overlay-text-color-hover);
 }
 
+/* GMAPS Popups */
+
 #gmaps-popup {
     width: 40rem;
     display: flex;
@@ -625,4 +689,22 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 #iframe-interactive-map {
     width: 40rem;
     background-color: var(--main-bg-color);
+}
+
+/* LocalStorage Consent Popup */
+#localstorage-decline {
+    background-color: var(--decline-button-bg-color);
+}
+#localstorage-decline:hover {
+    background-color: var(--decline-button-bg-color-hover);
+}
+#localstorage-accept {
+    background-color: var(--accept-button-bg-color);
+}
+#localstorage-accept:hover {
+    background-color: var(--accept-button-bg-color-hover);
+}
+[data-theme="light"] #localstorage-decline,
+[data-theme="light"] #localstorage-accept {
+    color: var(--text-color-opposite);
 }
