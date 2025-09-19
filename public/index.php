@@ -230,47 +230,50 @@ if(!empty($queryStr)){
             
             <input id="toggle-map-mode" type="checkbox" name="toggleMapMode"<?php if($hasSearched && $toggleMapMode) echo 'checked' ?>>
 
-            <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
-                <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
-                    <rect width="16" height="10" fill="#005cbf"/>
-                    <rect x="5" width="2" height="10" fill="#ffc720"/>
-                    <rect y="4" width="16" height="2" fill="#ffc720"/>    
-                </svg>
-                <svg id="english-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="12" viewBox="0 0 60 30">
-                    <rect width="60" height="30" fill="#012169"/>
+            <div id="input-labels-container" class="hflex-center">
+                <input id="search-button" type="submit" value="<?php echo localize("%search.button-text%")?>">
 
-                    <polygon points="0,0 6,0 60,24 60,30 54,30 0,6" fill="#fff"/>
-                    <polygon points="60,0 60,6 6,30 0,30 0,24 54,0" fill="#fff"/>
+                <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
+                    <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
+                        <rect width="16" height="10" fill="#005cbf"/>
+                        <rect x="5" width="2" height="10" fill="#ffc720"/>
+                        <rect y="4" width="16" height="2" fill="#ffc720"/>    
+                    </svg>
+                    <svg id="english-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="12" viewBox="0 0 60 30">
+                        <rect width="60" height="30" fill="#012169"/>
 
-                    <polygon points="0,0 3,0 60,27 60,30 57,30 0,3" fill="#C8102E"/>
-                    <polygon points="60,0 60,3 3,30 0,30 0,27 57,0" fill="#C8102E"/>
+                        <polygon points="0,0 6,0 60,24 60,30 54,30 0,6" fill="#fff"/>
+                        <polygon points="60,0 60,6 6,30 0,30 0,24 54,0" fill="#fff"/>
 
-                    <rect x="25" width="10" height="30" fill="#fff"/>
-                    <rect y="10" width="60" height="10" fill="#fff"/>
+                        <polygon points="0,0 3,0 60,27 60,30 57,30 0,3" fill="#C8102E"/>
+                        <polygon points="60,0 60,3 3,30 0,30 0,27 57,0" fill="#C8102E"/>
 
-                    <rect x="27" width="6" height="30" fill="#C8102E"/>
-                    <rect y="12" width="60" height="6" fill="#C8102E"/>
-                </svg>
-            </label>
-            
-            <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if($toggleLanguage) {echo 'checked'; }?> onchange="this.form.submit()">
-            <?php
-                echoFilter(
-                    [
-                        "relevant" => localize("%search.sorting.relevance%"),
-                        "latest" => localize("%search.sorting.latest%")
-                    ],
-                    $orderBy
-                );
-            ?>
+                        <rect x="25" width="10" height="30" fill="#fff"/>
+                        <rect y="10" width="60" height="10" fill="#fff"/>
 
-            <input id="search-button" type="submit" value="<?php echo localize("%search.button-text%")?>">
-            <div id="settings-button">  
-                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-                    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                </svg>
+                        <rect x="27" width="6" height="30" fill="#C8102E"/>
+                        <rect y="12" width="60" height="6" fill="#C8102E"/>
+                    </svg>
+                </label>
+                
+                <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if($toggleLanguage) {echo 'checked'; }?> onchange="this.form.submit()">
+                <?php
+                    echoFilter(
+                        [
+                            "relevant" => localize("%search.sorting.relevance%"),
+                            "latest" => localize("%search.sorting.latest%")
+                        ],
+                        $orderBy
+                    );
+                ?>
+
+                <div id="settings-button">  
+                    <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                    </svg>
+                </div>
             </div>
         </form>
 

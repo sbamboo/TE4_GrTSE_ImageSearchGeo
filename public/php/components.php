@@ -25,7 +25,7 @@ function echoImageDownloadBadge(string $slug, string $url): void {
     $proxyUrl = "endpoints/downloadProxy.php?url=" . urlencode($url) . "&filename=" . urlencode($slug) . "&filetype=png";
 
     $html = <<<EOF
-<a class="image-photo-download grid-item-download-badge" 
+<a class="image-photo-download grid-item-download-badge theme-icon" 
    href="{$proxyUrl}" target="_blank">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" 
          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -180,10 +180,10 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
                 echoImageDownloadBadge($identifiers["slug"], $downloadUrl);
                 //echo '<a class="image-photo-download grid-item-download-badge" href="' . $downloadUrl . '" download="' . $identifiers["slug"] . '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg></a>';
                 if($embed){
-                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="embed-gmap-link no-link-style" data-url="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';   
+                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="embed-gmap-link no-link-style theme-icon" data-url="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';   
                 }
                 else{
-                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="image-photo-gmaps-link no-link-style" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
+                    echo '<div class="image-photo-gmaps grid-item-badge"> <a class="image-photo-gmaps-link no-link-style theme-icon" href="' . $GMapsLink . '"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg></a> </div>';
                 }
                 echo localize('<div class="image-photo-credit grid-item-text"> %img.credit.start% <a class="image-photo-credit-link" href="' . $userLink["profile"]. '">@' . $userLink["username"]. '</a> %img.credit.end%</div>');
             echo '</div>';
@@ -197,7 +197,7 @@ function echoImageHTML(UnsplashAPIImage $image, bool $autoFetchDetails, $transla
 
 function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails, $translateNonLatin = false, ?GTranslate $translator = null, bool $embed = false): void {
     echo '<div class="images-page" data-page-nr="' . $pageNr . '">';
-        echo '<div class="images-page-title hflex-space-out">';
+        echo '<div class="images-page-title hflex-hcenter">';
             echo '<h3>' . localize('%search.page-nr.title%') . ': ' . $pageNr . '</h3>'; // "Page: 2"
         echo '</div>';
         echo '<div class="images-page-container">';
