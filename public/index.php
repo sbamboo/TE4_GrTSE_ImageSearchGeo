@@ -91,7 +91,11 @@ if(!empty($queryStr)){
 }
 
 // Count is based on HasGeo if FilterNonGeo is enabled
-$imagesCount = count($images);
+if(!empty($queryStr)) {
+    $imagesCount = count($images);
+} else {
+    $imagesCount = 0;
+}
 ?>
 
 <!DOCTYPE html>
