@@ -74,7 +74,7 @@ function clearMarkers() {
 // Function to get the contextual information inserted into <meta> tags by PHP
 function getPHPMetaEntries() {
 
-    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags', 'highlightTags'];
+    const metaNames = ['queryStr', 'orderBy', 'autoFetchDetails', 'filterNonGeo', 'translateNonLatin', 'toggleLayout', 'toggleLanguage', 'pageNr', 'embedGMaps', 'cachedTags', 'highlightTags', 'toggleMapMode'];
 
     // Extract meta information with exists check and build a dictgionary
     const metaEntries = {};
@@ -294,7 +294,6 @@ function onNewImages() {
 
                                 //console.log(place);
                                 if (!isNaN(lat) && !isNaN(lon) && imageUrl) {
-                                    console.log("2");
                                     addImageMarker(imageUrl, lat, lon, place);
                                 }
                             });
@@ -454,7 +453,7 @@ window.addEventListener('DOMContentLoaded', () => {
         //POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
     };
 
-    // Add click listeners to settings buttons
+    // Add click listeners to settings buttons)
     document.getElementById("settings-button").onclick = () => {
         POPUPS.showAsOverlay('settings', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
     };

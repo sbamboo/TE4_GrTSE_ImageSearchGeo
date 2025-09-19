@@ -370,7 +370,7 @@ mark {
 }
 
 
-#toggle-map {
+#toggle-map-mode {
     display: none;
 }
 
@@ -521,15 +521,16 @@ html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-info {
     color: var(--decline-button-bg-color);
 }
 
-body:has(#toggle-map:checked) .image-container, .images-page-title {
+body:has(#toggle-map-mode:checked) .image-container,
+body:has(#toggle-map-mode:checked) .images-page-title {
     display: none;
 }
-body:has(#toggle-map:checked) #gmaps-result-popup {
+body:has(#toggle-map-mode:checked) #gmaps-result-popup {
     display: block;
     width: 100%;
     height: 400px;
 }
-body:has(#toggle-map:not(:checked)) #map {
+body:has(#toggle-map-mode:not(:checked)) #map {
     display: none;
 }
 

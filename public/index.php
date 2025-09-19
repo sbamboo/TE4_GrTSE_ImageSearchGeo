@@ -36,6 +36,7 @@ $toggleLayout = isset($_REQUEST['toggleLayout']);
 $toggleLanguage = isset($_REQUEST['toggleLanguage']) ? true : false;
 $embedGMaps = isset($_REQUEST['embedGMaps']) ? true : false;
 $highlightTags = isset($_REQUEST['highlightTags']) ? true : false;
+$toggleMapMode = isset($_REQUEST['toggleMapMode']) ? true : false;
 
 $hasSearched = !empty($queryStr);
 $pageNr = 1;
@@ -85,7 +86,9 @@ if(!empty($queryStr)){
         }
     </script>
     
-
+    <script src="./js/popups.js"></script>
+    <script src="./js/localstorage.js"></script>
+    <script src="./js/main.js"></script>
 
     <!-- Context Meta (Use already validated values) -->
     <meta name="queryStr" content="<?php echo htmlspecialchars($queryStr, ENT_QUOTES); ?>">
@@ -97,6 +100,7 @@ if(!empty($queryStr)){
     <meta name="toggleLanguage" content="<?php echo $toggleLanguage ? 'true' : 'false'; ?>">
     <meta name="embedGMaps" content="<?php echo $embedGMaps ? 'true' : 'false'; ?>">
     <meta name="highlightTags" content="<?php echo $highlightTags ? 'true' : 'false'; ?>">
+    <meta name="toggleMapMode" content="<?php echo $toggleMapMode ? 'true' : 'false'; ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
     <?php
     // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined
@@ -223,7 +227,7 @@ if(!empty($queryStr)){
             
             <input id="toggle-layout" type="checkbox" name="toggleLayout"<?php if(!$hasSearched || $toggleLayout) echo 'checked' ?>>
             
-            <input id="toggle-map" type="checkbox" name="toggleMap">
+            <input id="toggle-map-mode" type="checkbox" name="toggleMapMode"<?php if($hasSearched && $toggleMapMode) echo 'checked' ?>>
 
             <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
                 <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
@@ -287,7 +291,7 @@ if(!empty($queryStr)){
                     <path d="M4 18h16" />
                 </svg>
             </label>
-            <label id="toggle-map-label" for="toggle-map">
+            <label id="toggle-map-label" for="toggle-map-mode">
                 <svg id="map-icon" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                     <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5" />
@@ -313,7 +317,6 @@ if(!empty($queryStr)){
                     return;
                 }
 
-
                 echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator, isset($_REQUEST["embedGMaps"]));
             ?>
         </div>
@@ -324,6 +327,8 @@ if(!empty($queryStr)){
             </div>
         </div>
     </main>
+
+    <!-- Scripts At End to ensure exec order -->
     <?php if($toggleLanguage){
         ?><script src="https://maps.googleapis.com/maps/api/js?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&callback=initMap&v=weekly&language=sv&libraries=marker&loading=async" async defer></script><?php
     } 
@@ -331,9 +336,5 @@ if(!empty($queryStr)){
         ?><script src="https://maps.googleapis.com/maps/api/js?key=<?= $SECRETS['GOOGLE_API_KEY'] ?>&callback=initMap&v=weekly&language=en&libraries=marker&loading=async" async defer></script><?php
     }
     ?>
-    
-    <script src="./js/popups.js"></script>
-    <script src="./js/localstorage.js"></script>
-    <script src="./js/main.js"></script>
 </body>
 </html>
