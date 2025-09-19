@@ -79,7 +79,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
         if (!$autoFetchDetails) { //MARK: Maybe to broad of a condition and should empty-check $geoNames and $coords
 
             echo '<div class="image-geonames-wrapper image-geonames-notfetched">';
-                echo localize('<button class="img-fetch-geonames" data-id="' . $identifiers["id"] . '">%img.fetch-loc-btn.text%</button>');
+                echo localize('<button class="img-fetch-geonames button" data-id="' . $identifiers["id"] . '">%img.fetch-loc-btn.text%</button>');
                 echo '<p class="img-fetch-geonames-info text-info-smaller" data-id="' . $identifiers["id"] . '" style="display:none;"></p>';
             echo '</div>';
 

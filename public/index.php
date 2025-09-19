@@ -89,6 +89,9 @@ if(!empty($queryStr)){
         //$images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
     }
 }
+
+// Count is based on HasGeo if FilterNonGeo is enabled
+$imagesCount = count($images);
 ?>
 
 <!DOCTYPE html>
@@ -136,6 +139,7 @@ if(!empty($queryStr)){
     <meta name="highlightTags" content="<?php echo $highlightTags ? 'true' : 'false'; ?>">
     <meta name="toggleMapMode" content="<?php echo $toggleMapMode ? 'true' : 'false'; ?>">
     <meta name="imagesPerPage" content="<?php echo $imagesPerPage ?>">
+    <meta name="imagesCount" content="<?php echo $imagesCount ?>">
     <meta name="pageNr" content="<?php echo $pageNr ?>">
     <?php
     // If we have a cache initialized call GetAllKnownTags() and then output as meta comma joined

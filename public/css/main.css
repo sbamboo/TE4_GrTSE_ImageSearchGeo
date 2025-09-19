@@ -204,6 +204,10 @@ html {
     padding-bottom: 0.2rem;
 }
 
+#get-more-images-button {
+    margin-bottom: 2rem;
+}
+
 #get-more-images-button, #highlight {
     padding: 0.25rem 0.4rem;
     border: 1px solid var(--border-light);
