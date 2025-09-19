@@ -143,16 +143,20 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
 
                 //// If any translation was done, show a note about it
                 if ($didTranslateAny) {
-                    echo localize('<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(%img.translated%)</p>');
-                    echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
-                    // Echo the original texts here
-                    foreach ($translated as $key => [$text, $translatedText]) {
-                        if ($translatedText !== null) {
-                            echo '<div class="location-text-original">';
-                                echo localize('<p> <span>' . ucfirst("%location.translated.$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                    echo '<div>';
+                        echo '<p>';
+                            echo localize('<p class="translated-geonames text-info-smaller" data-id="' . $identifiers["id"] . '">(%img.translated%)</p>');
+                            echo '<div id="translated-geonames-' . $identifiers["id"] . '" class="translated-geonames-content" style="display:none;">';
+                            // Echo the original texts here
+                            foreach ($translated as $key => [$text, $translatedText]) {
+                                if ($translatedText !== null) {
+                                    echo '<div class="location-text-original">';
+                                        echo localize('<p> <span>' . ucfirst("%location.translated.$key%") . ': </span> <span>' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</span> </p>');
+                                    echo '</div>';
+                                }
+                            }
                             echo '</div>';
-                        }
-                    }
+                        echo '</p>';
                     echo '</div>';
                 }
             //// End geonames container

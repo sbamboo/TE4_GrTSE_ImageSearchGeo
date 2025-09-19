@@ -13,6 +13,8 @@ $toggleLanguage = isset($_REQUEST['toggleLanguage']);
 
 $translations = [
     "en" => [
+        "sitename" => "PicFindGeo",
+
         "localstorage.prompt" => "Do you allow this website to store your settings in your browser's local storage?",
         "localstorage.accept" => "Accept",
         "localstorage.decline" => "Decline",
@@ -67,6 +69,8 @@ $translations = [
         "location.no-data" => "Photo has no geo data, filtered out"
     ],
     "sv" => [
+        "sitename" => "FotoSökGeo",
+
         "localstorage.prompt" => "Tillåter du att denna webbplats lagrar dina inställningar i din webbläsares lokala lagring?",
         "localstorage.accept" => "Tillåt",
         "localstorage.decline" => "Neka",
