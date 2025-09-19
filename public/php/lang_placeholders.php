@@ -18,6 +18,7 @@ $translations = [
         "localstorage.decline" => "Decline",
 
         "search.title" => "Search image",
+        "search.desc" => "Search result details are cached.",
         "search.button-text" => "Search",
         "search.sorting.relevance" => "Relevance",
         "search.sorting.latest" => "Latest",
@@ -68,6 +69,7 @@ $translations = [
         "localstorage.decline" => "Neka",
 
         "search.title" => "Sök bild",
+        "search.desc" => "Sökresultatens detaljer är cachade.",
         "search.button-text" => "Sök",
         "search.sorting.relevance" => "Relevans",
         "search.sorting.latest" => "Senast",

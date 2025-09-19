@@ -191,11 +191,17 @@ html {
 /* Topbar */
 #search-container {
     width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+#search-container > p:last-child {
+    margin-top: 0;
 }
 
 #search-form {
     padding: 0.5rem;
     gap: 0.3rem;
+    padding-bottom: 0.2rem;
 }
 
 #get-more-images-button, #highlight {

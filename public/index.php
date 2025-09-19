@@ -242,13 +242,14 @@ if(!empty($queryStr)){
 
     <!-- Main Content, With initial page -->
     <div id="search-container" class="vflex-center">
-    <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
-        <label id="search-label" for="search-bar"><?php echo localize("%search.title%") ?></label>
-        <div id="higlight-container">
-            <div id="higlight" class="highlight-layer"></div>  
-            <input id="search-bar" class="highlight-layer" type="search" 
-                   name="queryStr" value="<?php echo htmlspecialchars($queryStr); ?>">  
-        </div>    
+        <form id="search-form" class="hflex-vcenter" action="" method="post" autocomplete="on">
+            <label id="search-label" for="search-bar"><?php echo localize("%search.title%") ?></label>
+            <div id="higlight-container">
+                <div id="higlight" class="highlight-layer"></div>  
+                <input id="search-bar" class="highlight-layer" type="search" 
+                    name="queryStr" value="<?php echo htmlspecialchars($queryStr); ?>">  
+            </div>
+
             <input id="auto-fetch-details" class="hidden-checkbox" type="checkbox" name="autoFetchDetails" <?php if (!$hasSearched || $autoFetchDetails) echo 'checked'; ?>>
            
             <input id="filter-non-geo" class="hidden-checkbox" type="checkbox" name="filterNonGeo" <?php if (!$hasSearched || $filterNonGeo) echo 'checked'; ?>>
@@ -306,7 +307,7 @@ if(!empty($queryStr)){
                 </svg>
             </div>
         </form>
-
+        <p class="text-info-smaller"><?php echo localize("%search.desc%") ?></p>
     </div>
     <main class="vflex-center">
         <div id="results-filter-bar" class="hflex">
