@@ -3,6 +3,7 @@
 
 // Load secrets
 $SECRETS = parse_ini_file(__DIR__ . '/../../php_secrets.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
+$CONFIG = parse_ini_file(__DIR__ . '/../../config.ini', false, INI_SCANNER_TYPED); //This is not allowed to start with . or ..
 
 // Imports
 require_once('./../php/endpoint_helpers.php');
@@ -26,6 +27,7 @@ $autoFetchDetails = (isset($params["autoFetchDetails"]) && ($params["autoFetchDe
 $filterNonGeo = (isset($params["filterNonGeo"]) && ($params["filterNonGeo"] === "true" || $params["filterNonGeo"] === true))  ? true : false;
 $translateNonLatin = (isset($params["translateNonLatin"]) && ($params["translateNonLatin"] === "true" || $params["translateNonLatin"] === true))  ? true : false;
 $pageNr = isset($params['pageNr']) && is_numeric($params['pageNr']) ? (int)$params['pageNr'] : 1;
+$imagesPerPage = isset($params['imagesPerPage']) && is_numeric($params['imagesPerPage']) ? (int)$params['imagesPerPage'] : (int)$CONFIG['IMAGES_PER_PAGE'];
 
 // Instantiate Caches
 //$mysqli = new mysqli($SECRETS["SQL_URL"], $SECRETS["SQL_USERNAME"], $SECRETS["SQL_PASSWORD"], $SECRETS["SQL_DATABASE"]);
@@ -39,7 +41,7 @@ $translator = new GTranslate($SECRETS['GOOGLE_API_KEY'], isset($_POST['toggleLan
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails, $SECRETS['GOOGLE_API_KEY'], $imgDetailsCache);
 
 $unsplash = new UnsplashAPI($SECRETS['UNSPLASH_ACCESS_KEY'], $autoFetchDetails);
-$images = $unsplash->SearchPhotos($queryStr, 10, $pageNr, $filterNonGeo, $orderBy);
+$images = $unsplash->SearchPhotos($queryStr, $imagesPerPage, $pageNr, $filterNonGeo, $orderBy);
 //MARK: Wrap in div for "page"?
 echoSearchResultGrid($images, $pageNr, $autoFetchDetails, $translateNonLatin, $translator, isset($_REQUEST["embedGMaps"]));
 ?>

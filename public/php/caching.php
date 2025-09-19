@@ -67,7 +67,7 @@ class SingleDataCacheHandler {
         return true;
     }    
 
-    public function GetCacheKeys() {
+    public function GetCacheKeys(): array {
         $data = $this->readCache();
         return array_keys($data);
     }
@@ -118,6 +118,7 @@ class SingleDataCacheHandler {
     }
 
     public function SetValueFromAssocArray(string $key, array $value): bool {
+        // throw json_encode of $value
         $data = $this->readCache();
         $data[$key] = [time(), $value];
         return $this->writeCache($data);
@@ -161,7 +162,7 @@ class SingleDataCacheHandler {
 
     // Function to get all key-value pairs where value contains a field, also value should be just the field
     // Returns KEY => [FIELD => FIELD_VALUE] for any entries that has the field in value
-    public function GetAllFieldOfEntries($fieldName): array {
+    public function GetAllFieldOfEntries(string $fieldName): array {
         $data = $this->readCache();
         $result = [];
         foreach ($data as $key => $entry) {
@@ -219,8 +220,7 @@ class SingleSQLCacheHandler {
         return new self($db, $sqlTableName, $cacheTTL);
     }
 
-    private function ensureTableExists(): void
-    {
+    private function ensureTableExists(): void {
         $query = "
             CREATE TABLE IF NOT EXISTS {$this->tableName} (
                 cache_key VARCHAR(255) PRIMARY KEY,
@@ -357,6 +357,7 @@ class SingleSQLCacheHandler {
             throw new Exception("Failed to write cache entry for key '{$key}': " . $stmt->error);
         }
         $stmt->close();
+
         return $success;
     }
 
@@ -574,11 +575,71 @@ class SingleSQLCacheHandler {
         }
         return true;
     }
+
+    // Function to get all key-value pairs where value contains a field, also value should be just the field
+    // Returns KEY => [FIELD => FIELD_VALUE] for any entries that has the field in value
+    public function GetAllFieldOfEntries(string $fieldName): array {
+        //     $data = $this->readCache();
+        //     $result = [];
+        //     foreach ($data as $key => $entry) {
+        //         if (is_array($entry[1]) && array_key_exists($fieldName, $entry[1])) {
+        //             $result[$key] = [$fieldName => $entry[1][$fieldName]];
+        //         }
+        //     }
+        //     return $result;
+
+        $result = [];
+        $query = "
+            SELECT cache_key, cache_value
+            FROM {$this->tableName}
+            WHERE (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
+              AND JSON_EXTRACT(cache_value, ?) IS NOT NULL;
+        ";
+        $fieldPath = '$.' . $fieldName;
+        $stmt = $this->db->prepare($query);
+        if (!$stmt) {
+            //error_log("Failed to prepare GetAllFieldOfEntries statement: " . $this->db->error);
+            //return [];
+            throw new Exception("Failed to prepare GetAllFieldOfEntries statement: " . $this->db->error);
+        }
+        $stmt->bind_param("s", $fieldPath);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        while ($row = $res->fetch_assoc()) {
+            $cachedValue = json_decode($row['cache_value'], true);
+            if (is_array($cachedValue) && array_key_exists($fieldName, $cachedValue)) {
+                $result[$row['cache_key']] = [$fieldName => $cachedValue[$fieldName]];
+            }
+        }
+        $stmt->close();
+        return $result;
+    }
+}
+
+// Interface for image detail cache handlers
+interface ImgDetailsCacheInterface {
+    public function ImageIdHasNonExpiredDetails(string $imageId): bool;
+    public function GetImageDetails(string $imageId): ?array;
+    public function StoreImageDetails(string $imageId, array $details): bool;
+    public function GetAllKnownTags(): array;
+    // Add any other common methods you might need from the base cache handlers
+    public function GetCacheKeys(): array;
+    public function GetAsAssocArray(): array;
+    public function SetFromAssocArray(array $data): bool;
+    public function Clear(): bool;
+    public function KeyExists(string $key): bool;
+    public function KeyIsExpired(string $key): bool;
+    public function GetValueAsAssocArray(string $key): ?array;
+    public function SetValueFromAssocArray(string $key, array $value): bool;
+    public function GetExpiryForKey(string $key): ?int;
+    public function SetExpiryForKey(string $key, int $newTTL): bool;
+    public function UnsetKey(string $key): bool;
+    public function GetAllFieldOfEntries(string $fieldName): array;
 }
 
 // Handler for image detail cache
-// Extends either ImgDetailsCacheGeneric or ImgDetailsCacheSQL
-class ImgDetailsCache extends SingleDataCacheHandler {
+// Extends SingleDataCacheHandler and implements ImgDetailsCacheInterface
+class ImgDetailsCache extends SingleDataCacheHandler implements ImgDetailsCacheInterface {
     // Stores into ../cache/img_details.json by default with 1 days TTL
     public function __construct(string $cacheFile = "img_details.json", int $cacheTTL = 86400) {
         parent::__construct($cacheFile, $cacheTTL);
@@ -593,6 +654,7 @@ class ImgDetailsCache extends SingleDataCacheHandler {
     }
 
     public function StoreImageDetails(string $imageId, array $details): bool {
+        echo "FILE: Storing details for imageId: $imageId<br>";
         return $this->SetValueFromAssocArray($imageId, $details);
     }
 
@@ -615,9 +677,13 @@ class ImgDetailsCache extends SingleDataCacheHandler {
 
         return $allTags;
     }
+
+    public function GetAllFieldOfEntries(string $fieldName): array {
+        return parent::GetAllFieldOfEntries($fieldName);
+    }
 }
 
-class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
+class ImgDetailsCacheSQL extends SingleSQLCacheHandler implements ImgDetailsCacheInterface {
     // Stores into SQL table 'img_details' by default with 1 days TTL
     public function __construct(
         mysqli $db,
@@ -635,7 +701,12 @@ class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
         string $sqlTableName = 'img_details',
         int $cacheTTL = 86400
     ): ImgDetailsCacheSQL {
-        $db = new mysqli($sqlHost, $sqlUser, $sqlPassword, $sqlDbName);
+        // Split host and port
+        $parts = explode(':', $sqlHost);
+        $host = $parts[0];
+        $port = isset($parts[1]) ? (int)$parts[1] : 3306;
+
+        $db = new mysqli($host, $sqlUser, $sqlPassword, $sqlDbName, $port);
 
         if ($db->connect_error) {
             throw new Exception("Failed to connect to MySQL: " . $db->connect_error);
@@ -652,6 +723,7 @@ class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
     }
 
     public function StoreImageDetails(string $imageId, array $details): bool {
+        echo "SQL: Storing details for imageId: $imageId<br>";
         return $this->SetValueFromAssocArray($imageId, $details);
     }
 
@@ -674,6 +746,110 @@ class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
 
         return $allTags;
     }
+
+    public function GetAllFieldOfEntries(string $fieldName): array {
+        return parent::GetAllFieldOfEntries($fieldName);
+    }
 }
+
+// // Handler for image detail cache
+// // Extends either ImgDetailsCacheGeneric or ImgDetailsCacheSQL
+// class ImgDetailsCache extends SingleDataCacheHandler {
+//     // Stores into ../cache/img_details.json by default with 1 days TTL
+//     public function __construct(string $cacheFile = "img_details.json", int $cacheTTL = 86400) {
+//         parent::__construct($cacheFile, $cacheTTL);
+//     }
+
+//     public function ImageIdHasNonExpiredDetails(string $imageId): bool {
+//         return $this->KeyExists($imageId) && !$this->KeyIsExpired($imageId);
+//     }
+
+//     public function GetImageDetails(string $imageId): ?array {
+//         return $this->GetValueAsAssocArray($imageId);
+//     }
+
+//     public function StoreImageDetails(string $imageId, array $details): bool {
+//         return $this->SetValueFromAssocArray($imageId, $details);
+//     }
+
+//     public function GetAllKnownTags(): array {
+//         $allEntriesWithTags = $this->GetAllFieldOfEntries('tags'); // KEY => ['tags' => []VALUE]
+//         $allTags = [];
+//         // Iterate $allEntriesWithTags and iterate their "tags" field, for each get the "title" field and add to $allTags if not already present
+//         foreach ($allEntriesWithTags as $entry) {
+//             if (isset($entry['tags']) && is_array($entry['tags'])) {
+//                 foreach ($entry['tags'] as $tag) {
+//                     if (isset($tag['title']) && is_string($tag['title'])) {
+//                         // If $tag['title'] not already in $allTags array add it
+//                         if (!in_array($tag['title'], $allTags)) {
+//                             $allTags[] = $tag['title'];
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         return $allTags;
+//     }
+// }
+
+// class ImgDetailsCacheSQL extends SingleSQLCacheHandler {
+//     // Stores into SQL table 'img_details' by default with 1 days TTL
+//     public function __construct(
+//         mysqli $db,
+//         string $sqlTableName = "img_details",
+//         int $cacheTTL = 86400
+//     ) {
+//         parent::__construct($db, $sqlTableName, $cacheTTL);
+//     }
+
+//     public static function ConstructWithNewSQL(
+//         string $sqlUser,
+//         string $sqlPassword,
+//         string $sqlDbName,
+//         string $sqlHost = 'localhost:3306',
+//         string $sqlTableName = 'img_details',
+//         int $cacheTTL = 86400
+//     ): ImgDetailsCacheSQL {
+//         $db = new mysqli($sqlHost, $sqlUser, $sqlPassword, $sqlDbName);
+
+//         if ($db->connect_error) {
+//             throw new Exception("Failed to connect to MySQL: " . $db->connect_error);
+//         }
+//         return new self($db, $sqlTableName, $cacheTTL);
+//     }
+
+//     public function ImageIdHasNonExpiredDetails(string $imageId): bool {
+//         return $this->KeyExists($imageId) && !$this->KeyIsExpired($imageId);
+//     }
+
+//     public function GetImageDetails(string $imageId): ?array {
+//         return $this->GetValueAsAssocArray($imageId);
+//     }
+
+//     public function StoreImageDetails(string $imageId, array $details): bool {
+//         return $this->SetValueFromAssocArray($imageId, $details);
+//     }
+
+//     public function GetAllKnownTags(): array {
+//         $allEntriesWithTags = $this->GetAllFieldOfEntries('tags'); // KEY => ['tags' => []VALUE]
+//         $allTags = [];
+//         // Iterate $allEntriesWithTags and iterate their "tags" field, for each get the "title" field and add to $allTags if not already present
+//         foreach ($allEntriesWithTags as $entry) {
+//             if (isset($entry['tags']) && is_array($entry['tags'])) {
+//                 foreach ($entry['tags'] as $tag) {
+//                     if (isset($tag['title']) && is_string($tag['title'])) {
+//                         // If $tag['title'] not already in $allTags array add it
+//                         if (!in_array($tag['title'], $allTags)) {
+//                             $allTags[] = $tag['title'];
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         return $allTags;
+//     }
+// }
 
 ?>

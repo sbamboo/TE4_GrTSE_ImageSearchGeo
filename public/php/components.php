@@ -22,7 +22,7 @@ function echoProgImg(string $blurrySrc, string $fullSrc, string $alt = "", array
 }
 
 function echoImageDownloadBadge(string $slug, string $url): void {
-    $proxyUrl = "endpoints/downloadProxy.php?url=" . urlencode($url) . "&filename=" . urlencode($slug) . "&filetype=png";
+    $proxyUrl = "endpoints/download.php?url=" . urlencode($url) . "&filename=" . urlencode($slug) . "&filetype=png";
 
     $html = <<<EOF
 <a class="image-photo-download grid-item-download-badge" 
