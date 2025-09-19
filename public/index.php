@@ -119,8 +119,9 @@ if(!empty($queryStr)){
         }
     </script>
     
-    <script src="./js/popups.js"></script>
     <script src="./js/localstorage.js"></script>
+    <script src="./js/theme.js"></script>
+    <script src="./js/popups.js"></script>
     <script src="./js/main.js"></script>
 
     <!-- Context Meta (Use already validated values) -->
