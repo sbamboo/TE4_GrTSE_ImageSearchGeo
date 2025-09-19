@@ -766,33 +766,6 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 }
 
 
-
-
-/* .custom-infowindow .place-name {
-    font-weight: bold;
-}
-
-.custom-infowindow {
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    padding: 1rem;
-    max-width: 20rem;
-    text-align: center;
-}
-
-.custom-infowindow .infowindow-img { 
-    max-height: 10rem;
-    object-fit: contain;
-    border-radius: 1rem;
-    display: block;
-    margin: 0 auto 1rem;
-    max-width: 100%;
-}
-
-.place-name {
-    color: var(--text-color);
-} */
-
 .custom-infowindow {
     overflow: hidden;
     padding: 1rem;
@@ -812,4 +785,5 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 
 .custom-infowindow .place-name {
     font-weight: bold;
+    color: #121212;
 }
