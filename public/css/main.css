@@ -65,16 +65,17 @@ html {
     --toggle-bg-color-hover: #3a3a3a;
     --image-bg-color: #000000;
 
-    --overlay-text-color: #000000;
-    --overlay-link-color: rgb(55, 55, 55);
-    --overlay-link-color-hover: rgb(85, 85, 85);
-    --overlay-bg-color: rgba(255, 255, 255, 0.5);
-    --overlay-bg-color-ligher: rgba(255, 255, 255, 0.3);
-    --overlay-text-color-hover: rgb(55, 55, 55);
-    --overlay-bg-color-hover: rgba(255, 255, 255, 0.4);
-    --overlay-bg-color-ligher-hover: rgba(255, 255, 255, 0.2);
+    --overlay-text-color: white;
+    --overlay-link-color: rgb(210, 230, 248);
+    --overlay-link-color-hover: rgb(180, 210, 228);
+    --overlay-bg-color: rgba(0, 0, 0, 0.5);
+    --overlay-bg-color-ligher: rgba(137, 136, 136, 0.5);
+    --overlay-text-color-hover: rgb(210, 230, 248);
+    --overlay-bg-color-hover: rgba(0, 0, 0, 0.4);
+    --overlay-bg-color-ligher-hover: rgba(137, 136, 136, 0.4);
 
-    --highlight-color-color: rgba(0, 177, 236, 0.623);
+
+    --highlight-color-color: rgba(0, 144, 192, 0.623);
     --highlight-mark-color: rgba(125, 5, 5, 0.507);
 
     --popup-closer-color: #b5b5b5;
