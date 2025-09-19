@@ -1,12 +1,4 @@
 const POPUPS = new Popups();
-const STORAGE = new LocalStorageHandler(
-    onAccept = ()=>{
-        document.documentElement.setAttribute('data-localstorage-consent', 'true');
-    },
-    onRevoke = ()=>{
-        document.documentElement.setAttribute('data-localstorage-consent', 'false');
-    }
-);
 
 const TAGS = [];
 
@@ -120,27 +112,6 @@ function modifyUrl(url, extension) {
     return finalUrl.toString();
 }
 
-// Function to get the system prefered language between light and dark using media query
-function getSystemPreferredTheme() {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-    } else {
-        return 'light';
-    }
-}
-
-// Function to set the theme by changing the data-theme attribute on <html>
-function setTheme(theme) {
-    const htmlEl = document.documentElement;
-    if (theme === 'light' || theme === 'dark') {
-        htmlEl.setAttribute('data-theme', theme);
-    } else {
-        // system
-        const systemTheme = getSystemPreferredTheme();
-        htmlEl.setAttribute('data-theme', systemTheme);
-    }
-}
-
 // When new images are loaded do the following
 function onNewImages() {
 
@@ -167,36 +138,6 @@ function onNewImages() {
             el.onload();
         }
     });
-
-    // Add handlers for theme management
-    const themeToggle = document.getElementById('theme'); // Element of type select with option values "light", "dark" and "system"
-    if (themeToggle) {
-        // Set initial
-        const metaEntries = getPHPMetaEntries();
-        let initialTheme = 'system';
-        if (metaEntries.theme) {
-            initialTheme = metaEntries.theme;
-        }
-
-        themeToggle.value = initialTheme;
-
-        setTheme(initialTheme);
-
-        // Onchange
-        themeToggle.onchange = (e) => {
-            const selectedTheme = themeToggle.value;
-            setTheme(selectedTheme);
-        };
-
-        // Add listener for system theme changes, where we check if we are on system and in that case updates
-        window.matchMedia('(prefers-color-scheme: dark)').onchange = (e) => {
-            const newSystemTheme = e.matches ? 'dark' : 'light';
-            if (themeToggle.value === 'system') {
-                setTheme(newSystemTheme);
-            }
-        };
-    }
-    
 
     // Add "translated" hover tooltips
     document.querySelectorAll('.translated-geonames').forEach(el => {
@@ -423,7 +364,8 @@ function onNewImages() {
 }
 
 // When page is finished loading (PHP is done)
-window.addEventListener('DOMContentLoaded', () => {
+//MARK: "load" or "DOMContentLoaded"? Took "load" to not await responsive-images
+window.addEventListener('load', () => {
     // Conditionally show localstorage consent popup
     if (!STORAGE.IsAccepted() && (getPHPMetaEntries().queryStr === null || getPHPMetaEntries().queryStr.trim().length === 0)) {
         POPUPS.showAsOverlay('localstorage-prompt', closeOnClickOutside = false, closeOnMouseOut = false, darkenBackground = true);
