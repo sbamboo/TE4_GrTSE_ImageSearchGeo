@@ -274,6 +274,24 @@ mark {
     margin-left: 3rem;
     margin-right: 3rem;
 }
+
+#results-filter-bar { 
+    gap: 1rem;
+}
+
+#gmaps-result-container {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    border: 0.25rem solid var(--border-light);
+}
+
 .images-page-container {
     display: grid;
 
@@ -522,13 +540,14 @@ html:not([data-localstorage-consent="true"]) #revoke-localstorage-consent-info {
 }
 
 body:has(#toggle-map-mode:checked) .image-container,
-body:has(#toggle-map-mode:checked) .images-page-title {
+body:has(#toggle-map-mode:checked) .images-page-title,
+body:has(#toggle-map-mode:checked) .images-page {
     display: none;
 }
-body:has(#toggle-map-mode:checked) #gmaps-result-popup {
+body:has(#toggle-map-mode:checked) #gmaps-result-container {
     display: block;
     width: 100%;
-    height: 400px;
+    height: 40rem;
 }
 body:has(#toggle-map-mode:not(:checked)) #map {
     display: none;

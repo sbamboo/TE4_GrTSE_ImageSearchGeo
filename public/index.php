@@ -302,9 +302,9 @@ if(!empty($queryStr)){
                 </svg>
             </label>
         </div>
-        <div id="gmaps-result-popup">
+        <div id="gmaps-result-container">
             <!-- This is the container where the map will load -->
-            <div id="map" style="width:100%; height:100%;"></div>
+            <div id="map"></div>
         </div>
 
         <div id="search-result-container" class="reoderable-image-container php-endpoint-response">
