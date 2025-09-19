@@ -42,6 +42,9 @@
 ## Thoughts / Reminders
 - ClickOnOutside true on the localstorage-consent popup needs to clicks rest dont, DONT KNOW WHY
 
-## SVG origins
-- Grid, list and flag svg:s are form chatgpt
-- The rest are from tabler.com
+## LICENSEs
+Icons are from https://tabler.io/icons except:
+- iso       : https://www.svgrepo.com/svg/443606/camera-iso
+- list      : Made by us
+- grid      : Made by us
+- The flags : Made by us
