@@ -7,6 +7,11 @@
     .show-on-lowwidth {
         display: flex;
     }
+
+    #search-form {
+        display: flex;
+        flex-flow: column;
+    }
 }
 
 @media (min-width: 592px) {
