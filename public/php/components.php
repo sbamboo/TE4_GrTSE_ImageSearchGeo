@@ -44,6 +44,9 @@ EOF;
 function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $coords = [], array $identifiers = [], $translateNonLatin = false, ?GTranslate $translator = null, array $tagWith = [], array $tags = []): void {
     $dataAttributes = '';
     foreach ($tagWith as $key => $value) {
+        if($key === null || $value === null){
+            continue;
+        }
         $dataAttributes .= ' data-' . htmlspecialchars($key) . '="' . htmlspecialchars($value) . '"';
     }
 
@@ -199,19 +202,7 @@ function echoSearchResultGrid(array $images, int $pageNr, bool $autoFetchDetails
         echo '</div>';
         echo '<div class="images-page-container">';
             foreach ($images as $image) {
-                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, $embed);
-                // if (!empty($images) && $autoFetchDetails) { ?>
-                    <script>
-                //         const searchResults = <?php //echo json_encode(array_map(function($image) { 
-                //             return [ 
-                //                 'lat' => $image->GetCoordinates()['latitude'] ?? null, 
-                //                 'lng' => $image->GetCoordinates()['longitude'] ?? null, 
-                //                 'img' => $image->GetImageDisplayUrl(), 
-                //                 'place' => $image->GetLocation()['name'] ?? 'unknown place', 
-                //             ];
-                //         }, $images), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
-                //     </script>
-                 <?php //}              
+                echoImageHTML($image, $autoFetchDetails, $translateNonLatin, $translator, $embed);          
             }
         echo '</div>';
     echo '</div>';

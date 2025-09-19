@@ -43,10 +43,14 @@ $translateNonLatin = isset($params['translateNonLatin']) ? true : false;
 // Perform check
 try {
     $photoDetails = new UnsplashApiImage($unsplash, $unsplash->GetReducedPhotoDetails($params['id']));
+    $GMapsLink = $photoDetails->GetMostPreciseGMapsUrl(isset($_REQUEST["embedGMaps"]), $translator->GetTargetLang());
 
     // If filtering
     if ($filterNonGeo && !$photoDetails->HasGeoData()) {
-        respondOK(localize("%location.no-data%"));
+        //respondOK(localize("%location.no-data%"));
+        echo '<div class="image-location-data image-location-data-filted-out">';
+            echo '<p class="image-location-data-filted-out-info">' . localize("%location.no-data%") . '</p>';
+        echo '</div>';
     } else {
         // Respond with HTML
         $geoNames = $photoDetails->GetGeoNames();
