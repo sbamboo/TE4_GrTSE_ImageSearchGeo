@@ -58,8 +58,9 @@ $translations = [
         "location.lat" => "Latitude",
         "location.lon" => "Longitude",
         "location.unknown" => "Unknown",
-        "location.translated.place" => "Translated place",
-        "location.translated.city" => "Translated city",
+        "location.translated.place" => "Place",
+        "location.translated.city" => "City",
+        "locaiton.translated.country" => "Country",
         
         "img.credit.start" => "Photo taken by",
         "img.credit.end" => "from unsplash.",
@@ -125,8 +126,9 @@ $translations = [
         "location.lat" => "Latitud",
         "location.lon" => "Longitud",
         "location.unknown" => "Okänd",
-        "location.translated.place" => "Översatt plats",
-        "location.translated.city" => "Översatt stad",
+        "location.translated.place" => "Plats",
+        "location.translated.city" => "Stad",
+        "locaiton.translated.country" => "Land",
         
         "img.credit.start" => "Bild tagen av",
         "img.credit.end" => "från unsplash.",

@@ -458,6 +458,11 @@ body:has(#toggle-layout:not(:checked)) .image {
     display: none;
 }
 
+.translated-geonames-content {
+    display: flex;
+    flex-direction: column;
+}
+
 /* Main Content - ToggleLayout */
 #toggle-layout {
     display: none;
