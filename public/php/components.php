@@ -184,7 +184,7 @@ function echoLocationData(bool $autoFetchDetails, array $geoNames = [], array $c
 
             // Echo more metadata button
             echo '<div class="img-more-metadata-wrapper">';
-                echo '<button class="img-more-metadata button" data-id="' . $identifiers["id"] . '">View Metadata</button>';
+                echo localize('<button class="img-more-metadata button" data-id="' . $identifiers["id"] . '">%img.view.metadata%</button>');
             echo '</div>';
 
         }

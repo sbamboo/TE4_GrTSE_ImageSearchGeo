@@ -66,6 +66,17 @@ $translations = [
         "img.translated" => "translated",
         "img.fetch-loc-btn.text" => "Get location data",
 
+        "img.view.metadata" => "View Metadata",
+        "img.metadata.title" => "Image Metadata",
+        "img.metadata.tags" => "Tags",
+        "img.metadata.camera-name" => "Camera Name",
+        "img.metadata.camera-make" => "Camera Make",
+        "img.metadata.camera-model" => "Camera model",
+        "img.metadata.exposure-time" => "Exposure Time",
+        "img.metadata.aperture" => "Aperture",
+        "img.metadata.focal-length" => "Focal Length",
+        "img.metadata.iso" => "ISO",
+
         "location.no-data" => "Photo has no geo data, filtered out"
     ],
     "sv" => [
@@ -121,6 +132,17 @@ $translations = [
         "img.credit.end" => "från unsplash.",
         "img.translated" => "översatt",
         "img.fetch-loc-btn.text" => "Hämta platsdata",
+
+        "img.view.metadata" => "Se Metadata",
+        "img.metadata.title" => "Bild Metadata",
+        "img.metadata.tags" => "Taggar",
+        "img.metadata.camera-name" => "Kamera Namn",
+        "img.metadata.camera-make" => "Camera Make",
+        "img.metadata.camera-model" => "Kamera modell",
+        "img.metadata.exposure-time" => "Exponeringstid",
+        "img.metadata.aperture" => "Öppning",
+        "img.metadata.focal-length" => "Brännvidd",
+        "img.metadata.iso" => "ISO",
 
         "location.no-data" => "Bilden har ingen platsdata, utfiltrerad"
     ] 
