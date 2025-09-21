@@ -366,6 +366,16 @@ if(!empty($queryStr)) {
                 <div id="input-labels-container" class="hflex-center">
                     <input id="search-button" type="submit" value="<?php echo localize("%search.button-text%")?>">
 
+                    <?php
+                        echoFilter(
+                            [
+                                "relevant" => localize("%search.sorting.relevance%"),
+                                "latest" => localize("%search.sorting.latest%")
+                            ],
+                            $orderBy
+                        );
+                    ?>
+
                     <label id="toggle-language-label" class="vflex vflex-vcenter" for="toggle-language">
                         <svg id="swedish-flag" xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 16 10">
                             <rect width="16" height="10" fill="#005cbf"/>
@@ -390,15 +400,6 @@ if(!empty($queryStr)) {
                     </label>
                     
                     <input id="toggle-language" type="checkbox" name="toggleLanguage"<?php if($toggleLanguage) {echo 'checked'; }?> onchange="this.form.submit()">
-                    <?php
-                        echoFilter(
-                            [
-                                "relevant" => localize("%search.sorting.relevance%"),
-                                "latest" => localize("%search.sorting.latest%")
-                            ],
-                            $orderBy
-                        );
-                    ?>
 
                     <div id="settings-button">  
                         <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

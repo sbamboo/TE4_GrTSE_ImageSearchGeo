@@ -332,6 +332,10 @@ main {
     border: 0.125rem solid var(--border-light);
 }
 
+#search-button {
+    padding: 0.25rem 0.65rem;
+}
+
 .images-page-container {
     display: grid;
 
