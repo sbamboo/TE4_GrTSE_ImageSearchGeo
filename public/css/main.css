@@ -8,6 +8,10 @@ html {
     font-family: "Inter Variable", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+body { 
+    overflow-x: hidden;
+}
+
 /* Theming */
 [data-theme="light"] {
     --main-bg-color: #ffffff;
@@ -420,6 +424,7 @@ body:has(#toggle-layout:not(:checked)) .image {
 
 .translated-geonames {
     width: min-content;
+    margin-top: 0.1rem;
 }
 
 .translated-geonames-content {
@@ -809,8 +814,11 @@ body:has(#toggle-language:not(:checked)) #english-flag {
 /* GMAPS Popups */
 #gmaps-popup {
     width: 40rem;
+    max-width: calc(100vw - 4rem);
     display: flex;
     justify-content: end;
+    margin-right: 2rem;
+    margin-left: 2rem;
 }
 #gmaps-popup iframe {
     border: none;
